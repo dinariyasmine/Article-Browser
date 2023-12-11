@@ -9,11 +9,8 @@ function App() {
         Officia ullamco consectetur non occaecat exercitation commodo 
         labore magna occaecat occaecat labore minim commodo.
       </p>
-      <p  >
-        Consequat reprehenderit elit elit cupidatat nulla. 
-        Officia ullamco consectetur non occaecat exercitation commodo 
-        labore magna occaecat occaecat labore minim commodo. 
-      </p>
+      
+      
     </section>
   );
 }
