@@ -1,0 +1,36 @@
+  .TextFiled{
+    width: 100%;
+    height: 50px;
+    border-radius: 40px;
+    border: 1px solid #D8DDE3;
+    background-color: #F8F9FA;
+    font-weight: 400;
+    font-size: large;
+    padding-left : 12%;
+    color: #A3A8AD;
+  }
+
+  .TextFiled:focus{
+    outline: #EE4A6A;
+    border: 1px solid #EE4A6A;
+    background-color: #FFF;
+  }
+  
+  .PasswordBox{width: 100%; border: 1px solid #F8F9FA;}
+  
+  .DivPassword{
+    width: 100%;
+    height: 50px;
+    border-radius: 40px;
+    border: 1px solid #D8DDE3;
+    background-color: #F8F9FA;
+    font-weight: 400;
+    font-size: large;
+    color: #A3A8AD;
+  }
+
+  .Icon{
+    position: relative;
+    left: 89%;
+    bottom: 37px;
+  }
