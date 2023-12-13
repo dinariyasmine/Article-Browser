@@ -8,8 +8,10 @@ import Text from "../components/LandingPage/textLandingPage";
 const LandingPage = () => {
   return (
     <div>
-      <Logo />
+     <Logo />
       <Text/>
+      <p>Unlock the wonders of academic discovery. Dive into a world of breakthroughs with our seamless scientific
+         article search. Ready to explore?</p>
       <img src={pic} alt="Landing Page" className="w-100 h-72"/>
       <LandingPageButton/>
       <Elipse/>
