@@ -26,6 +26,7 @@ module.exports = {
         'montserrat-regular': 400, 
         'montserrat-bold': 700,  
       },
+
     },
   },
   plugins: [],

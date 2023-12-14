@@ -1,0 +1,12 @@
+
+.LOGINBUT{
+    width: 100%;
+    background-color: #EE4A6A;
+    border-radius: 40px;
+    color: #FFF;
+    text-align: center;
+    height: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    font-family: Montserrat;
+}
