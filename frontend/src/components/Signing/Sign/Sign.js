@@ -3,9 +3,9 @@ import './Sign.css'
 
 const Sign = (Props) => {
   return (
-      <p>
-        {Props.account} <span>Sign {Props.sign}</span>
-      </p>
+    <p>
+      {Props.account} <span>Sign {Props.sign}</span>
+    </p>
   )
 }
 
