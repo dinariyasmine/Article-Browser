@@ -10,7 +10,7 @@ const TextLandingPage = () => {
           <span className="text-5xl text-darkBlue">Explorer!</span>
         </p>
       </div>
-      <div className="w-4/6 ml-1">
+      <div className="w-5/6 ml-1 mt-5">
         <p className="text-lg">
           Unlock the wonders of academic discovery. Dive into a world of
           breakthroughs with our seamless scientific article search. Ready to
