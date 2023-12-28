@@ -11,7 +11,7 @@ import './Signing.css';
 
 const SignIn = () => {
   return (
-    <section>
+    <>
         <div className='LeftSide'>
           <div className='logo'>
             <Logo/>
@@ -32,7 +32,7 @@ const SignIn = () => {
               <Sign account='Don t have an account?' sign='up'/>
             </div>
         </div>
-    </section>
+    </>
   )
 }
 

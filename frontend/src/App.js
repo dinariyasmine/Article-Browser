@@ -3,12 +3,15 @@
  import ArticleModify from './pages/articleModify/articleModify';
  import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
 import PopUp from './components/ModeratorPage/Popup/popUp';
+import SignUp from './pages/SignPages/SignUp'
 
 
  function App() {
    return (
      <section className='App'>
-       <ArticleModify keywords={['un','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux']} />
+      <ModeratorPage/>
+       {/* <ArticleModify keywords={['un','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux']} /> */}
+       {/* <SignUp /> */}
      </section>
       
    );
