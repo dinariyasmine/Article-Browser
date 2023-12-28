@@ -14,35 +14,5 @@ import PopUp from './components/ModeratorPage/Popup/popUp';
    );
  }
 
+
  export default App;
-// import React, { useState } from 'react';
-// import './App.css';
-
-// function App() {
-//   const [showPopup, setShowPopup] = useState(false);
-
-//   const openPopup = () => {
-//     setShowPopup(true);
-//   };
-
-//   const closePopup = () => {
-//     setShowPopup(false);
-//   };
-
-//   return (
-//     <div className="App">
-//       <button onClick={openPopup}>Cliquez-moi</button>
-
-//       {showPopup && (
-//         <div className="popup">
-//           <div className="popup-content">
-//             <span className="close" onClick={closePopup}>&times;</span>
-//             <p>Contenu de votre popup ici.</p>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
