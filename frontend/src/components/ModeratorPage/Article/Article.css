@@ -1,0 +1,46 @@
+#ArticleDiv{
+    width: 95%;
+    padding: 14px 33px;
+    border-radius: 25px;
+    border: 1px solid #D8DDE3;
+    background: #F8F9FA;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin:  5px 0;
+}
+ 
+#ArticlesInfos{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#ArticleTitle{
+    color: #102B3E;
+    font-family: Montserrat;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+#Keywords{
+    color: #3AC6EB;
+    font-family: Montserrat;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+#dateAuthor{
+    color: #102B3E;
+    font-family: Montserrat;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
