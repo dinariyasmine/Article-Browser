@@ -1,14 +1,18 @@
-import React from 'react';
-import SearchScreen from "./pages/searchPage";
-import LandingPage from "./pages/landingPage";
-import './App.css';
+ import React from 'react';
+ import './App.css';
+ import ArticleModify from './pages/articleModify/articleModify';
+ import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
+import PopUp from './components/ModeratorPage/Popup/popUp';
 
 
-function App() {
-  return (
-<LandingPage/>
+ function App() {
+   return (
+     <section className='App'>
+       <ArticleModify keywords={['un','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux','deux']} />
+     </section>
+      
+   );
+ }
 
-  );
-}
 
-export default App;
+ export default App;

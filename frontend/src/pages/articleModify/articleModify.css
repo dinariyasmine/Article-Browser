@@ -1,0 +1,73 @@
+.ArticleModify{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.containerArticleModify{
+    padding: 13px 33px;
+    margin: 10px 0;
+    border-radius: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: #F8F9FA;
+    width: 95%;
+}
+.summaryTitle{
+    color: #102B3E;
+    font-family: Montserrat;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 3px;
+}
+.contenuArticleModify textarea{
+    background-color: #F8F9FA;
+    width: 100%;
+    color: #000;
+    font-family: Montserrat;
+}
+.inputArticleModify{
+    background-color: #F8F9FA;
+    color: #000;
+    font-family: Montserrat;
+}
+.contenuArticleModify textarea:focus, .inputArticleModify:focus {
+    background: #fff;
+}
+.titreArticleModify{
+    margin: 40px 0;
+}
+.titreArticleModify input{
+    color: #000;
+    font-family: Montserrat;
+    font-size:1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.buttonsArticleModify button{
+    border-radius: 45px;
+    background: #EE4A6A;
+    color: #fff;
+    padding: 10px 20px;
+    font-family: Montserrat;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.buttonsArticleModify p{
+    color: #EE4A4A;
+    font-family: Montserrat;
+    font-size: 1.1rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline;
+}
+.buttonsArticleModify{
+    gap: 10px;
+    margin: 20px 2.6% 20px 0;
+}
+
