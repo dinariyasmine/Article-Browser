@@ -1,12 +1,12 @@
 import React from 'react';
 import ArticleIcon from "../../assets/articleIcon.png";
 
-const ClosedArticle = ({ title,keywords,PublishDate,Author }) => {
+const FavoritesArticle = ({ title,keywords,PublishDate,Author }) => {
     const formattedKeywords = keywords.join(' , ');
   return (
     <div className="mt-5">
       <button
-        className={`ml-14 w-4/6 flex items-center bg-white rounded-3xl py-3 border transition duration-300 ease-in-out hover:bg-gray-100 relative`}
+        className={`mx-14 w-11/12 flex items-center bg-gray-100 rounded-3xl py-3 border transition duration-300 ease-in-out hover:bg-gray-200 relative`}
       > 
         <div className='w-3/4'>
         <p className="text-left pl-5 font-extrabold text-lg text-darkBlue">{title}</p>
@@ -27,4 +27,4 @@ const ClosedArticle = ({ title,keywords,PublishDate,Author }) => {
   );
 };
 
-export default ClosedArticle;
+export default FavoritesArticle;

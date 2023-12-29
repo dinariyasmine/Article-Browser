@@ -16,7 +16,7 @@ const SearchBar = () => {
 
 
       
-      <button className="ml-4 text-white font-montserrat bg-pink rounded-full px-8 py-2">
+      <button className="ml-4 text-white font-montserrat bg-pink rounded-full px-8 py-2 hover:bg-pink-700">
         Search
       </button>
     </div>
