@@ -1,11 +1,11 @@
 import React from 'react';
-import ClosedArticle from './closedArticle'; 
+import FavoritesArticle from './favoritesArticle'; 
 
-const ClosedArticleList = ({ articles }) => {
+const FavoritesArticleList = ({ articles }) => {
   return (
     <div className='mb-5'>
       {articles.map((article, index) => (
-        <ClosedArticle
+        <FavoritesArticle
           key={index}
           title={article.title}
           keywords={article.keywords}
@@ -17,4 +17,4 @@ const ClosedArticleList = ({ articles }) => {
   );
 };
 
-export default ClosedArticleList;
+export default FavoritesArticleList;
