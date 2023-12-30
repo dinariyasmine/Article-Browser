@@ -1,9 +1,10 @@
 import React from "react";
 
 const HeaderArticle = ({ Authors, Institutions, PublishDate, KeyWords }) => {
-  const formattedKeywords = KeyWords.join(' , ');
-  const formattedAuthors = Authors.join(' , ');
-  const formattedInstitutions = Institutions.join(' , ');
+  // Check if arrays are defined before calling join
+  const formattedAuthors = Authors ? Authors.join(' , ') : '';
+  const formattedInstitutions = Institutions ? Institutions.join(' , ') : '';
+  const formattedKeywords = KeyWords ? KeyWords.join(' , ') : '';
 
   return (
     <div className="ml-16 mt-6 p-4 mb-4 relative">
