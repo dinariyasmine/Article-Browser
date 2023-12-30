@@ -1,10 +1,10 @@
 import React from "react";
-import profilePic from "../../assets/userIcon.png";
-import favoritesPic from "../../assets/emptyHeart.png";
+import ProfilePic from "../SearchPage/userPopUp";
 
 
 
-const DetailArticle =()=>{
+
+const FavoritesNavbar =({UserName,EmailAdress})=>{
     return (
         <div className="flex justify-between items-center p-4 ">
           {/* Left side of the navbar */}
@@ -18,10 +18,10 @@ const DetailArticle =()=>{
           {/* Right side of the navbar */}
           <div className="-mt-5 mr-5">
             <button>
-              <img src={profilePic} alt="Profile" className="w-10 h-10" />
+              <ProfilePic UserName={UserName} EmailAdress={EmailAdress}/>
             </button>
           </div>
         </div>
       );
 }
-export default DetailArticle;
+export default FavoritesNavbar;

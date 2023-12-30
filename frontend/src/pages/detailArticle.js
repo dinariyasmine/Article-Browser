@@ -1,8 +1,29 @@
 import React from "react";
-import Navbar from "../components/SearchScreen/detailArticleNavbar";
-import HeaderArticle from "../components/SearchScreen/headerArticle";
+import Navbar from "../components/ArticleDetailsPage/detailArticleNavbar";
+import HeaderArticle from "../components/ArticleDetailsPage/headerArticle";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+
+
+const DetailArticle = () => {
+  const User = {
+    UserName:'JaneDoe',
+    EmailAdress:'jdoe@gmail.com'
+  }
+  const storedArticle = localStorage.getItem('selectedArticle');
+  const article = storedArticle ? JSON.parse(storedArticle) : {};
+  console.log('Article stored in local storage:', article);
+  let firstHalfIntegralText = '';
+  let secondHalfIntegralText = '';
+  
+  if (article && article.IntegralText) {
+    const midpoint = Math.floor(article.IntegralText.length / 2);
+    const nearestWhitespace = article.IntegralText.lastIndexOf(' ', midpoint) + 1;
+    firstHalfIntegralText = article.IntegralText.slice(0, nearestWhitespace);
+    secondHalfIntegralText = article.IntegralText.slice(nearestWhitespace);
+    
+  }
+  const formattedReferences = article && article.References ? article.References.join(', ') : '';
 
 
 const generatePDF = () => {
@@ -10,22 +31,22 @@ const generatePDF = () => {
 
   // Add title
   pdf.setFont('times', 'bold');
-  pdf.text(closedArticles.title, 20, 20);
+  pdf.text(article.title, 20, 20);
   pdf.setFont('times', 'normal');
   
 
   // Add Authors, Institutions, PublishDate, and Keywords
-  pdf.text(`Authors: ${closedArticles.Authors.join(', ')}`, 20, 30);
-  pdf.text(`Institutions: ${closedArticles.Institutions.join(', ')}`, 20, 40);
-  pdf.text(`Publish Date: ${closedArticles.PublishDate}`, 20, 50);
-  pdf.text(`Keywords: ${closedArticles.keywords.join(', ')}`, 20, 60);
+  pdf.text(`Authors: ${article.Authors.join(', ')}`, 20, 30);
+  pdf.text(`Institutions: ${article.Institutions.join(', ')}`, 20, 40);
+  pdf.text(`Publish Date: ${article.PublishDate}`, 20, 50);
+  pdf.text(`Keywords: ${article.keywords.join(', ')}`, 20, 60);
 
   // Add Abstract
   pdf.setFont('times', 'bold');
   pdf.text('Abstract:', 20, 70);
   pdf.setFont('times', 'normal');
   
-  const abstractLines = pdf.splitTextToSize(closedArticles.Abstract, pdf.internal.pageSize.width - 40);
+  const abstractLines = pdf.splitTextToSize(article.Abstract, pdf.internal.pageSize.width - 40);
   pdf.text(abstractLines, 20, 80);
 
   // Add Integral Text
@@ -40,42 +61,13 @@ const generatePDF = () => {
   // Save the PDF
   pdf.save('article.pdf');
 };
-
-
-const closedArticles = {
-  title: 'The article’s title',
-  Institutions: ['Institution1', 'Institution2', 'Institution3'],
-  keywords: ['React', 'JavaScript'],
-  PublishDate: '2023-01-01',
-  Authors: ['Marc Levy', 'Harvey Specter'],
-  Abstract: 'This is the abstract of the article. It provides a brief overview about the content of the article and what you can expect to learn',
-  IntegralText: 'Sint occaecat voluptate Lorem laborum sit eu incididunt deserunt ut ut aliquip sint non. Deserunt quis in exercitation tempor labore cillum proident irure cillum nostrud nostrud amet sit dolor. Incididunt eiusmod Lorem occaecat adipisicing dolor sint. Exercitation et mollit aliquip tempor ipsum in id deserunt magna dolor qui. Ea incididunt reprehenderit pariatur ut tempor sint occaecat aliquip.',
-  References: ['Reference 1','Reference 2','Reference 3']
-}
-
-// Calculate the midpoint of the IntegralText
-const midpoint = Math.floor(closedArticles.IntegralText.length / 2);
-
-// Find the nearest whitespace to the midpoint
-const nearestWhitespace = closedArticles.IntegralText.lastIndexOf(' ', midpoint) + 1;
-
-// Create a constant with the first half of IntegralText
-const firstHalfIntegralText = closedArticles.IntegralText.slice(0, nearestWhitespace);
-
-// Create a constant with the second half of IntegralText
-const secondHalfIntegralText = closedArticles.IntegralText.slice(nearestWhitespace);
-
-const formattedReferences = closedArticles.References.join(' , ');
-
-const DetailArticle = () => {
- 
   return (
     <div className="flex flex-col overflow-x-hidden">
-      <Navbar title={closedArticles.title} />
-      <HeaderArticle Authors={closedArticles.Authors} Institutions={closedArticles.Institutions} PublishDate={closedArticles.PublishDate} KeyWords={closedArticles.keywords} />
+      <Navbar title={article.title} UserName={User.UserName} EmailAdress={User.EmailAdress} />
+      <HeaderArticle Authors={article.Authors} Institutions={article.Institutions} PublishDate={article.PublishDate} KeyWords={article.keywords} />
       <div className="mt-10 w-5/6">
         <p className=" ml-24 font-bold text-lg">Abstract :</p>
-        <p className="ml-24 mt-2">{closedArticles.Abstract}</p>
+        <p className="ml-24 mt-2">{article.Abstract}</p>
       </div>
       <div className="mt-10 w-5/6">
       <p className="ml-24 font-bold text-lg">Integral Text :</p>

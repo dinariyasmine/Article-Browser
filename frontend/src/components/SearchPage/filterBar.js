@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Triangle from "../../assets/blackTriangle.png";
-import FilterList from "../SearchScreen/filterList";
+import FilterList from "../SearchPage/filterList";
 
 const FilterBar = ({ title, listOfOptions }) => {
   const [rotation, setRotation] = useState(0);
