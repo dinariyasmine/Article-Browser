@@ -9,7 +9,12 @@
     align-items: center;
     margin:  5px 0;
 }
- 
+
+#ArticleDiv:hover{
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    transition: background-color 300ms ease-in-out;
+}
+
 #ArticlesInfos{
     display: flex;
     justify-content: center;
