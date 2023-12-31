@@ -1,5 +1,5 @@
 import React from 'react';
-import DatePicker from '../SearchScreen/datePicker';
+import DatePicker from '../SearchPage/datePicker';
 
 
 

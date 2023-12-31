@@ -3,9 +3,12 @@ import './App.css';
 import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 import ArticleModify from './pages/articleModify/articleModify';
 import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
-import PopUp from './components/ModeratorPage/Popup/popUp';
 import SignUp from './pages/SignPages/SignUp'
 import SignIn from './pages/SignPages/SignIn'
+import SearchPage from './pages/searchPage';
+import DetailArticle from './pages/detailArticle';
+import FavoritesPage from './pages/favoritesPage';
+
 
 
 
@@ -13,6 +16,9 @@ import SignIn from './pages/SignPages/SignIn'
    return (
     <Router>
       <Routes>
+        <Route path="/" element={<SearchPage />} />
+        <Route path="/detail/:id" element={<DetailArticle/>} />
+        <Route path="/favorites/" element={<FavoritesPage/>} />
         <Route path="/signup" element={<SignUp/>} />
         <Route path="/signin" element={<SignIn/>} />
         <Route path="/moderator" element={<ModeratorPage/>} />
