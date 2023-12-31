@@ -10,8 +10,11 @@ import './Signing.css';
 
 
 const SignIn = () => {
+
+ 
+
   return (
-    <>
+    <div className='h-screen flex justify-between items-center'>
         <div className='LeftSide'>
           <div className='logo'>
             <Logo/>
@@ -28,11 +31,11 @@ const SignIn = () => {
               <TextFiled text='Password'/>
             </div>
             <div className='BRightSide'>
-              <LogInButton text='Log In' />
+              <LogInButton text='Log In'/>
               <Sign account='Don t have an account?' sign='up'/>
             </div>
         </div>
-    </>
+    </div>
   )
 }
 

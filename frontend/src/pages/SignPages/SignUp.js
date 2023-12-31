@@ -8,9 +8,10 @@ import Sign from '../../components/Signing/Sign/Sign';
 import AuthImg from '../../assets/AuthImage.svg';
 import './Signing.css';
 
-const signUp = () => {
+
+const SignUp = () => {
   return (
-    <>
+    <div className='h-screen flex justify-between items-center'>
         <div className='LeftSide'>
           <div className='logo'>
             <Logo/>
@@ -32,8 +33,8 @@ const signUp = () => {
               <Sign account='Already have an account?' sign='in'/>
             </div>
         </div>
-    </>
+    </div>
   )
 }
 
-export default signUp ;
+export default SignUp ;
