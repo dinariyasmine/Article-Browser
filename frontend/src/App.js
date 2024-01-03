@@ -16,13 +16,15 @@ import FavoritesPage from './pages/favoritesPage';
    return (
     <Router>
       <Routes>
-        <Route path="/" element={<SearchPage />} />
+        {/*<Route path="/" element={<SearchPage />} />
         <Route path="/detail/:id" element={<DetailArticle/>} />
         <Route path="/favorites/" element={<FavoritesPage/>} />
         <Route path="/signup" element={<SignUp/>} />
         <Route path="/signin" element={<SignIn/>} />
         <Route path="/moderator" element={<ModeratorPage/>} />
-        <Route path="/articlemodif/:id" element={<ArticleModify/>} />
+        <Route path="/articlemodif/:id" element={<ArticleModify/>} />*/}
+        <Route path="/" element={<SignUp />}> </Route>
+        
       </Routes>
     </Router>
    );
