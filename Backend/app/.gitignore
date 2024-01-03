@@ -29,7 +29,7 @@ ENV/
 # Log files
 *.log
 
-# Ignore Django migration files, as they can be specific to each developer's environment
+# Ignore Django migration files
 **/migrations/*.py
 **/migrations/*.pyc
 
@@ -50,16 +50,6 @@ htmlcov/
 .coverage
 .coverage.*
 .cache/
-
-# Ignore pytest cache
-__pycache__/
-.cacheprovider
-.cache/
-
-# Ignore Heroku related files
-*.pyc
-*.pyo
-*.pyd
 
 # Ignore pytest cache
 __pycache__/
