@@ -24,7 +24,10 @@ class Command(BaseCommand):
                     "authors": ", ".join(str(author) for author in article.authors.all()),
                     "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
                     "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
-                    "text": article.text,
+
+                    #modification
+                    "text": article.full_text,  
+
                     "pdf_url": article.pdf_url,
                 }
             }
