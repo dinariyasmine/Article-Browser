@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local development settings
+.env
+
+# Database
+db.sqlite3
+
+# Static files (usually collected by Django)
+/static/
+
+# Media files (usually user-uploaded content)
+/media/
+
+# Virtual environment
+venv/
+venv3/
+env/
+ENV/
+
+# IDE-specific files
+*.pycharm/
+*.vscode/
+
+# Log files
+*.log
+
+# Ignore Django migration files
+**/migrations/*.py
+**/migrations/*.pyc
+
+# Ignore Docker related files (if using Docker)
+Dockerfile
+docker-compose.yml
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore pipenv virtual environment
+Pipfile
+Pipfile.lock
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache/
+
+# Ignore pytest cache
+__pycache__/
+.cacheprovider
+.cache/
+
+# Ignore Heroku related files
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+
+# Ignore poetry virtual environment
+.poetry/
+__pypackages__/
