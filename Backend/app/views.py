@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from .models import Article
+from .models import Article, Author, Keyword, Institution, Reference
 from elasticsearch_dsl import Search
 from .index import ArticleIndex
+from django.http import HttpResponse
+from elasticsearch.helpers import bulk
 from tenacity import retry, stop_after_delay, wait_fixed
 
 # Decorate the Elasticsearch search operation with retry mechanism
@@ -84,3 +86,95 @@ def search_and_filter_articles(request):
         # Handle the exception or log the error
         print(f"Error: {e}")
         return render(request, 'search_results.html', {'articles': [], 'query': search_query, 'error': str(e)})
+    
+
+
+
+def index_articles(request):
+    try:
+        # Initialize the Elasticsearch index
+        ArticleIndex.init()
+
+        # Index all articles
+        articles = Article.objects.all()
+        actions = [
+            {
+                "_op_type": "index",
+                "_index": "article_index",
+                "_id": article.id,
+                "_source": {
+                    # Map model fields to Elasticsearch fields
+                    "title": article.title,
+                    "abstract": article.abstract,
+                    "authors": ", ".join(str(author) for author in article.authors.all()),
+                    "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
+                    "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
+
+                    #modification
+                    "text": article.full_text,
+
+                    "pdf_url": article.pdf_url,
+                }
+            }
+            for article in articles
+        ]
+
+        # Get the Elasticsearch connection
+        es = ArticleIndex._get_connection()
+
+        # Bulk indexing
+        success, failed = bulk(client=es, actions=actions, stats_only=True)
+
+        return HttpResponse(f'Successfully indexed {success} articles. Failed to index {failed} articles.')
+
+    except Exception as e:
+        return HttpResponse(f'Error during indexing: {str(e)}')
+
+
+
+
+def create_sample_articles(request):
+    try:
+        # Create sample authors
+        author1 = Author.objects.create(name='John Doe')
+        author2 = Author.objects.create(name='Jane Smith')
+
+        # Create sample institutions
+        institution1 = Institution.objects.create(name='University A')
+        institution2 = Institution.objects.create(name='University B')
+
+        # Create sample keywords
+        keyword1 = Keyword.objects.create(name='Science')
+        keyword2 = Keyword.objects.create(name='Technology')
+
+        # Create sample references
+        reference1 = Reference.objects.create(name='Reference A')
+        reference2 = Reference.objects.create(name='Reference B')
+
+        # Create sample articles
+        article1 = Article.objects.create(
+            title='Sample Article 1',
+            abstract='This is the abstract of sample article 1.',
+            full_text='This is the full text of sample article 1.',
+            pdf_url='https://example.com/sample-article-1.pdf',
+        )
+        article1.authors.add(author1)
+        article1.institutions.add(institution1)
+        article1.keywords.add(keyword1, keyword2)
+        article1.references.add(reference1, reference2)
+
+        article2 = Article.objects.create(
+            title='Sample Article 2',
+            abstract='This is the abstract of sample article 2.',
+            full_text='This is the full text of sample article 2.',
+            pdf_url='https://example.com/sample-article-2.pdf',
+        )
+        article2.authors.add(author2)
+        article2.institutions.add(institution2)
+        article2.keywords.add(keyword2)
+        article2.references.add(reference1)
+
+        return HttpResponse('Sample articles created successfully.')
+
+    except Exception as e:
+        return HttpResponse(f'Error creating sample articles: {str(e)}')
