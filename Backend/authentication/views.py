@@ -63,9 +63,9 @@ class ProtectedSpaceView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        if user.is_admin:
+        if user.role == 2:
             return self.admin_dashboard(request)
-        elif user.is_moderator:
+        elif user.role == 1 :
             return self.moderator_dashboard(request)
         else:
             return render(request, self.template_name)
