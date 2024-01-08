@@ -1,8 +1,12 @@
 from django.shortcuts import render
-from .models import Article
+from .models import Article, Author, Keyword, Institution, Reference
 from elasticsearch_dsl import Search
 from .index import ArticleIndex
+from django.http import HttpResponse
+from elasticsearch.helpers import bulk
 from tenacity import retry, stop_after_delay, wait_fixed
+from datetime import datetime
+
 
 # Decorate the Elasticsearch search operation with retry mechanism
 @retry(stop=stop_after_delay(30), wait=wait_fixed(5))
@@ -16,6 +20,105 @@ def perform_elasticsearch_search(query):
         return response
     else:
         raise Exception("Elasticsearch search failed")
+
+
+
+
+def create_sample_articles(request):
+    try:
+        # Create sample authors
+        author1 = Author.objects.create(name='John Do')
+        author2 = Author.objects.create(name='Jan Smith')
+
+
+        # Create sample institutions
+        institution1 = Institution.objects.create(name='University Ac')
+        institution2 = Institution.objects.create(name='University Bc')
+
+        # Create sample keywords
+        keyword1 = Keyword.objects.create(name='Sciences')
+        keyword2 = Keyword.objects.create(name='Tech')
+
+        # Create sample references
+        reference1 = Reference.objects.create(name='Reference1')
+        reference2 = Reference.objects.create(name='Reference2')
+
+        # Create sample articles
+        article1 = Article.objects.create(
+            title='Sample Article A',
+            abstract='This is the abstract of sample article A.',
+            full_text='This is the full text of sample article A.',
+            pdf_url='https://example.com/sample-article-A.pdf',
+        )
+        article1.authors.add(author1)
+        article1.institutions.add(institution1)
+        article1.keywords.add(keyword1, keyword2)
+        article1.references.add(reference1, reference2)
+
+        article2 = Article.objects.create(
+            title='Sample Article B',
+            abstract='This is the abstract of sample article B.',
+            full_text='This is the full text of sample article B.',
+            pdf_url='https://example.com/sample-article-B.pdf',
+        )
+        article2.authors.add(author2)
+        article2.institutions.add(institution2)
+        article2.keywords.add(keyword2)
+        article2.references.add(reference1)
+
+      
+        return HttpResponse('Sample articles created successfully.')
+
+    except Exception as e:
+        return HttpResponse(f'Error creating sample articles: {str(e)}')
+
+
+
+
+
+def index_articles(request):
+    try:
+        # Initialize the Elasticsearch index
+        ArticleIndex.init()
+
+        # Index all articles
+        articles = Article.objects.all()
+        actions = [
+            {
+                "_op_type": "index",
+                "_index": "article_index",
+                "_id": article.id,
+                "_source": {
+                    # Map model fields to Elasticsearch fields
+                    "title": article.title,
+                    "abstract": article.abstract,
+                    "authors": ", ".join(str(author) for author in article.authors.all()),
+                    "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
+                    "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
+
+                    #modification
+                    "text": article.full_text,
+
+                    "pdf_url": article.pdf_url,
+                }
+            }
+            for article in articles
+        ]
+
+        # Get the Elasticsearch connection
+        es = ArticleIndex._get_connection()
+
+        # Bulk indexing
+        success, failed = bulk(client=es, actions=actions, stats_only=True)
+
+        return HttpResponse(f'Successfully indexed {success} articles. Failed to index {failed} articles.')
+
+    except Exception as e:
+        return HttpResponse(f'Error during indexing: {str(e)}')
+
+
+
+
 
 def search_articles(request):
     query = request.GET.get('q', '')
@@ -40,10 +143,6 @@ def search_articles(request):
 
 
 
-# mery's code
-# Path: Backend/app/views.py
-
-from datetime import datetime
 
 def search_and_filter_articles(request):
     # Extract search query from the front end team
@@ -84,3 +183,4 @@ def search_and_filter_articles(request):
         # Handle the exception or log the error
         print(f"Error: {e}")
         return render(request, 'search_results.html', {'articles': [], 'query': search_query, 'error': str(e)})
+    

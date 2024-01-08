@@ -76,6 +76,7 @@ WSGI_APPLICATION = 'TP_IGL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -84,10 +85,12 @@ DATABASES = {
         'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+   }
 }
-# TP_IGL/settings.py
+
+#TP_IGL/settings.py
 AUTH_USER_MODEL = 'authentication.User'
+
 
 
 
