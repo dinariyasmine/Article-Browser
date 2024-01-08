@@ -1,20 +1,33 @@
 <!-- app/templates/app/search_results.html -->
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+</head>
+<body>
+    <div id="content">
 
-{% block content %}
-  <h2>Search Results for '{{ query }}'</h2>
-  {% if articles %}
-    <ul>
-      {% for article in articles %}
-        <li>
-          <strong>{{ article.title }}</strong><br>
-          Authors: {{ article.authors.all|join:', ' }}<br>
-          Keywords: {{ article.keywords.all|join:', ' }}<br>
-          <a href="{{ article.pdf_url }}" target="_blank">View PDF</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No articles found.</p>
-  {% endif %}
-{% endblock %}
+        <h2>Search Results for '{{ query }}'</h2>
+
+        {% if articles %}
+            <ul>
+                {% for article in articles %}
+                    {% if article.title == query %}
+                        <li>
+                            <strong>Title:</strong> {{ article.title }}<br>
+                            <strong>Authors:</strong> {% for author in article.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}<br>
+                            <strong>Institutions:</strong> {% for institution in article.institutions.all %}{{ institution.name }}{% if not forloop.last %}, {% endif %}{% endfor %}<br>
+                            <strong>Keywords:</strong> {% for keyword in article.keywords.all %}{{ keyword.name }}{% if not forloop.last %}, {% endif %}{% endfor %}<br>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No articles found.</p>
+        {% endif %}
+
+    </div>
+</body>
+</html>
