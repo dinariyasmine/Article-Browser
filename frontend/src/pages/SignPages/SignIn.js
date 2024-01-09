@@ -1,6 +1,6 @@
-import React, { useState }, { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import axios from 'axios';
+
 import TextFiled from '../../components/Signing/TextFiled/TextFiled';
 import LogInButton from '../../components/Signing/LogInButton/LogInButton';
 import Logo from '../../components/Signing/Logo/Logo';
