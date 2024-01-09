@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import './TextFiled.css'
-
+import './TextFiled.css';
 
 const PasswordField = (Props) => {
   const [password, setPassword] = useState('');
@@ -13,9 +12,18 @@ const PasswordField = (Props) => {
     setShowPassword(!showPassword);
   };
 
+  const handleChange = (e) => {
+    setPassword(e.target.value);
+    // Check if Props.onChange is a function before invoking it
+    if (typeof Props.onChange === 'function') {
+      Props.onChange(e);
+    }
+  };
+
+  const isPasswordType = Props.text === 'Password' || Props.text === 'Confirm Password';
 
   return (
-    (Props.text==='Password')?
+    isPasswordType ? (
       <div className='DivPassword'>
         <input
           type={showPassword ? 'text' : 'password'}
@@ -24,7 +32,7 @@ const PasswordField = (Props) => {
           placeholder={Props.text}
           value={password}
           className='TextFiled PasswordBox'
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handleChange}  
         />
         <FontAwesomeIcon
           className='Icon'
@@ -32,8 +40,17 @@ const PasswordField = (Props) => {
           onClick={handleTogglePassword}
         />
       </div>
-    :
-    <input type="text" id="username" name="username" placeholder={Props.text} className='TextFiled' />
+    ) : (
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder={Props.text}
+        value={Props.value}  
+        className='TextFiled'
+        onChange={Props.onChange}
+      />
+    )
   );
 };
 

@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'elasticsearch_dsl',
     'authentication',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'TP_IGL.urls'
@@ -75,6 +78,7 @@ WSGI_APPLICATION = 'TP_IGL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -83,10 +87,12 @@ DATABASES = {
         'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+   }
 }
-# TP_IGL/settings.py
+
+#TP_IGL/settings.py
 AUTH_USER_MODEL = 'authentication.User'
+
 
 
 
@@ -130,3 +136,48 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+        'retry': {'delay': 1, 'max_delay': 3, 'count': 3},
+        'timeout': 10,
+    },
+}
+
+
+# Optional: Allow credentials (cookies, authentication headers) in cross-origin requests
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    # Add any other origins as needed
+]
+
+
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_SAMESITE = None
+SESSION_COOKIE_SAMESITE = None

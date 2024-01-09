@@ -3,75 +3,75 @@ from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as 
 from django.http import JsonResponse
 from django.views.generic.edit import CreateView
 from django.contrib.auth import authenticate, login
-from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 from django.views import View
+from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from .models import User
-from .forms import CustomUserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+import json
 
-class RegisterView(CreateView):
-    model = User
-    form_class = CustomUserCreationForm
-    template_name = 'authentication/register.html'
+
+class RegisterView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.headers.get('content-type') == 'application/json':
-            post_data = request.json()
-        else:
-            post_data = request.POST
+        try:
+            post_data = json.loads(request.body)
+            print("Received JSON data:", post_data)
+        except json.JSONDecodeError:
+            return JsonResponse({"errors": "Invalid JSON data"}, status=400)
 
-        form = self.get_form(self.get_form_class())
+        username = post_data.get('username')
+        email = post_data.get('email')
+        password1 = post_data.get('password1')
+        password2 = post_data.get('password2')
 
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return JsonResponse({"errors": form.errors}, status=400)
+        if not (username and email and password1 and password2):
+            return JsonResponse({"errors": "All fields are required"}, status=400)
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        email = form.cleaned_data.get('email')
-        raw_password = form.cleaned_data.get('password1')
+        # Perform your custom validation if needed
 
-        # Use form.instance to access the newly created user instance
-        user = form.instance
+        # Create the user
+        user = User.objects.create_user(username=username, email=email, password=password1)
+
+        # Authenticate and login the user
+        user = authenticate(request, username=username, password=password1)
         if user is not None:
-            user = authenticate(self.request, username=email, password=raw_password)
+            login(request, user)
+            protected_space_url = reverse_lazy('protected-space')
+            return JsonResponse({"success": "User registration and authentication successful", "redirect_url": str(protected_space_url)}, status=200)
+        else:
+            return JsonResponse({"errors": "User authentication failed"}, status=400)
 
-            if user is not None:
-                login(self.request, user)
-                protected_space_url = reverse_lazy('protected-space') 
-                return redirect(protected_space_url) 
-
-        return JsonResponse({"errors": "User creation or authentication failed"}, status=400)
 
 class CustomLoginView(AuthLoginView):
-    template_name = 'authentication/login.html'
-    form_class = AuthenticationForm
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
-    def get_success_url(self):
-        return reverse_lazy('protected-space')
+    def post(self, request, *args, **kwargs):
+        try:
+            post_data = json.loads(request.body)
+            print("Received JSON data:", post_data)
+        except json.JSONDecodeError:
+            return JsonResponse({"errors": "Invalid JSON data"}, status=400)
 
-class CustomLogoutView(AuthLogoutView):
-    def get_next_page(self):
-        return reverse_lazy('login')  
+        username = post_data.get('username')
+        password = post_data.get('password')
 
-class ProtectedSpaceView(LoginRequiredMixin, View):
-    template_name = 'authentication/protected_space.html'
-    login_url = '/login/'
+        if not (username and password):
+            return JsonResponse({"errors": "Both username and password are required"}, status=400)
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_admin:
-            return self.admin_dashboard(request)
-        elif user.is_moderator:
-            return self.moderator_dashboard(request)
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            protected_space_url = reverse_lazy('protected-space')
+            return JsonResponse({"success": "User authentication successful", "redirect_url": str(protected_space_url)}, status=200)
         else:
-            return render(request, self.template_name)
-
-    def admin_dashboard(self, request):
-        return render(request, 'authentication/admin_dashboard.html')
-
-    def moderator_dashboard(self, request):
-        return render(request, 'authentication/moderator_protected_space.html')
+            return JsonResponse({"errors": "User authentication failed"}, status=400)
