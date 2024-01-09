@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState }, { useState } from 'react';
+import axios from 'axios';
 import axios from 'axios';
 import TextFiled from '../../components/Signing/TextFiled/TextFiled';
 import LogInButton from '../../components/Signing/LogInButton/LogInButton';
@@ -55,28 +56,28 @@ const SignIn = () => {
 
   return (
     <div className='h-screen flex justify-between items-center'>
-      <div className='LeftSide'>
-        <div className='logo'>
-          <Logo />
+        <div className='LeftSide'>
+          <div className='logo'>
+            <Logo/>
+          </div>
+          <img src={AuthImg} alt='Authentification' />        
+          <div className='slogan'>
+            <Slogan/>
+          </div>
         </div>
-        <img src={AuthImg} alt='Authentification' />
-        <div className='slogan'>
-          <Slogan />
+        <div className='RightSide'>
+            <AuthentificationTitle title='Log In' />
+            <div className='MRightSide'>
+              <TextFiled text='Email adress'/>
+              <TextFiled text='Password'/>
+            </div>
+            <div className='BRightSide'>
+              <LogInButton text='Log In'/>
+              <Sign account='Don t have an account?' sign='up'/>
+            </div>
         </div>
-      </div>
-      <div className='RightSide'>
-        <AuthentificationTitle title='Log In' />
-        <div className='MRightSide'>
-          <TextFiled text='UserName' value={username} onChange={handleUsernameChange} />
-          <TextFiled text='Password' type='password' value={password} onChange={handlePasswordChange} />
-        </div>
-        <div className='BRightSide' onClick={handleSubmit}>
-          <LogInButton text='Log In' />
-          <Sign account="Don't have an account?" sign='up' />
-        </div>
-      </div>
     </div>
   );
 };
 
-export default SignIn;
+export default SignIn

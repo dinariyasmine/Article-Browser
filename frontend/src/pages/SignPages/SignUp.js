@@ -10,7 +10,6 @@ import Sign from '../../components/Signing/Sign/Sign';
 import AuthImg from '../../assets/AuthImage.svg';
 import './Signing.css';
 
-
 const SignUp = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');

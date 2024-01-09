@@ -12,7 +12,6 @@ from django.utils.decorators import method_decorator
 from .models import User
 import json
 
-
 class RegisterView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
