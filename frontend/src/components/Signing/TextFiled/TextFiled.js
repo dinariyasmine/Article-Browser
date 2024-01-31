@@ -1,3 +1,29 @@
+// TextFiled.js
+import React from 'react';
+import './TextFiled.css';
+
+const TextFiled = (props) => {
+  const { text, value, onChange, type } = props;
+
+  return (
+    <div className='DivPassword'>
+      <input
+        type={type || 'text'} // Set type to 'text' by default or use the provided type
+        id={text.toLowerCase()}
+        name={text.toLowerCase()}
+        placeholder={text}
+        value={value}
+        className='TextFiled PasswordBox'
+        onChange={onChange}
+      />
+    </div>
+  );
+};
+export default TextFiled;
+
+
+/* 
+old code:
 // PasswordField.js
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,10 +55,10 @@ const PasswordField = (Props) => {
           type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          placeholder={Props.text}
-          value={password}
+          placeholder={text}
+          value={value}
           className='TextFiled PasswordBox'
-          onChange={handleChange}  
+          onChange={(e) => setPassword(e.target.value)}
         />
         <FontAwesomeIcon
           className='Icon'
@@ -55,3 +81,4 @@ const PasswordField = (Props) => {
 };
 
 export default PasswordField;
+*/
