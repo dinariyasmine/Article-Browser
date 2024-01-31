@@ -2,8 +2,10 @@ import React from 'react';
 import './ModeratorPage.css';
 import Article from '../../components/ModeratorPage/Article/Article';
 import imgProfil from '../../assets/userIcon.png'
+import ProfilePic from "../../components/SearchPage/userPopUp";
 
 const ModeratorPage = () => {
+  
   const items = [
     {
       id:'03',
@@ -33,7 +35,9 @@ const ModeratorPage = () => {
         <div style={{width : '5%'}}></div>
         <h1 className='TITLE'>Rencently uploaded articles</h1>
         <div className="image-container">
-          <img src={imgProfil} alt='Profil' className='image-ronde'/>
+        <button>
+           <ProfilePic />
+        </button>
         </div>
       </div>
       
