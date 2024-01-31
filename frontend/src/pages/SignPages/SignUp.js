@@ -1,5 +1,6 @@
 // SignUp.js
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TextFiled from '../../components/Signing/TextFiled/TextFiled';
 import LogInButton from '../../components/Signing/LogInButton/LogInButton';
@@ -11,6 +12,7 @@ import AuthImg from '../../assets/AuthImage.svg';
 import './Signing.css';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,7 +70,21 @@ const SignUp = () => {
     }
   };
 
-  
+  useEffect(() => {
+    
+    // Redirect based on the user's role
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      if (storedUser.role === 0) {
+        navigate('/UserSpace');
+      } else if (storedUser.role === 1) {
+        navigate('/ModeratorSpace');
+      } else {
+        // Handle other roles or scenarios
+        console.error('Unsupported role:', storedUser.role);
+      }
+    }
+  }, [navigate]);
 
   return (
     <div className='h-screen flex justify-between items-center'>
