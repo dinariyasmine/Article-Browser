@@ -1,7 +1,8 @@
 # yourappname/models.py
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.conf import settings
 
 class Keyword(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -36,40 +37,14 @@ class Article(models.Model):
     references = models.ManyToManyField(Reference)
     full_text = models.TextField()
     pdf_url = models.URLField()
+    validated = False
 
     def __str__(self):
         return self.title
     
 
-class CustomUser(AbstractUser):
-        
-    USER_TYPE_CHOICES = [
-    ('user', 'User'),
-    ('administrator', 'Administrator'),
-    ('moderator', 'Moderator'),
-    ]
-
-    user_type = models.CharField(
-        max_length=15,
-        choices=USER_TYPE_CHOICES,
-        default='user',
-    )
-
-    # Add related_name to resolve the clash
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_user_set',
-        related_query_name='user',
-        blank=True,
-        verbose_name='groups',
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-    )
-
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_user_set',
-        related_query_name='user',
-        blank=True,
-        verbose_name='user permissions',
-        help_text='Specific permissions for this user.',
-    )
+class UserFavorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'article')
