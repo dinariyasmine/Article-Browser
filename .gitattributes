@@ -1,0 +1,10 @@
+Backend/authentication/migrations/__pycache__/0001_initial.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0002_alter_admin_user_alter_moderator_user.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0003_alter_user_full_name.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0004_alter_user_full_name.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0005_alter_user_username.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0006_remove_user_full_name.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0007_user_is_admin_user_is_moderator.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0008_remove_moderator_user_delete_admin_delete_moderator.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/0009_alter_user_options.cpython-312.pyc -merge
+Backend/authentication/migrations/__pycache__/__init__.cpython-312.pyc -merge
