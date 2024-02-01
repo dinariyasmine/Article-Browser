@@ -123,9 +123,9 @@ def extract_information_from_pdf(chemin_du_pdf):
     if dt_abstract.search(chat_completion.choices[0].message.content) is not None:
         abstract=dt_abstract.search(chat_completion.choices[0].message.content).group(0)
     elif re.compile("(?<=Abstract:\n).+").search(chat_completion.choices[0].message.content) is not None:
-        abstract=dt_abstract.search(chat_completion.choices[0].message.content).group(0)
+        abstract=re.compile("(?<=Abstract:\n).+").search(chat_completion.choices[0].message.content).group(0)
     elif re.compile("(?<=Abstract: \n).+").search(chat_completion.choices[0].message.content) is not None:
-        abstract=dt_abstract.search(chat_completion.choices[0].message.content).group(0)
+        abstract=re.compile("(?<=Abstract: \n).+").search(chat_completion.choices[0].message.content).group(0)
     else:
         abstract=''
 
@@ -171,7 +171,7 @@ def extract_information_from_pdf(chemin_du_pdf):
     print(text_integral)
     print('\n')
     print(references)
-    
+
     # Retrieve or create Author instances for each author name
     author_instances = [Author.objects.get_or_create(name=author_name)[0] for author_name in auteurs]
 
