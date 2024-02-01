@@ -9,8 +9,7 @@ import ProfilePic from "../components/SearchPage/userPopUp";
 import favoritesPic from "../assets/fullHeart.png";
 
 
-//Random data  for testing purposes
-const optionsList = ['word 1', 'word 2', 'word 3'];
+
 
 
 
@@ -23,10 +22,12 @@ const SearchPage =()=>{
   const handleKeywordSelect = (selectedOptions) => {
     console.log("Selected Keywords:", selectedOptions);
     setSelectedKeywords(selectedOptions);
+    
   };
   
   
   const handleAuthorSelect = (selectedOptions) => {
+    console.log("Selected Keywords:", selectedOptions);
     setSelectedAuthors(selectedOptions);
   };
   
@@ -70,7 +71,7 @@ const SearchPage =()=>{
         console.log("here too !");
         console.log("articles : ", formattedArticles);
   
-        // Extract arrays of unique values
+       
         // Extract arrays of unique values
       const allInstitutions = formattedArticles.length > 0
       ? Array.from(new Set(formattedArticles.flatMap(article => article.Institutions)))
@@ -116,11 +117,11 @@ const SearchPage =()=>{
       );
   
       const authorCondition = selectedAuthors.length === 0 || selectedAuthors.every((author) =>
-        article.authors.includes(author)
+        article.Authors.includes(author)
       );
   
       const institutionCondition = selectedInstitutions.length === 0 || selectedInstitutions.every((institution) =>
-        article.institutions.includes(institution)
+        article.Institutions.includes(institution)
       );
   
       // Return true only if all conditions are met

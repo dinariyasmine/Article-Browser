@@ -1,27 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FilterListItem from './filterListItem';
 
-const FilterList = ({ options, onSelect }) => {
-  const [checkedItems, setCheckedItems] = useState([]);
+const FilterList = ({ options }) => {
+  const [checkedItems, setCheckedItems] = useState(Array(options.length).fill(false));
 
-  // Check if options is an array before mapping
-  if (!Array.isArray(options)) {
-    console.error('Options must be an array.');
-    return null; // or return an empty div or a message
-  }
+  useEffect(() => {
+    localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+  }, [checkedItems]);
 
   const handleCheckboxClick = (index) => {
-    const newCheckedItems = [...checkedItems];
-    newCheckedItems[index] = !newCheckedItems[index];
-    setCheckedItems(newCheckedItems);
-
-    // Call the onSelect callback with the updated checked items
-    onSelect(getCheckedItems());
+    setCheckedItems((prevCheckedItems) => {
+      const newCheckedItems = [...prevCheckedItems];
+      newCheckedItems[index] = !newCheckedItems[index];
+      console.log("new checked :",newCheckedItems);
+      return newCheckedItems;
+      
+    });
   };
 
-  // Function to get the items with isChecked set to true
   const getCheckedItems = () => {
-    return options.filter((option, index) => checkedItems[index]);
+    return options.filter((_, index) => checkedItems[index]);
   };
 
   return (
