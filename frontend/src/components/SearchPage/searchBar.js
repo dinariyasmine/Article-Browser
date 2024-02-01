@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoopeFlou from '../../assets/loopFlou.png';
 import ActiveLoope from '../../assets/loop.png';
+import axios  from "axios";
 
 const SearchBar = ({ onSearch }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -17,21 +18,33 @@ const SearchBar = ({ onSearch }) => {
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
     setSearchInput(inputValue);
-
     // Check if the input is empty, and update the search results accordingly
     if (onSearch) {
-      if (inputValue.trim() === '') {
-        onSearch(''); // Pass an empty query to indicate no search
-      }
-    }
-  };
+      const isEmpty = inputValue.trim() === '';
+      onSearch(inputValue.trim(), isEmpty); // Pass the input value and a flag indicating if it's empty
+    }};
 
-  const handleSearchClick = () => {
-    // Check if the input contains a value before triggering the search
-    if (onSearch && searchInput.trim() !== '') {
-      onSearch(searchInput.trim());
-    }
-  };
+
+
+    const handleSearchClick = async () => {
+      try {
+        console.log("i was triggered");
+    
+        const response = await axios.post('http://127.0.0.1:8000/articles/search/', {
+          searchBarContent: searchInput,
+        });
+    
+    
+        // Pass the entire response object to the parent component
+        if (onSearch) {
+          onSearch(response); // Pass the entire response object
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error('Error during search:', error.message);
+      }
+    };
+    
 
   return (
     <div className="flex items-center w-5/6 relative ml-14">

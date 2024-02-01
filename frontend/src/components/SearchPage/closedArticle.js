@@ -13,7 +13,7 @@ const ClosedArticle = ({ article }) => {
 
   return (
     <div className="mt-5">
-      <Link to={{ pathname: `/detail/${article.id}`, state: { article: article } }}>
+      <Link to={{ pathname: `/UserSpace/ArticleDetails/${article.id}`, state: { article: article } }}>
       
         <button
           className={`ml-14 w-4/6 flex items-center bg-white rounded-3xl py-3 border transition duration-300 ease-in-out hover:bg-gray-100 relative`}

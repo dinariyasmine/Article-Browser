@@ -22,28 +22,30 @@ const CustomInput = ({ value, onClick, isCalendarOpen }) => {
 
 
 
-const Datepicker = () => {
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  
-    return (
-      <div className="flex items-center">
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => {
-            setSelectedDate(date);
-            setIsCalendarOpen(false);
-          }}
-          onInputClick={() => setIsCalendarOpen(true)}
-          onBlur={() => !selectedDate && setIsCalendarOpen(false)} // Reset only if no date is selected
-          dateFormat="dd/MM/yyyy"
-          customInput={<CustomInput isCalendarOpen={isCalendarOpen} />}
-          popperPlacement="bottom-start"
-          className="w-64"
-        />
-      </div>
-    );
-  };
+const Datepicker = ({ onDateSelect }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  return (
+    <div className="flex items-center">
+      <DatePicker
+        selected={selectedDate}
+        onChange={(date) => {
+          setSelectedDate(date);
+          onDateSelect(date); // Pass the selected date to the callback
+          setIsCalendarOpen(false);
+        }}
+        onInputClick={() => setIsCalendarOpen(true)}
+        onBlur={() => !selectedDate && setIsCalendarOpen(false)}
+        dateFormat="dd/MM/yyyy"
+        customInput={<CustomInput isCalendarOpen={isCalendarOpen} />}
+        popperPlacement="bottom-start"
+        className="w-64"
+      />
+    </div>
+  );
+};
+
   
   export default Datepicker;
   
