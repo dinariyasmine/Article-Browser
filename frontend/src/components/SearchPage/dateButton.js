@@ -3,12 +3,12 @@ import DatePicker from '../SearchPage/datePicker';
 
 
 
-const DateButton = ({date}) => {
+const DateButton = ({date, onDateSelect}) => {
    
     return (
         <div>
             <p className='text-sm ml-5'>{date}</p>
-            <DatePicker/>
+            <DatePicker onDateSelect={onDateSelect}/>
         </div>
        
       

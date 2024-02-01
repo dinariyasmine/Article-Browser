@@ -14,11 +14,12 @@ const FilterList = ({ options, onSelect }) => {
     setCheckedItems((prevCheckedItems) => {
       const newCheckedItems = [...prevCheckedItems];
       newCheckedItems[index] = !newCheckedItems[index];
+  
+      const selectedOptions = options.filter((option, idx) => newCheckedItems[idx]);
+      onSelect(selectedOptions);
+  
       return newCheckedItems;
     });
-  
-    // Call the onSelect callback with the updated checked items
-    onSelect(getCheckedItems());
   };
   
 

@@ -19,6 +19,16 @@ const SearchPage =()=>{
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [selectedInstitutions, setSelectedInstitutions] = useState([]);
   const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  // Callback functions to update StartDate and EndDate
+  const handleStartDateSelect = (selectedDate) => {
+    setStartDate(selectedDate);
+  };
+
+  const handleEndDateSelect = (selectedDate) => {
+    setEndDate(selectedDate);
+  };
   const handleKeywordSelect = (selectedOptions) => {
     console.log("Selected Keywords:", selectedOptions);
     setSelectedKeywords(selectedOptions);
@@ -62,7 +72,7 @@ const SearchPage =()=>{
           title: article.title,
           Institutions: article.institutions,
           keywords: article.keywords,
-          PublishDate: article.publishDate,
+          PublishDate: article.publish_date,
           Authors: article.authors,
           Abstract: article.abstract,
           IntegralText: article.integralText,
@@ -108,7 +118,7 @@ const SearchPage =()=>{
   
   
   const filterArticles = () => {
-    // Retrieve the stored checked items from the window
+    console.log('Before Filtering:', searchQuery.map(article => article.PublishDate));
   
     // Filter articles based on selected keywords, authors, and institutions
     setSearchQuery(searchQuery.filter((article) => {
@@ -123,16 +133,31 @@ const SearchPage =()=>{
       const institutionCondition = selectedInstitutions.length === 0 || selectedInstitutions.every((institution) =>
         article.Institutions.includes(institution)
       );
+    // Date filtering conditions
+    const startDateCondition = !startDate || new Date(article.PublishDate) >= new Date(startDate);
+    const endDateCondition = !endDate || new Date(article.PublishDate) <= new Date(endDate);
+          // Console logs for debugging
+    console.log('Article:', article.title);
+    console.log('Publish Date:', article.PublishDate !== undefined ? article.PublishDate : 'Not available');
+    console.log('Keyword Condition:', keywordCondition);
+    console.log('Author Condition:', authorCondition);
+    console.log('Institution Condition:', institutionCondition);
+    console.log('StartDate Condition:', startDateCondition);
+    console.log('EndDate Condition:', endDateCondition);
+    // Return true only if all conditions are met
+    return keywordCondition && authorCondition && institutionCondition && startDateCondition && endDateCondition;
+  }));
   
-      // Return true only if all conditions are met
-      return keywordCondition && authorCondition && institutionCondition;
-    }));
+     
   
     // Do something with the filtered articles
     console.log('Filtered Articles:', searchQuery);
     console.log('Selected Keywords:', selectedKeywords);
     console.log('Selected Authors:', selectedAuthors);
     console.log('Selected Institutions:', selectedInstitutions);
+    console.log('Start Date :',startDate);
+    console.log('End Date :',endDate);
+    
   };
   
   
@@ -164,8 +189,8 @@ const SearchPage =()=>{
                 <FilterBar title={"Keywords"} listOfOptions={keywordsList} onSelect={handleKeywordSelect} />
                 <FilterBar title={"Authors"} listOfOptions={authorsList} onSelect={handleAuthorSelect}/>
                 <FilterBar title={"Institutions"} listOfOptions={institutionsList} onSelect={handleInstitutionSelect}/> 
-                <DateButton date={"Start Date"}/>
-                <DateButton date={"End Date"}/>
+                <DateButton date={"Start Date"} onDateSelect={handleStartDateSelect} />
+                <DateButton date={"End Date"} onDateSelect={handleEndDateSelect} />
                 <button className="mt-3" onClick={filterArticles}>
                 <p className="bg-pink text-white rounded-full py-2 hover:bg-pink-700">Filtrer Resultat</p>
                 </button>
