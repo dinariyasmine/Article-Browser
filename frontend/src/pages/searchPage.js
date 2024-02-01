@@ -9,10 +9,7 @@ import ProfilePic from "../components/SearchPage/userPopUp";
 import favoritesPic from "../assets/fullHeart.png";
 
 const optionsList = ['word 1', 'word 2', 'word 3'];
-const User = {
-  UserName:'JaneDoe',
-  EmailAdress:'jdoe@gmail.com'
-}
+
 
 
 const closedArticles = [
@@ -94,7 +91,7 @@ const SearchPage =()=>{
                     </button>
                     </Link>
                     <button>
-                    <ProfilePic UserName={User.UserName} EmailAdress={User.EmailAdress}/>
+                    <ProfilePic />
                     </button>
                    
                 </div>

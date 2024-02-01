@@ -21,7 +21,7 @@
     flex-direction: column;
 }
 
- .imgProfil{
+ /*.imgProfil{
     border-radius: 50%;
     height: 70px; 
     object-fit: cover;
@@ -29,7 +29,7 @@
     top: 50px;
     right: 20px;
 }
-
+*/
 /*.Up{
     margin: 9.9vh 3vw 9.9vh 0;
     display: flex;

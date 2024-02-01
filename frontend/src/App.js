@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 import ArticleModify from './pages/articleModify/articleModify';
 import ModeratorPage from './pages/ModeratorPage/ModeratorPage';
 import SignUp from './pages/SignPages/SignUp'
@@ -8,26 +7,25 @@ import SignIn from './pages/SignPages/SignIn'
 import SearchPage from './pages/searchPage';
 import DetailArticle from './pages/detailArticle';
 import FavoritesPage from './pages/favoritesPage';
+import LandingPage from './pages/landingPage';
+
+import { Route, Routes,  BrowserRouter as Router } from 'react-router-dom';
 
 
 
-
- function App() {
-   return (
+function App() {
+  return (
     <Router>
       <Routes>
-        {/*<Route path="/" element={<SearchPage />} />
-        <Route path="/detail/:id" element={<DetailArticle/>} />
-        <Route path="/favorites/" element={<FavoritesPage/>} />
-        <Route path="/signup" element={<SignUp/>} />
-        <Route path="/signin" element={<SignIn/>} />
-        <Route path="/moderator" element={<ModeratorPage/>} />
-        <Route path="/articlemodif/:id" element={<ArticleModify/>} />*/}
-        <Route path="/" element={<SignUp />}> </Route>
-        
+        {/* Other routes... */}
+        <Route path="/" element={<LandingPage/>} />
+        <Route path="/SignIn" element={<SignIn />} />
+        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/UserSpace" element={<SearchPage />} />
+        <Route path="/ModeratorSpace" element={<ModeratorPage />}  />
       </Routes>
     </Router>
-   );
- }
+  );
+}
 
- export default App;
+export default App;

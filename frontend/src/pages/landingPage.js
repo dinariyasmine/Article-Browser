@@ -8,6 +8,7 @@ import IconCard from "../components/LandingPage/iconCard";
 import IconEarth from "../assets/earthVector.png";
 import IconUI from "../assets/uiVector.png";
 import IconUpdate from "../assets/updateVector.png";
+import { Link } from "react-router-dom";
 const LandingPage = () => {
   return (
     <div className="overflow-x-hidden font-montserrat ">
@@ -22,7 +23,10 @@ const LandingPage = () => {
         <div>
           <Text/>
           <div className="mt-10">
+            <Link to="/SignIn">
             <LandingPageButton />
+            </Link>
+            
           </div>
         </div>
 

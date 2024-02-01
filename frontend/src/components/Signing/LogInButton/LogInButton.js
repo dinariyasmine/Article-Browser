@@ -1,12 +1,12 @@
 import React from 'react';
 import './LogInButton.css';
 
-function LogInButton(Props) {
+function LogInButton({ text, onClick }) {
   return (
-    <button className='LOGINBUT'>
-        {Props.text}
+    <button className='LOGINBUT' onClick={onClick}>
+      {text}
     </button>
-  )
+  );
 }
 
-export default LogInButton
+export default LogInButton;

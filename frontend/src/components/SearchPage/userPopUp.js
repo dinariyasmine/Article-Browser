@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import profilePic from "../../assets/userIcon.png";
 import Logout from "../../assets/logout.png";
+import { Link } from "react-router-dom";
 
-/*
 
-const storedUser = localStorage.getItem("user");
 
-const user = storedUser ? JSON.parse(storedUser) : null;
-
-const UserName = user ? user.UserName : "";
-const EmailAdress = user ? user.EmailAdress : "";
-*/
-
-// ... (previous imports)
-
-const UserPopUp = ({ UserName, EmailAdress }) => {
-    const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+const UserPopUp = () => {
+  const storedUser = JSON.parse(localStorage.getItem('user')) || {};
+  const UserName = storedUser.username;
+  const EmailAdress = storedUser.email;
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   
     const handleIconClick = () => {
+      console.log("user",storedUser);
       setIsPopUpVisible(!isPopUpVisible);
+    };
+    const handleLogout = () => {
+      console.log("user",storedUser);
+      localStorage.removeItem("user");
+      window.isLogged=false;
     };
   
     return (
@@ -55,10 +55,13 @@ const UserPopUp = ({ UserName, EmailAdress }) => {
                  <div className="line-container w-11/12">
                   <div className="mb-2 border-b bg-black"></div>
                 </div>
-                <button className="flex items-center">
+                <Link to ="/">
+                <button className="flex items-center" onClick={handleLogout}>
                   <p className="mt-1 mr-2 mb-0 pb-2 font-semibold text-gray-500">Logout</p>
                   <img src={Logout} alt="Logout" className="" />
                 </button>
+                </Link>
+                
               </div>
             </div>
           </div>
