@@ -11,60 +11,34 @@ import favoritesPic from "../assets/fullHeart.png";
 
 //Random data  for testing purposes
 const optionsList = ['word 1', 'word 2', 'word 3'];
-const closedArticles = [
-    {
-      id:'00',
-      title: 'Article 1',
-      Institutions :['Hello','Hello2'],
-      keywords: ['React', 'JavaScript'],
-      PublishDate: '2023-01-01',
-      Authors: ['Author1','Author2'],
-      Abstract:'Incididunt laboris deserunt in sint ad non quis ex consequat nulla adipisicing.',
-      IntegralText:'Commodo ut quis minim laboris in proident occaecat enim tempor mollit eu cillum. Occaecat irure consequat cillum ut dolore. Excepteur ipsum eiusmod veniam pariatur. Ad laboris aliquip ea cupidatat aute. Mollit dolor sunt nostrud occaecat sunt cillum sunt et anim consequat laboris. Minim id sit cupidatat qui exercitation voluptate dolore. Ad ea aliquip laborum non aliqua.',
-      References: ['Reference1','Reference2'],
-    },
-    {
-      id:'01',
-      title: 'Article 2',
-      Institutions :['Hello','Hello2'],
-      keywords: ['React', 'JavaScript'],
-      PublishDate: '2023-01-01',
-      Authors: ['Author1','Author2'],
-      Abstract:'Incididunt laboris deserunt in sint ad non quis ex consequat nulla adipisicing.',
-      IntegralText:'Commodo ut quis minim laboris in proident occaecat enim tempor mollit eu cillum. Occaecat irure consequat cillum ut dolore. Excepteur ipsum eiusmod veniam pariatur. Ad laboris aliquip ea cupidatat aute. Mollit dolor sunt nostrud occaecat sunt cillum sunt et anim consequat laboris. Minim id sit cupidatat qui exercitation voluptate dolore. Ad ea aliquip laborum non aliqua.',
-      References: ['Reference1','Reference2'],
-      },
-      {
-        id:'02',
-        title: 'Article 3',
-        Institutions :['Hello','Hello2'],
-        keywords: ['React', 'JavaScript'],
-        PublishDate: '2023-01-01',
-        Authors: ['Author1','Author2'],
-        Abstract:'Incididunt laboris deserunt in sint ad non quis ex consequat nulla adipisicing.',
-        IntegralText:'Commodo ut quis minim laboris in proident occaecat enim tempor mollit eu cillum. Occaecat irure consequat cillum ut dolore. Excepteur ipsum eiusmod veniam pariatur. Ad laboris aliquip ea cupidatat aute. Mollit dolor sunt nostrud occaecat sunt cillum sunt et anim consequat laboris. Minim id sit cupidatat qui exercitation voluptate dolore. Ad ea aliquip laborum non aliqua.',
-        References: ['Reference1','Reference2'],
-      },
-      {
-        id:'03',
-        title: 'Article 4',
-        Institutions :['Hello','Hello2'],
-        keywords: ['React', 'JavaScript'],
-        PublishDate: '2023-01-01',
-        Authors: ['Author1','Author2'],
-        Abstract:'Incididunt laboris deserunt in sint ad non quis ex consequat nulla adipisicing.',
-        IntegralText:'Commodo ut quis minim laboris in proident occaecat enim tempor mollit eu cillum. Occaecat irure consequat cillum ut dolore. Excepteur ipsum eiusmod veniam pariatur. Ad laboris aliquip ea cupidatat aute. Mollit dolor sunt nostrud occaecat sunt cillum sunt et anim consequat laboris. Minim id sit cupidatat qui exercitation voluptate dolore. Ad ea aliquip laborum non aliqua.',
-        References: ['Reference1','Reference2'],
-      }
-   
-  ];
+
 
 
   
 const SearchPage =()=>{
+  // filtering lists
+  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [selectedInstitutions, setSelectedInstitutions] = useState([]);
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const handleKeywordSelect = (selectedOptions) => {
+    console.log("Selected Keywords:", selectedOptions);
+    setSelectedKeywords(selectedOptions);
+  };
+  
+  
+  const handleAuthorSelect = (selectedOptions) => {
+    setSelectedAuthors(selectedOptions);
+  };
+  
+  const handleInstitutionSelect = (selectedOptions) => {
+    setSelectedInstitutions(selectedOptions);
+  };
+  
+
+  
 
   const [showFoundArticlesList, setShowFoundArticlesList] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState([]);
   const [institutionsList, setinstitutionsList] = useState('');
   const [authorsList, setauthorsList] = useState('');
   const [keywordsList, setKeywordsList] = useState('');
@@ -97,15 +71,21 @@ const SearchPage =()=>{
         console.log("articles : ", formattedArticles);
   
         // Extract arrays of unique values
-        const allInstitutions = Array.from(new Set(formattedArticles.flatMap(article => article.Institutions)));
-        const allAuthors = Array.from(new Set(formattedArticles.flatMap(article => article.Authors)));
-        const allKeywords = Array.from(new Set(formattedArticles.flatMap(article => article.keywords)));
+        // Extract arrays of unique values
+      const allInstitutions = formattedArticles.length > 0
+      ? Array.from(new Set(formattedArticles.flatMap(article => article.Institutions)))
+      : [];
+    const allAuthors = formattedArticles.length > 0
+      ? Array.from(new Set(formattedArticles.flatMap(article => article.Authors)))
+      : [];
+    const allKeywords = formattedArticles.length > 0
+      ? Array.from(new Set(formattedArticles.flatMap(article => article.keywords)))
+      : [];
   
         // Put the options lists in the corresponding state variables
         setauthorsList(allAuthors);
         setinstitutionsList(allInstitutions);
         setKeywordsList(allKeywords);
-  
         console.log("All Institutions:", allInstitutions);
         console.log("All Authors:", allAuthors);
         console.log("All Keywords:", allKeywords);
@@ -123,12 +103,42 @@ const SearchPage =()=>{
       console.error('Invalid or empty response.');
     }
   };
+
   
+  
+  const filterArticles = () => {
+    // Retrieve the stored checked items from the window
+  
+    // Filter articles based on selected keywords, authors, and institutions
+    setSearchQuery(searchQuery.filter((article) => {
+      const keywordCondition = selectedKeywords.length === 0 || selectedKeywords.every((keyword) =>
+        article.keywords.includes(keyword)
+      );
+  
+      const authorCondition = selectedAuthors.length === 0 || selectedAuthors.every((author) =>
+        article.authors.includes(author)
+      );
+  
+      const institutionCondition = selectedInstitutions.length === 0 || selectedInstitutions.every((institution) =>
+        article.institutions.includes(institution)
+      );
+  
+      // Return true only if all conditions are met
+      return keywordCondition && authorCondition && institutionCondition;
+    }));
+  
+    // Do something with the filtered articles
+    console.log('Filtered Articles:', searchQuery);
+    console.log('Selected Keywords:', selectedKeywords);
+    console.log('Selected Authors:', selectedAuthors);
+    console.log('Selected Institutions:', selectedInstitutions);
+  };
   
   
   
 
-    const showClosedArticleList = closedArticles.length > 0;
+  
+    const showClosedArticleList = searchQuery.length > 0;
     return(
         <div className="font-montserrat flex">
              <div className="bg-lightBlue h-screen w-4/6 fixed overflow-y-auto no-scrollbar">
@@ -149,14 +159,16 @@ const SearchPage =()=>{
                     </button>
                    
                 </div>
-                <FilterBar title={"Keywords"} listOfOptions={keywordsList}/>
-                <FilterBar title={"Authors"} listOfOptions={authorsList}/>
-                <FilterBar title={"Institutions"} listOfOptions={institutionsList}/> 
+                
+                <FilterBar title={"Keywords"} listOfOptions={keywordsList} onSelect={handleKeywordSelect} />
+                <FilterBar title={"Authors"} listOfOptions={authorsList} onSelect={handleAuthorSelect}/>
+                <FilterBar title={"Institutions"} listOfOptions={institutionsList} onSelect={handleInstitutionSelect}/> 
                 <DateButton date={"Start Date"}/>
                 <DateButton date={"End Date"}/>
-                <button className="mt-3">
-                     <p className="bg-pink text-white rounded-full py-2 hover:bg-pink-700">Filtrer Resultat</p>   
+                <button className="mt-3" onClick={filterArticles}>
+                <p className="bg-pink text-white rounded-full py-2 hover:bg-pink-700">Filtrer Resultat</p>
                 </button>
+
             </div>
         </div>
 

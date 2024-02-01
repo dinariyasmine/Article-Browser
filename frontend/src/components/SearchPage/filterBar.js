@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Triangle from "../../assets/blackTriangle.png";
 import FilterList from "../SearchPage/filterList";
 
-const FilterBar = ({ title, listOfOptions }) => {
+const FilterBar = ({ title, listOfOptions,onSelect }) => {
   const [rotation, setRotation] = useState(0);
   const [isOpened, setIsOpened] = useState(false);
   
@@ -28,7 +28,7 @@ const FilterBar = ({ title, listOfOptions }) => {
           style={{ transform: `rotate(${rotation}deg)` }}
         />
       </button>
-      {isOpened &&<FilterList options={listOfOptions}/>}
+      {isOpened &&<FilterList options={listOfOptions} onSelect={onSelect}/>}
     </div>
   );
 };

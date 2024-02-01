@@ -22,6 +22,7 @@ function App() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/UserSpace" element={<SearchPage />} />
+        <Route path="/UserSpace/ArticleDetails/:id" element={<DetailArticle/>} />
         <Route path="/ModeratorSpace" element={<ModeratorPage />}  />
         <Route path="/favorites" element={<FavoritesPage/>}  />
       </Routes>
