@@ -136,7 +136,7 @@ const SearchPage =()=>{
     // Date filtering conditions
     const startDateCondition = !startDate || new Date(article.PublishDate) >= new Date(startDate);
     const endDateCondition = !endDate || new Date(article.PublishDate) <= new Date(endDate);
-          // Console logs for debugging
+         
     console.log('Article:', article.title);
     console.log('Publish Date:', article.PublishDate !== undefined ? article.PublishDate : 'Not available');
     console.log('Keyword Condition:', keywordCondition);
