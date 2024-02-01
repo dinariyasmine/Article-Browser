@@ -23,6 +23,7 @@ function App() {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/UserSpace" element={<SearchPage />} />
         <Route path="/ModeratorSpace" element={<ModeratorPage />}  />
+        <Route path="/favorites" element={<FavoritesPage/>}  />
       </Routes>
     </Router>
   );

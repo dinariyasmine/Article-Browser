@@ -70,7 +70,6 @@ const SignIn = () => {
         }
       }
 
-
       // Handle the response as needed, for example, navigate to a new page
       // or update the UI to reflect the user being logged in
     } catch (error) {

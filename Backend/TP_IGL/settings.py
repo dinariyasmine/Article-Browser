@@ -41,9 +41,11 @@ INSTALLED_APPS = [
     'elasticsearch_dsl',
     'authentication',
     'corsheaders',
+    'articles',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'TP_IGL.urls'
@@ -172,11 +174,8 @@ CORS_ALLOW_HEADERS = [
 ]
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    # Add any other origins as needed
-]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_USE_SESSIONS = True
 CSRF_COOKIE_SAMESITE = None
