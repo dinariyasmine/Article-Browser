@@ -38,6 +38,7 @@ class Article(models.Model):
     full_text = models.TextField()
     pdf_url = models.URLField()
     validated = False
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

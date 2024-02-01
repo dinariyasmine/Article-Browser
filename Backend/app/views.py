@@ -53,6 +53,8 @@ def index_articles(request):
                         "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
                         "text": article.full_text,
                         "pdf_url": article.pdf_url,
+                        "validated": article.validated,
+                        "date": article.date
                     }
                 }
             ]
