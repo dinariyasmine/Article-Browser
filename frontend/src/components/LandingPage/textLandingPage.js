@@ -3,7 +3,7 @@ import React from "react";
 const TextLandingPage = () => {
   return (
     <div>
-      <div className="flex flex-col items-left font-montserrat font-bold">
+      <div className="flex flex-col items-left font-montserrat font-bold max-sm:text-sm">
         <p className="text-5xl text-darkBlue">Welcome to </p>
         <p className="text-3xl">
           <span className="text-5xl text-pink">SciQuest </span>

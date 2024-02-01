@@ -8,12 +8,6 @@ import searchPic from "../assets/searchPic.png";
 import ProfilePic from "../components/SearchPage/userPopUp";
 import favoritesPic from "../assets/fullHeart.png";
 
-
-
-
-
-
-  
 const SearchPage =()=>{
   // filtering lists
   const [selectedKeywords, setSelectedKeywords] = useState([]);
@@ -166,7 +160,7 @@ const SearchPage =()=>{
   
     const showClosedArticleList = searchQuery.length > 0;
     return(
-        <div className="font-montserrat flex">
+        <div className="font-montserrat flex ">
              <div className="bg-lightBlue h-screen w-4/6 fixed overflow-y-auto no-scrollbar">
                 <p className="text-3xl font-bold text-darkBlue mt-16 mb-5 ml-20">What are you looking for ?</p>
                 <SearchBar onSearch={handleSearchButtonClick} />

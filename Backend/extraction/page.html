@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Information Extraction</title>
+</head>
+<body>
+    <h1>PDF Information Extraction</h1>
+
+    <form method="post" action="{% url 'extract_information' %}">
+        {% csrf_token %}
+        <label for="pdf_path">Enter PDF Path:</label>
+        <input type="text" id="pdf_path" name="pdf_path" required>
+
+        <button type="submit">Extract Information</button>
+    </form>
+</body>
+</html>
