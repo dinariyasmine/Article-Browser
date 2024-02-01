@@ -44,7 +44,9 @@ class Article(models.Model):
     
 
 class UserFavorite(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user_id = models.IntegerField()
+    article_id = models.IntegerField()
     class Meta:
-        unique_together = ('user', 'article')
+        unique_together = ('user_id', 'article_id')
+    def __str__(self):
+        return f"{self.user_id} - {self.article_id}"

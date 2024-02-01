@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from .models import Article, Author, Keyword, Institution, Reference
+from app.models import Article, Author, Keyword, Institution, Reference, UserFavorite
 from elasticsearch_dsl import Search
 from .index import ArticleIndex
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from elasticsearch.helpers import bulk
 from tenacity import retry, stop_after_delay, wait_fixed
 from datetime import datetime
 from django.shortcuts import get_object_or_404
-
+import json
+from django.views.decorators.csrf import csrf_exempt
+from authentication.models import User
+import random
 
 # Decorate the Elasticsearch search operation with retry mechanism
 @retry(stop=stop_after_delay(30), wait=wait_fixed(5))
@@ -22,39 +25,48 @@ def perform_elasticsearch_search(query):
     else:
         raise Exception("Elasticsearch search failed")
 
-def index_articles(request, article_id):
-    try:
-        article = get_object_or_404(Article, id = article_id)
-        # Initialize the Elasticsearch index
-        ArticleIndex.init()
 
-        # Index the article
-        actions = [
-            {
-                "_op_type": "index",
-                "_index": "article_index",
-                "_id": article.id,
-                "_source": {
-                    # Map model fields to Elasticsearch fields
-                    "title": article.title,
-                    "abstract": article.abstract,
-                    "authors": ", ".join(str(author) for author in article.authors.all()),
-                    "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
-                    "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
-                    "text": article.full_text,
-                    "pdf_url": article.pdf_url,
+@csrf_exempt
+def index_articles(request):
+    if request.method == 'POST':
+        try:
+            # Retrieve JSON data from the request body
+            data = json.loads(request.body.decode('utf-8'))
+            article_id = data.get('article_id')
+            
+            if article_id is None:
+                return JsonResponse({'status': 'error', 'message': 'Article ID is missing'})
+
+            article = get_object_or_404(Article, id=article_id)
+            ArticleIndex.init()
+
+            actions = [
+                {
+                    "_op_type": "index",
+                    "_index": "article_index",
+                    "_id": article.id,
+                    "_source": {
+                        "title": article.title,
+                        "abstract": article.abstract,
+                        "authors": ", ".join(str(author) for author in article.authors.all()),
+                        "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
+                        "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
+                        "text": article.full_text,
+                        "pdf_url": article.pdf_url,
+                    }
                 }
-            }
-        ]
-        # Get the Elasticsearch connection
-        es = ArticleIndex._get_connection()
-        # Bulk indexing
-        success, failed = bulk(client=es, actions=actions, stats_only=True)
-        return HttpResponse(f'Successfully indexed the article')
-    except Exception as e:
-        return HttpResponse(f'Error during indexing: {str(e)}')
+            ]
 
+            es = ArticleIndex._get_connection()
+            success, failed = bulk(client=es, actions=actions, stats_only=True)
+            return JsonResponse({'status': 'success', 'message': 'Article indexed successfully'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error during indexing: {str(e)}'})
+    else:
+        return HttpResponse('This view only accepts POST requests.')
 
+#--------------------------------------------------------------
+    
 def search_articles(request):
     query = request.GET.get('q', '')
     try:
@@ -70,10 +82,8 @@ def search_articles(request):
         print(f"Error: {e}")
         return render(request, 'search_results.html', {'articles': [], 'query': query, 'error': str(e)})
 
-
-
-
-
+#--------------------------------------------------------------
+    
 def search_and_filter_articles(request):
     # Extract search query from the front end team
     search_query = request.GET.get('q', '')
@@ -114,24 +124,123 @@ def search_and_filter_articles(request):
         print(f"Error: {e}")
         return render(request, 'search_results.html', {'articles': [], 'query': search_query, 'error': str(e)})
     
-
-#Favorites
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from .models import UserFavorite
-
-def add_to_favorites(request, article_id):
+#--------------------------------------------------------------
+    
+def add_to_favorites(request):
     if request.user.is_authenticated:
-        article = get_object_or_404(Article, id=article_id)
-        
-        # Check if the user already has the article in favorites
-        if UserFavorite.objects.filter(user=request.user, article=article).exists():
-            return JsonResponse({'status': 'Already in favorites'})
+        try:
+            # Extract user and article IDs from the JSON data in the request body
+            data = json.loads(request.body.decode('utf-8'))
+            user_id = data.get('user_id')
+            article_id = data.get('article_id')
 
-        # If not, add the article to favorites
-        user_favorite = UserFavorite(user=request.user, article=article)
-        user_favorite.save()
+            # Check if the user already has the article in favorites
+            if UserFavorite.objects.filter(user_id=user_id, article_id=article_id).exists():
+                return JsonResponse({'status': 'Already in favorites'})
 
-        return JsonResponse({'status': 'Added to favorites'})
+            # If not, add the article to favorites
+            user_favorite = UserFavorite(user_id=user_id, article_id=article_id)
+            user_favorite.save()
+
+            return JsonResponse({'status': 'Added to favorites'})
+
+        except Exception as e:
+            return JsonResponse({'status': 'Error', 'error': str(e)})
+
     else:
         return JsonResponse({'status': 'User not authenticated'})
+
+#--------------------------------------------------------------
+
+def get_favorite_articles(request):
+    try:
+        # Extract user and article IDs from the JSON data in the request body
+        data = json.loads(request.body.decode('utf-8'))
+        user_id = data.get('user_id')
+
+        # Step 2: Query UserFavorite model to get favorite article IDs
+        favorite_article_ids = UserFavorite.objects.filter(user_id=user_id).values_list('article_id', flat=True)
+
+        # Step 3: Use Elasticsearch to retrieve actual articles
+        if favorite_article_ids:
+            # Perform Elasticsearch search for favorite articles
+            query = {"terms": {"_id": list(favorite_article_ids)}}
+            print(f"Elasticsearch query: {query}")
+            result = perform_elasticsearch_search(query)
+
+            # Extract the articles from the Elasticsearch search result
+            favorite_articles = [hit.to_dict() for hit in result.hits]
+
+            # Return the favorite articles
+            return JsonResponse({'favorite_articles': favorite_articles})
+
+        else:
+            return JsonResponse({'message': 'User has no favorite articles'}, status=404)
+
+    except Exception as e:
+        print(f"Error in get_favorite_articles: {str(e)}")
+        print(f"Error details: {e.info}")  # Log detailed error information from Elasticsearch
+        return JsonResponse({'status': 'error', 'message': f'Error in get_favorite_articles: {str(e)}'}, status=500)
+    
+def perform_elasticsearch_search(query):
+    try:
+        s = ArticleIndex.search().query(query)
+        response = s.execute()
+        print(f"Elasticsearch response: {response}")
+        return response
+    except Exception as e:
+        print(f"Elasticsearch error: {e}")
+        raise
+    
+#--------------------------------------------------------------
+    
+def create_and_index_random_articles():
+    # Dummy data for authors, institutions, keywords, and articles
+    authors = ['Author A', 'Author B', 'Author C']
+    institutions = ['Institution X', 'Institution Y', 'Institution Z']
+    keywords = ['Keyword 1', 'Keyword 2', 'Keyword 3']
+
+    for i in range(15, 30):
+        # Create a random article
+        article = {
+            'title': f'Random Article {i}',
+            'abstract': f'This is the abstract of Random Article {i}.',
+            'full_text': f'This is the full text of Random Article {i}.',
+            'pdf_url': f'https://example.com/random-article-{i}.pdf',
+            'authors': random.sample(authors, k=random.randint(1, len(authors))),
+            'institutions': random.sample(institutions, k=random.randint(1, len(institutions))),
+            'keywords': random.sample(keywords, k=random.randint(1, len(keywords))),
+        }
+
+        # Index the article using the existing index_articles function
+        index_article(article,i)
+
+def index_article(article,i):
+    try:
+        ArticleIndex.init()
+        actions = [
+            {
+                "_op_type": "index",
+                "_index": "article_index",
+                "_id": i,
+                "_source": {
+                    "title": article['title'],
+                    "abstract": article['abstract'],
+                    "authors": ", ".join(str(author) for author in article['authors']),
+                    "institutions": ", ".join(str(institution) for institution in article['institutions']),
+                    "keywords": ", ".join(str(keyword) for keyword in article['keywords']),
+                    "text": article['full_text'],
+                    "pdf_url": article['pdf_url'],
+                }
+            }
+        ]
+        es = ArticleIndex._get_connection()
+        success, failed = bulk(client=es, actions=actions, stats_only=True)
+        if failed:
+            print(f"Failed to index article: {failed}")
+        else:
+            print("Article indexed successfully")
+        return JsonResponse({'status': 'success', 'message': 'Article indexed successfully'})
+    except Exception as e:
+        print(f"Error during indexing: {str(e)}")
+        return JsonResponse({'status': 'error', 'message': f'Error during indexing: {str(e)}'})
