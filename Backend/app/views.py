@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from app.models import Article, Author, Keyword, Institution, Reference, UserFavorite
+from app.models import Article,UserFavorite
 from elasticsearch_dsl import Search
 from .index import ArticleIndex
 from django.http import HttpResponse,JsonResponse
@@ -11,10 +11,13 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from authentication.models import User
 import random
+from django.utils import timezone
+from elasticsearch_dsl.connections import connections
+
 
 # Decorate the Elasticsearch search operation with retry mechanism
 @retry(stop=stop_after_delay(30), wait=wait_fixed(5))
-def perform_elasticsearch_search(query):
+def perform_elasticsearch_search1(query):
     # Use Elasticsearch DSL to perform the search
     s = Search(index='article_index').query("multi_match", query=query, fields=['title', 'keywords.name', 'authors.name', 'full_text'])
     response = s.execute()
@@ -73,7 +76,7 @@ def search_articles(request):
     query = request.GET.get('q', '')
     try:
         # Perform Elasticsearch search with retry mechanism
-        result = perform_elasticsearch_search(query)
+        result = perform_elasticsearch_search1(query)
         # Extract the list of article IDs from the Elasticsearch response
         article_ids = [hit.meta.id for hit in result]
         # Retrieve the articles from the database based on the IDs
@@ -214,6 +217,12 @@ def create_and_index_random_articles():
             'keywords': random.sample(keywords, k=random.randint(1, len(keywords))),
         }
 
+        # Set a default value for 'validated' (you may adjust this based on your logic)
+        article['validated'] = False
+
+        # Set a default value for 'date' (you may adjust this based on your logic)
+        article['date'] = timezone.now()
+
         # Index the article using the existing index_articles function
         index_article(article,i)
 
@@ -233,6 +242,8 @@ def index_article(article,i):
                     "keywords": ", ".join(str(keyword) for keyword in article['keywords']),
                     "text": article['full_text'],
                     "pdf_url": article['pdf_url'],
+                    "validated": article['validated'],
+                    "date": article['date']
                 }
             }
         ]
@@ -246,3 +257,47 @@ def index_article(article,i):
     except Exception as e:
         print(f"Error during indexing: {str(e)}")
         return JsonResponse({'status': 'error', 'message': f'Error during indexing: {str(e)}'})
+    
+#--------------------------------------------------------------
+
+def modify_article(request):
+    try:
+         # Extract user and article IDs from the JSON data in the request body
+        data = json.loads(request.body.decode('utf-8'))
+        article_id = data.get('article_id')
+        title = data.get('title', '')
+        abstract = data.get('abstract', '')
+        authors = data.get('authors', [])
+        institutions = data.get('institutions', [])
+        keywords = data.get('keywords', [])
+        references = data.get('references', [])
+        full_text = data.get('full_text', '')
+        pdf_url = data.get('pdf_url', '')
+        validated = True
+        date = data.get('date', '')
+
+        # Create an Elasticsearch client
+        es = connections.get_connection()
+
+        # Update the article in Elasticsearch
+        es.update(index='article_index', id=article_id,
+                  body={'doc': {
+                    'title': title,
+                    'abstract': abstract,
+                    'authors': authors,
+                    'institutions': institutions,
+                    'keywords': keywords,
+                    'references': references,
+                    'full_text': full_text,
+                    'pdf_url': pdf_url,
+                    'validated': validated,
+                    'date': date
+                  }})
+
+        return JsonResponse({'status': 'success', 'message': 'Article updated successfully'})
+
+    except Exception as e:
+        print(f"Error in modify_article: {str(e)}")
+        return JsonResponse({'status': 'error', 'message': f'Error in modify_article: {str(e)}'}, status=500)
+
+#--------------------------------------------------------------

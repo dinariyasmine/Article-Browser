@@ -37,7 +37,7 @@ class Article(models.Model):
     references = models.ManyToManyField(Reference)
     full_text = models.TextField()
     pdf_url = models.URLField()
-    validated = False
+    validated = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
