@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 import json
 from app.views import index_article
 from django.forms.models import model_to_dict
+from elasticsearch_dsl.connections import connections
+from elasticsearch.exceptions import NotFoundError
+from django.utils import timezone
 
 
 class IndexingTestCase(TestCase):
@@ -54,6 +57,27 @@ class SearchingTestCase(TestCase):
     def setUp(self):
         # Create a test client
         self.client = Client()
+        author1 = Author.objects.create(name='John Do')
+        institution1 = Institution.objects.create(name='University Ac')
+        keyword1 = Keyword.objects.create(name='Sciences')
+        reference1 = Reference.objects.create(name='Reference1')
+        article1 = Article.objects.create(
+            title='Sample Article A',
+            abstract='This is the abstract of sample article A.',
+            full_text='This is the full text of sample article A.',
+            pdf_url='https://example.com/sample-article-A.pdf',
+        )
+        article1.authors.add(author1)
+        article1.institutions.add(institution1)
+        article1.keywords.add(keyword1)
+        article1.references.add(reference1)
+        # Index articles
+        url = reverse('index_articles')
+        data = {'article_id': article1.id}
+        response = self.client.post(url, data=data, content_type='application/json')
+        print(response.content.decode())
+        print(response.status_code)
+        self.assertEqual(response.status_code, 200)
 
     @transaction.atomic
     def test_integration(self):
@@ -65,7 +89,7 @@ class SearchingTestCase(TestCase):
             print(response.status_code)
             self.assertEqual(response.status_code, 200)
 
-            # Search for sample article2 by Author
+            # Search for sample article2 by text
             search_query = 'This is the abstract of sample article A.'
             response = self.client.get(reverse('search_articles'), {'q': search_query})
             print(response.content.decode())
@@ -177,4 +201,76 @@ class GetFavoriteArticlesTestCase(TestCase):
         elif 'favorite_articles' in response_data:
             print(f"Favorite articles: {response_data['favorite_articles']}")
 
+#--------------------------------------------------------
 
+class ModifyArticleTestCase(TestCase):
+    def setUp(self):
+        # Create an article for testing
+        self.article = Article.objects.create(
+            title="Test Article",
+            abstract="Test Abstract",
+            full_text="Test Text",
+            pdf_url="https://example.com/test.pdf",
+            date=timezone.now(),
+        )
+
+        # Create authors, institutions, keywords, and references
+        author_a = Author.objects.create(name="Author A")
+        author_b = Author.objects.create(name="Author B")
+
+        institution_x = Institution.objects.create(name="Institution X")
+        institution_y = Institution.objects.create(name="Institution Y")
+
+        keyword_1 = Keyword.objects.create(name="Keyword 1")
+        keyword_2 = Keyword.objects.create(name="Keyword 2")
+
+        reference_1 = Reference.objects.create(name="Reference 1")
+        reference_2 = Reference.objects.create(name="Reference 2")
+
+        # Assign authors, institutions, keywords, and references to the article
+        self.article.authors.set([author_a, author_b])
+        self.article.institutions.set([institution_x, institution_y])
+        self.article.keywords.set([keyword_1, keyword_2])
+        self.article.references.set([reference_1, reference_2])
+
+        # Index the article in Elasticsearch
+        index_article(model_to_dict(self.article), self.article.id)
+
+    def test_modify_article(self):
+        # Prepare data for modification
+        modified_data = {
+            'article_id': self.article.id,
+            'title': 'Modified Title',
+            'abstract': 'Modified Abstract',
+            'full_text': 'Modified Text',
+            'pdf_url': 'https://example.com/modified.pdf',
+            'validated': True,
+            'authors': ["Modified Author A", "Modified Author B"],
+            'institutions': ["Modified Institution X", "Modified Institution Y"],
+            'keywords': ["Modified Keyword 1", "Modified Keyword 2"],
+            'references': ["Modified Reference 1", "Modified Reference 2"],
+            'date': (timezone.now()).isoformat()
+        }
+
+        # Send a POST request with the new data
+        url = reverse('modify_article')
+        response = self.client.post(
+            url,
+            json.dumps(modified_data),
+            content_type='application/json'
+        )
+
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Verify that the new article was indexed in Elasticsearch
+        es = connections.get_connection()
+        try:
+            es_response = es.get(index='article_index', id=str(self.article.id))  # Convert id to string
+            updated_article = es_response['_source']
+            print (updated_article)
+
+        except NotFoundError:
+            self.fail("Article not found in Elasticsearch")
+
+#--------------------------------------------------------
