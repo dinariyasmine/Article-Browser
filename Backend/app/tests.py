@@ -63,8 +63,8 @@ class SearchingTestCase(TestCase):
         reference1 = Reference.objects.create(name='Reference1')
         article1 = Article.objects.create(
             title='Sample Article A',
-            abstract='This is the abstract of sample article A.',
-            full_text='This is the full text of sample article A.',
+            abstract='This is the abstract of sample article A',
+            full_text='This is the full text of sample article A',
             pdf_url='https://example.com/sample-article-A.pdf',
         )
         article1.authors.add(author1)
@@ -82,15 +82,20 @@ class SearchingTestCase(TestCase):
     @transaction.atomic
     def test_integration(self):
         try:
-             # Search for sample article1 by name
+            # Search for sample article2 by keyword
+            search_query = 'Sciences'
+            response = self.client.get(reverse('search_articles'), {'q': search_query})
+            print(response.content.decode())
+            print(response.status_code)
+            self.assertEqual(response.status_code, 200)
+            # Search for sample article2 by title
             search_query = 'Sample Article A'
             response = self.client.get(reverse('search_articles'), {'q': search_query})
             print(response.content.decode())
             print(response.status_code)
             self.assertEqual(response.status_code, 200)
-
-            # Search for sample article2 by text
-            search_query = 'This is the abstract of sample article A.'
+            # Search for sample article2 by author
+            search_query = 'John Do'
             response = self.client.get(reverse('search_articles'), {'q': search_query})
             print(response.content.decode())
             print(response.status_code)
