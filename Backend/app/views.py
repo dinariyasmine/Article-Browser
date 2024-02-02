@@ -40,6 +40,7 @@ def index_articles(request):
                         "authors": ", ".join(str(author) for author in article.authors.all()),
                         "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
                         "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
+                        "references": article.references,
                         "text": article.full_text,
                         "pdf_url": article.pdf_url,
                         "validated": article.validated,
@@ -236,6 +237,7 @@ def create_and_index_random_articles():
             'authors': random.sample(authors, k=random.randint(1, len(authors))),
             'institutions': random.sample(institutions, k=random.randint(1, len(institutions))),
             'keywords': random.sample(keywords, k=random.randint(1, len(keywords))),
+            'references': f'These are the references of Random Article {i}.',
         }
 
         # Set a default value for 'validated' (you may adjust this based on your logic)
@@ -261,6 +263,7 @@ def index_article(article,i):
                     "authors": ", ".join(str(author) for author in article['authors']),
                     "institutions": ", ".join(str(institution) for institution in article['institutions']),
                     "keywords": ", ".join(str(keyword) for keyword in article['keywords']),
+                    "references": article['references'],
                     "text": article['full_text'],
                     "pdf_url": article['pdf_url'],
                     "validated": article['validated'],
@@ -291,7 +294,7 @@ def modify_article(request):
         authors = data.get('authors', [])
         institutions = data.get('institutions', [])
         keywords = data.get('keywords', [])
-        references = data.get('references', [])
+        references = data.get('references', '')
         full_text = data.get('full_text', '')
         pdf_url = data.get('pdf_url', '')
         validated = True
