@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from .models import Article
 import json
 from datetime import datetime, timedelta
-
+from app.views import perform_elasticsearch_search
 
 class AddArticleView(View):
     @method_decorator(csrf_exempt)
@@ -14,32 +14,42 @@ class AddArticleView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            # No need for search input as we want to retrieve all articles
-            # Perform your search logic here
-            articles = Article.objects.all()
+            # Extract the search query from the request POST data
+            query = request.POST.get('query', '')  # Assuming the search query is sent as 'query' if u named it 3fssa whdoukhra change it
 
-            # Prepare the response data
-            response_data = {
-                'articles': [
-                    {
-                        'title': article.title,
-                        'authors': article.authors,
-                        'keywords': article.keywords,
-                        'institutions': article.institutions,
-                        'publish_date': article.publish_date.strftime('%Y-%m-%d'),
-                        'abstract': article.abstract,
-                        'integral_text': article.integral_text,
-                        'references': article.references,
-                    }
-                    for article in articles
-                ],
-            }
+            # Perform Elasticsearch search with retry mechanism
+            result = perform_elasticsearch_search(query)
 
-            return JsonResponse(response_data)
+            # Extract the list of article IDs from the Elasticsearch response
+            article_ids = [hit.meta.id for hit in result]
 
-        except json.JSONDecodeError as decode_error:
-            return JsonResponse({"errors": f"JSON Decode Error: {decode_error}"}, status=400)
+            # Retrieve the articles from the database based on the IDs
+            articles = Article.objects.filter(id__in=article_ids)
+
+            # Serialize the articles to JSON
+            articles_data = []
+            for article in articles:
+                article_data = {
+                    'title': article.title,
+                    'abstract': article.abstract,
+                    'authors': [author.name for author in article.authors.all()],
+                    'institutions': [institution.name for institution in article.institutions.all()],
+                    'keywords': [keyword.name for keyword in article.keywords.all()],
+                    'references': [reference.name for reference in article.references.all()],
+                    'full_text': article.full_text,
+                    'pdf_url': article.pdf_url,
+                    'validated': article.validated,
+                    'date': article.date.strftime('%Y-%m-%d')  # Format date as string
+                }
+                articles_data.append(article_data)
+
+            return JsonResponse({'articles': articles_data, 'query': query})
 
         except Exception as e:
-            print(f"Unexpected error in AddArticleView: {str(e)}")
-            return JsonResponse({"errors": "Internal Server Error"}, status=500)
+            # Handle the exception or log the error
+            print(f"Error: {e}")
+            return JsonResponse({'error': str(e)}, status=500)
+
+    def get(self, request, *args, **kwargs):
+        # Return a 405 Method Not Allowed error if the request method is not POST
+        return JsonResponse({'error': 'Method Not Allowed'}, status=405)
