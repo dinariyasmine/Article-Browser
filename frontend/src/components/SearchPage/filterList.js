@@ -29,7 +29,7 @@ const FilterList = ({ options, onSelect }) => {
   };
 
   return (
-    <div className="flex flex-col mb-5">
+    <div className="flex flex-col mb-5 max-sm:w-11/12">
       {options.map((option, index) => (
         <FilterListItem
           key={index}

@@ -38,8 +38,8 @@ const LandingPage = () => {
       <div className="flex flex-col items-center justify-center">
       <p className="text-4xl font-bold text-darkBlue mb-24 -mt-24 max-sm:mt-20">Why choose us ?</p>
       </div>
-       <div className="flex items-center justify-center ">
-        <div className="flex flex-col items-center justify-center max-sm:flex-col max-sm:flex">
+       <div className="flex flex-wrap items-center justify-center max-sm:flex-wrap ">
+        <div className="flex flex-col items-center justify-center max-sm:flex-col ">
         <IconCard imgUrl={IconEarth}/>
         <Card title={"Precision Search"} text={"Our advanced algorithms ensure precise and efficient searches, saving you time and effort."}/>
         </div>

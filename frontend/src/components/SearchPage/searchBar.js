@@ -47,15 +47,15 @@ const SearchBar = ({ onSearch }) => {
     
 
   return (
-    <div className="flex items-center w-5/6 relative ml-14">
+    <div className="flex items-center w-5/6 relative ml-14 max-sm:ml-10">
       <img
         src={isClicked ? ActiveLoope : LoopeFlou}
         alt="Search Loope Icon"
-        className="absolute left-3 top-1/2 transform -translate-y-1/2"
+        className="absolute left-3 top-1/2 transform -translate-y-1/2 "
       />
       <input
         type="search"
-        className={`font-montserrat flex-1 outline-none shadow-inner rounded-full py-2 px-4 pl-12 bg-image ${
+        className={`font-montserrat flex-1 outline-none shadow-inner rounded-full py-2 px-4 max-sm:px-3 pl-12 max-sm:pl-10  bg-image ${
           isClicked ? 'focus:border-pink-500 border-2 border-pink' : ''
         }`}
         onClick={handleInputClick}
@@ -68,7 +68,7 @@ const SearchBar = ({ onSearch }) => {
       />
 
       <button
-        className="ml-4 text-white font-montserrat bg-pink rounded-full px-8 py-2 hover:bg-pink-700"
+        className="ml-4 text-white font-montserrat bg-pink rounded-full px-8 py-2 hover:bg-pink-700 max-sm:ml-2 max-sm:px-6 "
         onClick={handleSearchClick}
       >
         Search

@@ -13,12 +13,12 @@ const FavoritesArticle = ({ article }) => {
   };
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 ">
       <Link to={{ pathname: `/detail/${article.id}`, state: { article: article } }}>
       <button
-        className={`mx-14 w-11/12 flex items-center bg-gray-50 rounded-3xl py-3 border transition duration-300 ease-in-out hover:bg-gray-200 relative`}
+        className={`mx-14 w-11/12 flex items-center bg-gray-50 rounded-3xl py-3 border transition duration-300 ease-in-out hover:bg-gray-200 relative max-sm:mx-4`}
         onClick={handleButtonClick}> 
-        <div className='w-3/4'>
+        <div className='w-3/4  '>
         <p className="text-left pl-5 font-extrabold text-lg text-darkBlue">{article.title}</p>
         <p className="text-left pl-5 font text-lightBlue">{formattedKeywords}</p>
         <p className="text-left pl-5 font-thin text-darkBlue ">{article.PublishDate} , {article.Authors}</p>

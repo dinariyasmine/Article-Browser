@@ -4,7 +4,7 @@ import ProfilePic from "../SearchPage/userPopUp";
 
 
 
-const FavoritesNavbar =({UserName,EmailAdress})=>{
+const FavoritesNavbar =()=>{
     return (
         <div className="flex justify-between items-center p-4 ">
           {/* Left side of the navbar */}
@@ -18,7 +18,7 @@ const FavoritesNavbar =({UserName,EmailAdress})=>{
           {/* Right side of the navbar */}
           <div className="-mt-5 mr-5">
             <button>
-              <ProfilePic UserName={UserName} EmailAdress={EmailAdress}/>
+              <ProfilePic/>
             </button>
           </div>
         </div>

@@ -49,8 +49,6 @@ const SearchPage =()=>{
   const [keywordsList, setKeywordsList] = useState('');
 
   const handleSearchButtonClick = (response) => {
-    console.log("I am getting in !");
-    
     // Check if the response and response.data are defined
     if (response && response.data) {
       // Access the entire response object and handle it accordingly
@@ -159,39 +157,47 @@ const SearchPage =()=>{
 
   
     const showClosedArticleList = searchQuery.length > 0;
-    return(
-        <div className="font-montserrat flex ">
-             <div className="bg-lightBlue h-screen w-4/6 fixed overflow-y-auto no-scrollbar">
-                <p className="text-3xl font-bold text-darkBlue mt-16 mb-5 ml-20">What are you looking for ?</p>
-                <SearchBar onSearch={handleSearchButtonClick} />
-                {showClosedArticleList && showFoundArticlesList ? (  <ClosedArticleList articles={searchQuery} />) : (
-                <img src={searchPic} alt="Search Page Pic" className="w-1/3 mt-10 ml-48" />)}      
-            </div>
-            <div className="font-montserrat flex flex-col mt-5 ml-auto mr-14 no-scrollbar">
-                <div className="flex mb-20 ml-auto no-scrollbar">
-                <Link to={{ pathname: `/favorites` }}>
-                    <button>
-                    <img src={favoritesPic} alt="Search Page Pic" className="w-12 h-12 mr-6" />
-                    </button>
-                    </Link>
-                    <button>
-                    <ProfilePic />
-                    </button>
-                   
-                </div>
-                
-                <FilterBar title={"Keywords"} listOfOptions={keywordsList} onSelect={handleKeywordSelect} />
-                <FilterBar title={"Authors"} listOfOptions={authorsList} onSelect={handleAuthorSelect}/>
-                <FilterBar title={"Institutions"} listOfOptions={institutionsList} onSelect={handleInstitutionSelect}/> 
-                <DateButton date={"Start Date"} onDateSelect={handleStartDateSelect} />
-                <DateButton date={"End Date"} onDateSelect={handleEndDateSelect} />
-                <button className="mt-3" onClick={filterArticles}>
-                <p className="bg-pink text-white rounded-full py-2 hover:bg-pink-700">Filtrer Resultat</p>
-                </button>
-
-            </div>
+    return (
+      <div className="font-montserrat flex flex-col-reverse sm:flex-row ">
+        {/* First Column */}
+        <div className="bg-lightBlue h-screen w-full sm:w-4/6  sm:mb-14 max-sm:h-1/2   ">
+          <p className="text-3xl font-bold text-darkBlue mt-16 mb-5 ml-20 max-sm:ml-16 max-sm:text-2xl max-sm:mb-7">What are you looking for?</p>
+          <SearchBar onSearch={handleSearchButtonClick} />
+          {showClosedArticleList && showFoundArticlesList ? (
+            <ClosedArticleList articles={searchQuery} />
+          ) : (
+            <img src={searchPic} alt="Search Page Pic" className="w-1/3 mt-10 ml-48 max-sm:ml-28 max-sm:mb-20 " />
+          )}
         </div>
+    
+        {/* Second Column */}
+        <div className="font-montserrat  mt-5 ml-auto mr-14 no-scrollbar max-sm:ml-24 max-sm:mb-8">
+          <div className="flex mb-20  ml-32 max-sm:ml-40 max-sm:mb-14">
+            <Link to={{ pathname: `/favorites` }}>
+              <button>
+                <img src={favoritesPic} alt="Search Page Pic" className="w-12 h-12 mr-6" />
+              </button>
+            </Link>
+            <button>
+              <ProfilePic />
+            </button>
+          </div>
+    
+          {/* Rest of your second column content */}
+          <FilterBar title={"Keywords"} listOfOptions={keywordsList} onSelect={handleKeywordSelect} />
+          <FilterBar title={"Authors"} listOfOptions={authorsList} onSelect={handleAuthorSelect} />
+          <FilterBar title={"Institutions"} listOfOptions={institutionsList} onSelect={handleInstitutionSelect} />
+          <DateButton date={"Start Date"} onDateSelect={handleStartDateSelect} />
+          <DateButton date={"End Date"} onDateSelect={handleEndDateSelect} />
+          
+          <button className="mt-3 flex items-center" onClick={filterArticles}>
+            <p className="bg-pink text-white rounded-full w-64 max-sm:w-64 py-2 max-sm:py-3 hover:bg-pink-700">Filtrer Resultat</p>
+          </button>
 
+        </div>
+      </div>
     );
+    
+    
 }
 export default SearchPage;
