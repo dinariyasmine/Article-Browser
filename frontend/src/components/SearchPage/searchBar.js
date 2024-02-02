@@ -28,22 +28,38 @@ const SearchBar = ({ onSearch }) => {
 
     const handleSearchClick = async () => {
       try {
-        console.log("i was triggered");
-    
-        const response = await axios.post('http://127.0.0.1:8000/articles/search/', {
-          searchBarContent: searchInput,
-        });
-    
-    
-        // Pass the entire response object to the parent component
-        if (onSearch) {
-          onSearch(response); // Pass the entire response object
-        }
+          console.log("I was triggered by:", searchInput);
+  
+          const response = await axios.post('http://127.0.0.1:8000/app/search/', {
+              query: searchInput,
+          });
+          console.log("res",response);
+  
+          // Check if the response status is in the 2xx range (success)
+          if (response.status >= 200 && response.status < 300) {
+              // Pass the entire response object to the parent component
+              if (onSearch) {
+                  onSearch(response); // Pass the entire response object
+              }
+          } else {
+              // Handle non-success status codes
+              console.error(`Error during search - Server responded with status ${response.status}`);
+          }
       } catch (error) {
-        // Handle errors here
-        console.error('Error during search:', error.message);
+          // Handle network errors or other exceptions
+          if (error.response) {
+              // The request was made, but the server responded with a non-success status code
+              console.error(`Error during search - Server responded with status ${error.response.status}`);
+          } else if (error.request) {
+              // The request was made, but no response was received
+              console.error('Error during search - No response received from the server');
+          } else {
+              // Something else happened while setting up the request
+              console.error('Error during search - Request setup error:', error.message);
+          }
       }
-    };
+  };
+  
     
 
   return (
