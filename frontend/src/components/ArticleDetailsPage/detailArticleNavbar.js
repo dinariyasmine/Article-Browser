@@ -5,7 +5,7 @@ import FavoritesButton from "../FavoritesPage/favoritesButton";
 
 
 
-const DetailArticleNavbar =({title,UserName,EmailAdress})=>{
+const DetailArticleNavbar =({title})=>{
   const [isFavorite,setIsFavorite]=useState(false);
   const addRemoveFavorite = () => {
     // Toggle the active state
@@ -23,15 +23,15 @@ const DetailArticleNavbar =({title,UserName,EmailAdress})=>{
           </div>
     
           <div className="relative">
-            <p className="text-3xl text-darkBlue font-bold mb-2">{title}</p>
+            <p className="text-3xl text-darkBlue font-bold mb-2 max-sm:text-xl max-sm:mt-32">{title}</p>
         {/* Underline effect using Tailwind CSS classes */}
         <div className="absolute bottom-0 left-0 w-full h-1 bg-pink"></div>
         </div>   
           {/* Right side of the navbar */}
-          <div className="-mt-5 mr-5">
+          <div className="-mt-10 mr-5 max-sm:-mt-20">
             <FavoritesButton onClick={addRemoveFavorite}></FavoritesButton>
             <button>
-              <ProfilePic UserName={UserName} EmailAdress={EmailAdress}/>
+              <ProfilePic/>
             </button>
           </div>
         </div>

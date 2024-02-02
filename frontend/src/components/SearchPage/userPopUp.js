@@ -27,7 +27,7 @@ const UserPopUp = () => {
           <img
             src={profilePic}
             alt="User Icon"
-            className="w-11/12 h-11/12"
+            className="w-11/12 h-11/12 max-sm:w-10 max-sm:h-10"
           />
         </button>
   
