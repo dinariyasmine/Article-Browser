@@ -2,7 +2,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
-from .models import Article
+from app.models import Article
 import json
 from datetime import datetime, timedelta
 from app.views import perform_elasticsearch_search
@@ -35,7 +35,7 @@ class AddArticleView(View):
                     'authors': [author.name for author in article.authors.all()],
                     'institutions': [institution.name for institution in article.institutions.all()],
                     'keywords': [keyword.name for keyword in article.keywords.all()],
-                    'references': [reference.name for reference in article.references.all()],
+                    'references': article.references,
                     'full_text': article.full_text,
                     'pdf_url': article.pdf_url,
                     'validated': article.validated,

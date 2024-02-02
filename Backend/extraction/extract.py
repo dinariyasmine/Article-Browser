@@ -1,7 +1,7 @@
 from openai import OpenAI
 import fitz
 import re
-from app.models import Article,Author,Reference,Institution,Keyword
+from app.models import Article,Author,Institution,Keyword
 
 
 # def lire_pdf_first_page(chemin_du_pdf, sortie_texte):
