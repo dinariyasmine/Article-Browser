@@ -12,7 +12,7 @@ const DetailArticle =({title})=>{
   };
     return (
             <button onClick={handleOnclickFavorite}>
-              <img src={isFavorite? activeFavoritesPic:favoritesPic} alt="Favorites" className="w-10 h-10 mr-6 mb-1 " />
+              <img src={isFavorite? activeFavoritesPic:favoritesPic} alt="Favorites" className="w-10 h-10 mr-6 mb-1 max-sm:w-8 max-sm:h-8 " />
             </button>
         
       );

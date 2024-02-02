@@ -6,10 +6,7 @@ import 'jspdf-autotable';
 
 
 const DetailArticle = () => {
-  const User = {
-    UserName:'JaneDoe',
-    EmailAdress:'jdoe@gmail.com'
-  }
+  
   const storedArticle = localStorage.getItem('selectedArticle');
   const article = storedArticle ? JSON.parse(storedArticle) : {};
   console.log('Article stored in local storage:', article);
@@ -62,8 +59,8 @@ const generatePDF = () => {
   pdf.save('article.pdf');
 };
   return (
-    <div className="flex flex-col overflow-x-hidden">
-      <Navbar title={article.title} UserName={User.UserName} EmailAdress={User.EmailAdress} />
+    <div className="flex flex-col overflow-x-hidden max-sm:-ml-8">
+      <Navbar title={article.title}/>
       <HeaderArticle Authors={article.Authors} Institutions={article.Institutions} PublishDate={article.PublishDate} KeyWords={article.keywords} />
       <div className="mt-10 w-5/6">
         <p className=" ml-24 font-bold text-lg">Abstract :</p>
@@ -81,7 +78,7 @@ const generatePDF = () => {
           <div className=" ml-auto -mr-40 -mt-36  w-56 h-56 rounded-full bg-darkBlue"></div>
           </div>
       <p className="ml-24 mt-10"><strong className="text-lg ">References :</strong> {formattedReferences}</p>
-      <button className="ml-auto mr-24 bg-pink  rounded-full  my-10  py-2 px-10 hover:bg-pink-700" onClick={generatePDF}>
+      <button className="ml-auto  mr-24 max-sm:mr-14 bg-pink  rounded-full  my-10  py-2 px-10 hover:bg-pink-700" onClick={generatePDF}>
          <p className="text-white">View PDF</p>   
       </button>
     </div>

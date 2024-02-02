@@ -168,7 +168,7 @@ def extract_information_from_pdf(chemin_du_pdf):
     # Extraire les references
     references = pdf_complet[index_references + len("References"):]
 
-    print(text_integral)
+    # print(text_integral)
     print('\n')
     print(references)
 

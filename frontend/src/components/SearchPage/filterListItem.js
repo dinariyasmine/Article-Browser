@@ -8,7 +8,7 @@ const FilterListItem = ({ option, isChecked, onCheckboxClick, isFirst, isLast })
 
   return (
     <div className={containerClassName}>
-      <span className='ml-4 w-3/4 overflow-hidden overflow-ellipsis whitespace-normal'>{option}</span>
+      <span className='ml-4 w-3/4 overflow-hidden overflow-ellipsis whitespace-normal text-darkBlue  font-extralight '>{option}</span>
       <label className="flex items-center cursor-pointer ">
         <div
           className={`w-5 h-5 border rounded-full flex items-center justify-center transition duration-200 ease-in-out 
