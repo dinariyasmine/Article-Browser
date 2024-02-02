@@ -59,7 +59,16 @@ def extract_information_from_pdf(chemin_du_pdf):
     # sortie_texte = 'out.txt'
 
     # lire_pdf_first_page(chemin_du_pdf, sortie_texte)
-    premiere_page=lire_pdf_first_page(chemin_du_pdf)
+    # IMPORTANTE : premiere_page=lire_pdf_first_page(chemin_du_pdf)
+
+    pdf_document = fitz.open(stream=chemin_du_pdf, filetype="pdf")
+    
+    # Accédez aux informations du PDF
+    number_of_pages = pdf_document.page_count
+
+    
+    page = pdf_document[0]
+    premiere_page = page.get_text()
 
     # file_path = 'out.txt'  
     # with open(file_path, 'r', encoding='utf-8') as file:
@@ -144,7 +153,12 @@ def extract_information_from_pdf(chemin_du_pdf):
 
     # Extraction text integral
     # lire_pdf(chemin_du_pdf,sortie_texte)
-    pdf_complet= lire_pdf(chemin_du_pdf)
+    # IMPORTANTE : pdf_complet= lire_pdf(chemin_du_pdf)
+    pdf_complet=""
+    for page_num in range(number_of_pages):
+        page = pdf_document[page_num]
+        texte_page = page.get_text()
+        pdf_complet += texte_page
     # with open(sortie_texte, 'r', encoding='utf-8') as file:
     #     file_content = file.read()
 
@@ -169,8 +183,8 @@ def extract_information_from_pdf(chemin_du_pdf):
     references = pdf_complet[index_references + len("References"):]
 
     # print(text_integral)
-    print('\n')
-    print(references)
+    # print('\n')
+    # print(references)
 
     # Retrieve or create Author instances for each author name
     author_instances = [Author.objects.get_or_create(name=author_name)[0] for author_name in auteurs]
@@ -182,20 +196,24 @@ def extract_information_from_pdf(chemin_du_pdf):
     keyword_instances = [Keyword.objects.get_or_create(name=keyword)[0] for keyword in mots_cles]
 
     # Retrieve or create Reference instances for each reference
-    # reference_instances = [Reference.objects.get_or_create(name=reference)[0] for reference in references]
-
+    print('Start\n')
     # Create the Article instance
     article_instance = Article.objects.create(
         title=title,
         abstract=abstract,
         full_text=text_integral,  
-        pdf_url=chemin_du_pdf,      
+        pdf_url='vide',  
+        references='references',    
     )
-
+    print('fin hadok jma3a\n')
     # Use set() method to assign values to many-to-many fields
     article_instance.authors.set(author_instances)
+    print('fin authors\n')
     article_instance.institutions.set(institution_instances)
+    print('fin institutions\n')
     article_instance.keywords.set(keyword_instances)
-    # article_instance.references.set(reference_instances)
+    print('fin keywords\n')
+
+    print('fin')
 
     return article_instance

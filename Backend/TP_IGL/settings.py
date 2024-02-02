@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,6 @@ INSTALLED_APPS = [
     'elasticsearch_dsl',
     'authentication',
     'corsheaders',
-    'articles',
     'extraction',
 ]
 
@@ -183,3 +183,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_USE_SESSIONS = True
 CSRF_COOKIE_SAMESITE = None
 SESSION_COOKIE_SAMESITE = None
+
+# # Configurez le stockage des fichiers en utilisant le système de fichiers local (par défaut)
+# DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# # Chemin du répertoire où les fichiers uploadés seront stockés
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# # URL pour servir les fichiers uploadés
+# MEDIA_URL = '/media/'

@@ -2,9 +2,9 @@ import React from "react";
 
 const HeaderArticle = ({ Authors, Institutions, PublishDate, KeyWords }) => {
   // Check if arrays are defined before calling join
-  const formattedAuthors = Authors ? Authors.join(' , ') : '';
-  const formattedInstitutions = Institutions ? Institutions.join(' , ') : '';
-  const formattedKeywords = KeyWords ? KeyWords.join(' , ') : '';
+  const formattedAuthors = Array.isArray(Authors) ? Authors.join(' , ') : Authors;
+  const formattedInstitutions = Array.isArray(Institutions) ? Institutions.join(' , ') : Institutions;
+  const formattedKeywords = Array.isArray(KeyWords) ? KeyWords.join(' , ') : KeyWords;
 
   return (
     <div className="ml-16 mt-6 p-4 mb-4 relative">

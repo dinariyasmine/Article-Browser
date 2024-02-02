@@ -8,63 +8,80 @@ import 'jspdf-autotable';
 const DetailArticle = () => {
   
   const storedArticle = localStorage.getItem('selectedArticle');
+  console.log("ANA ani hna",storedArticle);
   const article = storedArticle ? JSON.parse(storedArticle) : {};
   console.log('Article stored in local storage:', article);
   let firstHalfIntegralText = '';
   let secondHalfIntegralText = '';
   
-  if (article && article.IntegralText) {
-    const midpoint = Math.floor(article.IntegralText.length / 2);
-    const nearestWhitespace = article.IntegralText.lastIndexOf(' ', midpoint) + 1;
-    firstHalfIntegralText = article.IntegralText.slice(0, nearestWhitespace);
-    secondHalfIntegralText = article.IntegralText.slice(nearestWhitespace);
-    
+  if (article && article.integralText) {
+    const midpoint = Math.floor(article.integralText.length / 2);
+    const nearestWhitespace = article.integralText.lastIndexOf(' ', midpoint) + 1;
+    firstHalfIntegralText = article.integralText.slice(0, nearestWhitespace);
+    secondHalfIntegralText = article.integralText.slice(nearestWhitespace);
   }
-  const formattedReferences = article && article.References ? article.References.join(', ') : '';
-
-
-const generatePDF = () => {
-  const pdf = new jsPDF();
-
-  // Add title
-  pdf.setFont('times', 'bold');
-  pdf.text(article.title, 20, 20);
-  pdf.setFont('times', 'normal');
   
+  const formattedReferences = Array.isArray(article.references) ? article.references.join(', ') : 'N/A';
 
-  // Add Authors, Institutions, PublishDate, and Keywords
-  pdf.text(`Authors: ${article.Authors.join(', ')}`, 20, 30);
-  pdf.text(`Institutions: ${article.Institutions.join(', ')}`, 20, 40);
-  pdf.text(`Publish Date: ${article.PublishDate}`, 20, 50);
-  pdf.text(`Keywords: ${article.keywords.join(', ')}`, 20, 60);
 
-  // Add Abstract
-  pdf.setFont('times', 'bold');
-  pdf.text('Abstract:', 20, 70);
-  pdf.setFont('times', 'normal');
+  const generatePDF = () => {
+    const pdf = new jsPDF();
   
-  const abstractLines = pdf.splitTextToSize(article.Abstract, pdf.internal.pageSize.width - 40);
-  pdf.text(abstractLines, 20, 80);
-
-  // Add Integral Text
-  pdf.setFont('times', 'bold');
-  pdf.text('Integral Text:', 20, 100);
-  pdf.setFont('times', 'normal');
-  pdf.autoTable({ startY: 110,  body: [[firstHalfIntegralText, secondHalfIntegralText]] });
-
-  // Add References
-  pdf.text(`References: ${formattedReferences}`, 20, pdf.autoTable.previous.finalY + 20);
-
-  // Save the PDF
-  pdf.save('article.pdf');
-};
+    // Add title
+    pdf.setFont('times', 'bold');
+    pdf.text(article.title, 20, 20);
+    pdf.setFont('times', 'normal');
+  
+    // Add Authors, Institutions, PublishDate, and Keywords
+    if (Array.isArray(article.authors)) {
+      pdf.text(`Authors: ${article.authors.join(', ')}`, 20, 30);
+    } else {
+      pdf.text('Authors: N/A', 20, 30);
+    }
+  
+    if (Array.isArray(article.Institutions)) {
+      pdf.text(`Institutions: ${article.Institutions.join(', ')}`, 20, 40);
+    } else {
+      pdf.text('Institutions: N/A', 20, 40);
+    }
+  
+    pdf.text(`Publish Date: ${article.publishDate}`, 20, 50);
+  
+    if (Array.isArray(article.keywords)) {
+      pdf.text(`keywords: ${article.keywords.join(', ')}`, 20, 60);
+    } else {
+      pdf.text('keywords: N/A', 20, 60);
+    }
+  
+    // Add Abstract
+    pdf.setFont('times', 'bold');
+    pdf.text('Abstract:', 20, 70);
+    pdf.setFont('times', 'normal');
+  
+    const abstractLines = pdf.splitTextToSize(article.abstract, pdf.internal.pageSize.width - 40);
+    pdf.text(abstractLines, 20, 80);
+  
+    // Add Integral Text
+    pdf.setFont('times', 'bold');
+    pdf.text('Integral Text:', 20, 100);
+    pdf.setFont('times', 'normal');
+    pdf.autoTable({ startY: 110, body: [[firstHalfIntegralText, secondHalfIntegralText]] });
+  
+    // Add References
+    pdf.text(`References: ${formattedReferences}`, 20, pdf.autoTable.previous.finalY + 20);
+  
+    // Save the PDF
+    pdf.save('article.pdf');
+  };
+  
+  
   return (
     <div className="flex flex-col overflow-x-hidden max-sm:-ml-8">
       <Navbar title={article.title}/>
-      <HeaderArticle Authors={article.Authors} Institutions={article.Institutions} PublishDate={article.PublishDate} KeyWords={article.keywords} />
+      <HeaderArticle Authors={article.authors} Institutions={article.institutions} PublishDate={article.publishDate} KeyWords={article.keywords} />
       <div className="mt-10 w-5/6">
         <p className=" ml-24 font-bold text-lg">Abstract :</p>
-        <p className="ml-24 mt-2">{article.Abstract}</p>
+        <p className="ml-24 mt-2">{article.abstract}</p>
       </div>
       <div className="mt-10 w-5/6">
       <p className="ml-24 font-bold text-lg">Integral Text :</p>

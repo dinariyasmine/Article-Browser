@@ -58,33 +58,55 @@ def index_articles(request):
         return HttpResponse('This view only accepts POST requests.')
 
 #--------------------------------------------------------------
-    
+
+@csrf_exempt
 def search_articles(request):
-    query = request.GET.get('q', '')
-    try:
-        # Perform Elasticsearch search with retry mechanism
-        result = perform_elasticsearch_search1(query)
+    if request.method == 'POST':
+        try:
+            # Retrieve JSON data from the request body
+            data = json.loads(request.body.decode('utf-8'))
+            query = data.get('query')
+            # Perform Elasticsearch search with retry mechanism
+            result = perform_elasticsearch_search1(query)
 
-        # Extract and print search results in the console
-        for hit in result:
-            title = hit.title if hasattr(hit, 'title') else ''
-            authors = ', '.join(hit.authors.split('.') if hasattr(hit, 'authors') else [])
-            institutions = ', '.join(hit.institutions.split('.') if hasattr(hit, 'institutions') else [])
-            keywords = ', '.join(hit.keywords.split('.') if hasattr(hit, 'keywords') else [])
-            abstract = hit.abstract if hasattr(hit, 'abstract') else ''
+            hits_data = []  # Move the list declaration outside the loop
 
-            print(f"Title: {title}")
-            print(f"Authors: {authors}")
-            print(f"Institutions: {institutions}")
-            print(f"Keywords: {keywords}")
-            print(f"Abstract: {abstract}")
+            # Extract and print search results in the console
+            for hit in result:
+                title = hit.title if hasattr(hit, 'title') else ''
+                authors = ', '.join(hit.authors.split('.') if hasattr(hit, 'authors') else [])
+                institutions = ', '.join(hit.institutions.split('.') if hasattr(hit, 'institutions') else [])
+                keywords = ', '.join(hit.keywords.split('.') if hasattr(hit, 'keywords') else [])
+                abstract = hit.abstract if hasattr(hit, 'abstract') else ''
+                references = hit.references if hasattr(hit, 'references') else ''
+               # date = hit.date.strftime("%Y-%m-%d") if hasattr(hit, 'date') else '2024-10-12'
 
-        return HttpResponse(status=200)  # Returning a blank response with status 200
 
-    except Exception as e:
-        # Handle the exception or log the error
-        print(f"Error: {e}")
-        return HttpResponseServerError(f"Error: {e}", status=500)
+                print(f"Title: {title}")
+                print(f"Authors: {authors}")
+                print(f"Institutions: {institutions}")
+                print(f"Keywords: {keywords}")
+                print(f"Abstract: {abstract}")
+                print(f"references: {references}")
+               # print(f"Date: {date}")
+
+                # Append data to the list
+                hits_data.append({
+                    'title': title,
+                    'authors': authors,
+                    'institutions': institutions,
+                    'keywords': keywords,
+                    'abstract': abstract,
+                    'references': references,
+                   # 'date': date
+                })
+
+            return JsonResponse({'result': hits_data})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error during research: {str(e)}'})
+    else:
+        return HttpResponse('This view only accepts POST requests.')
+
 
 @retry(stop=stop_after_delay(30), wait=wait_fixed(5))
 def perform_elasticsearch_search1(query):
@@ -109,7 +131,7 @@ def perform_elasticsearch_search1(query):
     else:
         raise Exception("Elasticsearch search failed")
     
-#--------------------------------------------------------------
+#---------------A ne pas utiliser a été faite dans le front-----------------------------------------------
     
 def search_and_filter_articles(request):
     # Extract search query from the front end team

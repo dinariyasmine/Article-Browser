@@ -82,23 +82,29 @@ class SearchingTestCase(TestCase):
         try:
             # Search for sample article2 by keyword
             search_query = 'Sciences'
-            response = self.client.get(reverse('search_articles'), {'q': search_query})
+            url = reverse('search_articles')
+            data = {'query': search_query}
+            response = self.client.post(url, data=data, content_type='application/json')
             print(response.content.decode())
             print(response.status_code)
             self.assertEqual(response.status_code, 200)
-            # Search for sample article2 by title
+            
             search_query = 'Sample Article A'
-            response = self.client.get(reverse('search_articles'), {'q': search_query})
+            url = reverse('search_articles')
+            data = {'query': search_query}
+            response = self.client.post(url, data=data, content_type='application/json')
             print(response.content.decode())
             print(response.status_code)
             self.assertEqual(response.status_code, 200)
-            # Search for sample article2 by author
+            
             search_query = 'John Do'
-            response = self.client.get(reverse('search_articles'), {'q': search_query})
+            url = reverse('search_articles')
+            data = {'query': search_query}
+            response = self.client.post(url, data=data, content_type='application/json')
             print(response.content.decode())
             print(response.status_code)
             self.assertEqual(response.status_code, 200)
-
+            
         except Exception as e:
             self.fail(f"Integration test failed: {str(e)}")
 

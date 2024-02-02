@@ -1,0 +1,12 @@
+{
+    "commands": [
+      {
+        "allocate_stale_primary": {
+          "index": "article_index",
+          "shard": 0,
+          "node": "hvOaKgkRScWjgMxhnXelnA"
+        }
+      }
+    ]
+  }
+  

@@ -50,55 +50,54 @@ const SearchPage =()=>{
 
   const handleSearchButtonClick = (response) => {
     // Check if the response and response.data are defined
-    if (response && response.data) {
-      // Access the entire response object and handle it accordingly
-      // You can access response.data, response.status, etc.
+    if (response && response.data && response.data.result) {
+      // Access the array of articles
+      const articles = response.data.result;
   
       // Check if articles are present in the response
-      const articles = response.data.articles;
-  
-      if (articles) {
+      if (articles && Array.isArray(articles)) {
         // Format the articles to match the closedArticles structure
         const formattedArticles = articles.map((article, index) => ({
           id: index.toString(),
           title: article.title,
-          Institutions: article.institutions,
+          institutions: article.institutions,
           keywords: article.keywords,
-          PublishDate: article.publish_date,
-          Authors: article.authors,
-          Abstract: article.abstract,
-          IntegralText: article.integralText,
-          References: article.references,
+          publishDate: article.date,
+          authors: article.authors,
+          abstract: article.abstract,
+          integralText: 'azertyuio',
+          references: 'xxxx',
         }));
-        console.log("here too !");
-        console.log("articles : ", formattedArticles);
   
-       
+        console.log("Articles from Elasticsearch:", formattedArticles);
+  
         // Extract arrays of unique values
-      const allInstitutions = formattedArticles.length > 0
-      ? Array.from(new Set(formattedArticles.flatMap(article => article.Institutions)))
-      : [];
-    const allAuthors = formattedArticles.length > 0
-      ? Array.from(new Set(formattedArticles.flatMap(article => article.Authors)))
-      : [];
-    const allKeywords = formattedArticles.length > 0
-      ? Array.from(new Set(formattedArticles.flatMap(article => article.keywords)))
-      : [];
+        const allInstitutions = formattedArticles.length > 0
+          ? Array.from(new Set(formattedArticles.flatMap(article => article.institutions)))
+          : [];
+        const allAuthors = formattedArticles.length > 0
+          ? Array.from(new Set(formattedArticles.flatMap(article => article.authors)))
+          : [];
+        const allKeywords = formattedArticles.length > 0
+          ? Array.from(new Set(formattedArticles.flatMap(article => article.keywords)))
+          : [];
   
         // Put the options lists in the corresponding state variables
         setauthorsList(allAuthors);
         setinstitutionsList(allInstitutions);
         setKeywordsList(allKeywords);
-        console.log("All Institutions:", allInstitutions);
+
+        console.log("All Institutions:", allInstitutions,"publish date:",articles[0].publishDate);
         console.log("All Authors:", allAuthors);
         console.log("All Keywords:", allKeywords);
+  
         // Set the search query and proceed with the search
         setSearchQuery(formattedArticles);
         setShowFoundArticlesList(true);
-        
       } else {
-        // No articles found in the response
+        // No valid articles found in the response
         setShowFoundArticlesList(false);
+        console.error('Invalid or empty articles array in the response.');
       }
     } else {
       // Invalid or empty response
@@ -106,6 +105,7 @@ const SearchPage =()=>{
       console.error('Invalid or empty response.');
     }
   };
+  
 
   
   
@@ -154,13 +154,11 @@ const SearchPage =()=>{
   
   
   
-
-  
     const showClosedArticleList = searchQuery.length > 0;
     return (
-      <div className="font-montserrat flex flex-col-reverse sm:flex-row ">
+      <div className="font-montserrat flex flex-col-reverse   sm:flex-row ">
         {/* First Column */}
-        <div className="bg-lightBlue h-screen w-full sm:w-4/6  sm:mb-14 max-sm:h-1/2   ">
+        <div className="sticky bg-lightBlue h-screen w-full sm:w-4/6 sm:mb-14 max-sm:h-1/2">
           <p className="text-3xl font-bold text-darkBlue mt-16 mb-5 ml-20 max-sm:ml-16 max-sm:text-2xl max-sm:mb-7">What are you looking for?</p>
           <SearchBar onSearch={handleSearchButtonClick} />
           {showClosedArticleList && showFoundArticlesList ? (
@@ -171,7 +169,7 @@ const SearchPage =()=>{
         </div>
     
         {/* Second Column */}
-        <div className="font-montserrat  mt-5 ml-auto mr-14 no-scrollbar max-sm:ml-24 max-sm:mb-8">
+        <div className="font-montserrat mt-5 ml-auto mr-14  scroll-auto no-scrollbar max-sm:ml-24 max-sm:mb-8">
           <div className="flex mb-20  ml-32 max-sm:ml-40 max-sm:mb-14">
             <Link to={{ pathname: `/favorites` }}>
               <button>
