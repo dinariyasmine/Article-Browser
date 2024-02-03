@@ -65,7 +65,7 @@ const SearchPage =()=>{
           publishDate: article.date,
           authors: article.authors,
           abstract: article.abstract,
-          integralText: 'azertyuio',
+          integralText: article.text,
           references: 'xxxx',
         }));
   

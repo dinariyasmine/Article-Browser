@@ -16,46 +16,35 @@ from elasticsearch_dsl.connections import connections
 
 
 @csrf_exempt
-def index_articles(request):
-    if request.method == 'POST':
-        try:
-            # Retrieve JSON data from the request body
-            data = json.loads(request.body.decode('utf-8'))
-            article_id = data.get('article_id')
-            
-            if article_id is None:
-                return JsonResponse({'status': 'error', 'message': 'Article ID is missing'})
-
-            article = get_object_or_404(Article, id=article_id)
-            ArticleIndex.init()
-
-            actions = [
-                {
-                    "_op_type": "index",
-                    "_index": "article_index",
-                    "_id": article.id,
-                    "_source": {
-                        "title": article.title,
-                        "abstract": article.abstract,
-                        "authors": ", ".join(str(author) for author in article.authors.all()),
-                        "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
-                        "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
-                        "references": article.references,
-                        "text": article.full_text,
-                        "pdf_url": article.pdf_url,
-                        "validated": article.validated,
-                        "date": article.date
-                    }
+def index_articles(article):
+    try:
+        if not article.id:
+            return JsonResponse({'status': 'error', 'message': 'Article has no ID'})
+        actions = [
+            {
+                "_op_type": "index",
+                "_index": "article_index",
+                "_id": article.id,
+                "_source": {
+                    "title": article.title,
+                    "abstract": article.abstract,
+                    "authors": ", ".join(str(author) for author in article.authors.all()),
+                    "institutions": ", ".join(str(institution) for institution in article.institutions.all()),
+                    "keywords": ", ".join(str(keyword) for keyword in article.keywords.all()),
+                    "references": article.references,
+                    "text": article.full_text,
+                    "pdf_url": article.pdf_url,
+                    "validated": article.validated,
+                    "date": article.date
                 }
-            ]
+            }
+        ]
 
-            es = ArticleIndex._get_connection()
-            success, failed = bulk(client=es, actions=actions, stats_only=True)
-            return JsonResponse({'status': 'success', 'message': 'Article indexed successfully'})
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Error during indexing: {str(e)}'})
-    else:
-        return HttpResponse('This view only accepts POST requests.')
+        es = ArticleIndex._get_connection()
+        success, failed = bulk(client=es, actions=actions, stats_only=True)
+        return JsonResponse({'status': 'success', 'message': 'Article indexed successfully'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': f'Error during indexing: {str(e)}'})
 
 #--------------------------------------------------------------
 
@@ -73,33 +62,39 @@ def search_articles(request):
 
             # Extract and print search results in the console
             for hit in result:
-                title = hit.title if hasattr(hit, 'title') else ''
-                authors = ', '.join(hit.authors.split('.') if hasattr(hit, 'authors') else [])
-                institutions = ', '.join(hit.institutions.split('.') if hasattr(hit, 'institutions') else [])
-                keywords = ', '.join(hit.keywords.split('.') if hasattr(hit, 'keywords') else [])
-                abstract = hit.abstract if hasattr(hit, 'abstract') else ''
-                references = hit.references if hasattr(hit, 'references') else ''
-               # date = hit.date.strftime("%Y-%m-%d") if hasattr(hit, 'date') else '2024-10-12'
+                if getattr(hit, 'validated', True):  # Check if 'validated' is True
+                    title = hit.title if hasattr(hit, 'title') else ''
+                    authors = ', '.join(hit.authors.split('.') if hasattr(hit, 'authors') else [])
+                    institutions = ', '.join(hit.institutions.split('.') if hasattr(hit, 'institutions') else [])
+                    keywords = ', '.join(hit.keywords.split('.') if hasattr(hit, 'keywords') else [])
+                    abstract = hit.abstract if hasattr(hit, 'abstract') else ''
+                    references = hit.references if hasattr(hit, 'references') else ''
+                    text = hit.text if hasattr(hit, 'text') else ''
+                    date = hit.date if hasattr(hit, 'date') else '2024-10-12'
 
 
-                print(f"Title: {title}")
-                print(f"Authors: {authors}")
-                print(f"Institutions: {institutions}")
-                print(f"Keywords: {keywords}")
-                print(f"Abstract: {abstract}")
-                print(f"references: {references}")
-               # print(f"Date: {date}")
+                    print(f"Title: {title}")
+                    print(f"Authors: {authors}")
+                    print(f"Institutions: {institutions}")
+                    print(f"Keywords: {keywords}")
+                    print(f"Abstract: {abstract}")
+                    print(f"references: {references}")
+                    print(f"text: {text}")
+                    print(f"Date: {date}")
 
-                # Append data to the list
-                hits_data.append({
-                    'title': title,
-                    'authors': authors,
-                    'institutions': institutions,
-                    'keywords': keywords,
-                    'abstract': abstract,
-                    'references': references,
-                   # 'date': date
-                })
+                    # Append data to the list
+                    hits_data.append({
+                        'title': title,
+                        'authors': authors,
+                        'institutions': institutions,
+                        'keywords': keywords,
+                        'abstract': abstract,
+                        'references': references,
+                        'text': text,
+                        'date': date
+                    })
+                else :
+                    print ('Not validated')
 
             return JsonResponse({'result': hits_data})
         except Exception as e:
@@ -123,6 +118,7 @@ def perform_elasticsearch_search1(query):
             {"match": {"text": query}},
         ]
     )
+    s = s.extra(size=30)
     response = s.execute()
 
     # Check if the search was successful
@@ -132,7 +128,7 @@ def perform_elasticsearch_search1(query):
         raise Exception("Elasticsearch search failed")
     
 #---------------A ne pas utiliser a été faite dans le front-----------------------------------------------
-    
+ 
 def search_and_filter_articles(request):
     # Extract search query from the front end team
     search_query = request.GET.get('q', '')
@@ -174,7 +170,7 @@ def search_and_filter_articles(request):
         return render(request, 'search_results.html', {'articles': [], 'query': search_query, 'error': str(e)})
     
 #--------------------------------------------------------------
-    
+@csrf_exempt
 def add_to_favorites(request):
     if request.user.is_authenticated:
         try:
@@ -234,6 +230,7 @@ def get_favorite_articles(request):
 def perform_elasticsearch_search(query):
     try:
         s = ArticleIndex.search().query(query)
+        s = s.extra(size=30)
         response = s.execute()
         print(f"Elasticsearch response: {response}")
         return response
@@ -347,3 +344,85 @@ def modify_article(request):
         return JsonResponse({'status': 'error', 'message': f'Error in modify_article: {str(e)}'}, status=500)
 
 #--------------------------------------------------------------
+
+def create_and_index_random_articles2():
+    # Dummy data for authors, institutions, keywords, and articles
+    authors = ['Author A', 'Author B', 'Author C']
+    institutions = ['Institution X', 'Institution Y', 'Institution Z']
+    keywords = ['Keyword 1', 'Keyword 2', 'Keyword 3']
+
+    for i in range(30, 40):
+        # Create a random article
+        article = {
+            'title': f'Random Article {i}',
+            'abstract': f'This is the abstract of Random Article {i}.',
+            'full_text': f'This is the full text of Random Article {i}.',
+            'pdf_url': f'https://example.com/random-article-{i}.pdf',
+            'authors': random.sample(authors, k=random.randint(1, len(authors))),
+            'institutions': random.sample(institutions, k=random.randint(1, len(institutions))),
+            'keywords': random.sample(keywords, k=random.randint(1, len(keywords))),
+            'references': f'These are the references of Random Article {i}.',
+        }
+
+        # Set a default value for 'validated' (you may adjust this based on your logic)
+        article['validated'] = True
+
+        # Set a default value for 'date' (you may adjust this based on your logic)
+        article['date'] = timezone.now()
+
+        # Index the article using the existing index_articles function
+        index_article(article,i)
+
+#-----------------------------------------------------------------------------------
+
+def not_validated(request):
+    try:
+        # Perform Elasticsearch search with retry mechanism
+        result = perform_elasticsearch_search_not_validated()
+
+        hits_data = []
+        # Extract and print search results in the console
+        
+        for hit in result:
+            title = hit.title if hasattr(hit, 'title') else ''
+            authors = ', '.join(hit.authors.split('.') if hasattr(hit, 'authors') else [])
+            institutions = ', '.join(hit.institutions.split('.') if hasattr(hit, 'institutions') else [])
+            keywords = ', '.join(hit.keywords.split('.') if hasattr(hit, 'keywords') else [])
+            abstract = hit.abstract if hasattr(hit, 'abstract') else ''
+            text = hit.abstract if hasattr(hit, 'text') else ''
+
+            print(f"Title: {title}")
+            print(f"Authors: {authors}")
+            print(f"Institutions: {institutions}")
+            print(f"Keywords: {keywords}")
+            print(f"Abstract: {abstract}")
+            print(f"text: {text}")
+
+            # Append data to the list
+            hits_data.append({
+            'title': title,
+            'authors': authors,
+            'institutions': institutions,
+            'keywords': keywords,
+            'abstract': abstract
+            })  
+        
+        return JsonResponse({'result': hits_data})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': f'Error during research: {str(e)}'})
+
+@retry(stop=stop_after_delay(30), wait=wait_fixed(5))
+def perform_elasticsearch_search_not_validated():
+    # Assuming you have a Search object
+    search = Search(index='article_index')
+    # Build the query to match documents where 'validated' is false
+    search = search.query('match', validated=False)
+    search = search.extra(size=30)
+    # Execute the search
+    response = search.execute()
+
+    # Check if the search was successful
+    if response.success():
+        return response
+    else:
+        raise Exception("Elasticsearch search failed")

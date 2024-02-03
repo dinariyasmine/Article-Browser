@@ -46,6 +46,17 @@ table{
     margin-bottom: 30px;
 }
 
+.upload{
+    background-color: #EE4A6A;
+    color: white;
+    border-radius: 44px;
+    width: 20%;
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 1em;
+    padding: 7px;
+    text-align: center;
+}
 
 
   
