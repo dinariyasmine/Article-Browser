@@ -1,11 +1,13 @@
 import React from "react";
 
-const rectangle = () => {
+/**
+ * Rectangle component for displaying a rectangular shape with a dark blue background.
+ * @returns {JSX.Element} React component
+ */
+const Rectangle = () => {
   return (
- 
-      <div className="w-32 h-20 rounded-3xl bg-darkBlue"></div>
-   
+    <div className="w-32 h-20 rounded-3xl bg-darkBlue"></div>
   );
 };
 
-export default rectangle;
+export default Rectangle;

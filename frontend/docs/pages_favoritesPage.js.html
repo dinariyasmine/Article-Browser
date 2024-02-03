@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/favoritesPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/favoritesPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import axios from "axios";
+import FavoritesArticleList from "../components/FavoritesPage/favoritesArticleList";
+import searchPic from "../assets/searchPic.png";
+import Navbar from "../components/FavoritesPage/favoritesNavbar";
+
+/**
+ * FavoritesPage component for displaying the user's favorite articles.
+ * @returns {JSX.Element} React component
+ */
+const FavoritesPage = () => {
+  // State for storing favorite articles
+  const [favoriteArticles, setFavoriteArticles] = useState([]);
+
+  // Fetch favorite articles from the server when the component mounts
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const fetchFavoriteArticles = async () => {
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/app/get_favorite_articles/", {
+          user_id: user.id,
+        });
+    
+        console.log("Server Response:", response.data.favorite_articles);
+    
+        if (response.data.favorite_articles) {
+          // Format the received favorite articles data
+          const formattedFavoriteArticles = response.data.favorite_articles.map((article, index) => ({
+            id: index.toString(),
+            id2: article.id2, 
+            title: article.title,
+            institutions: article.institutions,
+            keywords: article.keywords,
+            publishDate: article.date,
+            authors: article.authors,
+            abstract: article.abstract,
+            integralText: article.text,
+            references: 'xxxx',
+          }));
+    
+          console.log("Favorite Articles heeeeeere:", formattedFavoriteArticles);
+    
+          // Set the formatted favorite articles to the state
+          setFavoriteArticles(formattedFavoriteArticles);
+        } else {
+          console.error('Invalid or empty favorite articles array in the response.');
+        }
+      } catch (error) {
+        console.error("Error fetching favorite articles:", error);
+      }
+    };
+
+    fetchFavoriteArticles();
+  }, []); // Empty dependency array to run the effect once when the component mounts
+
+  // Check if there are favorite articles to display
+  const showFavoriteArticleList = favoriteArticles.length > 0;
+
+  return (
+    &lt;div className="font-montserrat max-sm:text-sm">
+      {/* Favorites Navbar */}
+      &lt;Navbar />
+
+      {/* Display either the list of favorite articles or a search pic */}
+      {showFavoriteArticleList ? (
+        &lt;FavoritesArticleList articles={favoriteArticles} />
+      ) : (
+        &lt;img src={searchPic} alt="Search Page Pic" className="w-1/3 mt-10 ml-80" />
+      )}
+    &lt;/div>
+  );
+};
+
+export default FavoritesPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

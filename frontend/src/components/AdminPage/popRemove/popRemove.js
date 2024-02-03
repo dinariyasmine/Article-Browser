@@ -2,8 +2,22 @@ import React from 'react';
 import axios from 'axios';
 import './popRemove.css';
 
+/**
+ * Component for removing a moderator.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.trigger - Boolean indicating whether the pop-up is triggered.
+ * @param {Function} props.setTrigger - Function to set the pop-up trigger.
+ * @param {string} props.username - Username of the moderator to be removed.
+ * @param {string} props.email - Email address of the moderator to be removed.
+ * @param {Function} props.handleRemove - Function to handle the removal of a moderator.
+ * @returns {JSX.Element} JSX element representing the pop-up for removing a moderator.
+ */
 const PopRemove = (props) => {
 
+  /**
+   * Handles the removal of the moderator.
+   * @async
+   */
   const handleRemove = async () => {
     try {
       // Make a POST request to your Django backend's delete moderator endpoint

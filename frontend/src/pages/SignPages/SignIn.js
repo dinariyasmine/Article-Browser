@@ -11,23 +11,44 @@ import Sign from '../../components/Signing/Sign/Sign';
 import AuthImg from '../../assets/AuthImage.svg';
 import './Signing.css';
 
+/**
+ * SignIn component for user login.
+ *
+ * @component
+ * @returns {JSX.Element} SignIn component
+ */
+
 const SignIn = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  
+  const navigate = useNavigate();
+
+  /**
+   * Handle change in the 'User Name' field.
+   *
+   * @param {Object} e - Event object
+   */
 
   const handleUserNameChange = (e) => {
     setUserName(e.target.value);
-    console.log("Username :",userName);
   };
 
+  /**
+   * Handle change in the 'Password' field.
+   *
+   * @param {Object} e - Event object
+   */
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  const navigate = useNavigate();
 
+  /**
+   * Handle form submission.
+   *
+   * @async
+   */
+  
   const handleSubmit = async () => {
-    console.log("I was clicked!");
     try {
       const response = await axios.post(
         'http://127.0.0.1:8000/auth/login/',
@@ -43,21 +64,20 @@ const SignIn = () => {
           withCredentials: true,
         }
       );
-  
+
       console.log('Response:', response.data);
-  
+
       // Assuming the response contains user information
       const user = response.data.user;
-  
+
       // Set global variable indicating the user is logged in
       window.isLoggedIn = true;
-  
+
       // Store the user in local storage
       localStorage.setItem('user', JSON.stringify(user));
       console.log('user', JSON.parse(localStorage.getItem('user')));
       console.log('Logged in?', window.isLoggedIn);
-      
-  
+
       // Navigate to the next page based on user role
       const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser) {
@@ -72,7 +92,7 @@ const SignIn = () => {
           console.error('Unsupported role:', storedUser.role);
         }
       }
-  
+
       // Handle the response as needed, for example, navigate to a new page
       // or update the UI to reflect the user being logged in
     } catch (error) {
@@ -80,10 +100,9 @@ const SignIn = () => {
       // Handle login error, display a message to the user, etc.
     }
   };
-  
 
+  // Redirect if the user is already logged in
   useEffect(() => {
-    // Redirect based on the user's role
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
       if (storedUser.role === 0) {
@@ -115,15 +134,11 @@ const SignIn = () => {
           <TextFiled text='Password' type='password' value={password} onChange={handlePasswordChange} />
         </div>
         <div className='BRightSide' >
-          
           <LogInButton text='Log In' onClick={handleSubmit}/>
           <div>
-          <Sign account="Don't have an account?" sign='up' />
-          <Link to="/SignUp"></Link>
+            <Sign account="Don't have an account?" sign='up' />
+            <Link to="/SignUp"></Link>
           </div>
-         
-          
-          
         </div>
       </div>
     </div>

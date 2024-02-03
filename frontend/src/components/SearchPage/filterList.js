@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import FilterListItem from './filterListItem';
 
+/**
+ * FilterList component for displaying a list of filter options with checkboxes.
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.options - An array of filter options.
+ * @param {function} props.onSelect - The function to be called when an option is selected.
+ * @returns {JSX.Element} React component
+ */
+
 const FilterList = ({ options, onSelect }) => {
   const [checkedItems, setCheckedItems] = useState([]);
 
@@ -10,6 +18,11 @@ const FilterList = ({ options, onSelect }) => {
     return null; // or return an empty div or a message
   }
 
+  /**
+   * Handles the click event on the checkbox.
+   * Updates the checkedItems state and calls the onSelect callback with selected options.
+   * @param {number} index - The index of the clicked checkbox.
+   */
   const handleCheckboxClick = (index) => {
     setCheckedItems((prevCheckedItems) => {
       const newCheckedItems = [...prevCheckedItems];
@@ -23,7 +36,10 @@ const FilterList = ({ options, onSelect }) => {
   };
   
 
-  // Function to get the items with isChecked set to true
+  /**
+   * Gets the items with isChecked set to true.
+   * @returns {Array} - An array of selected options.
+   */
   const getCheckedItems = () => {
     return options.filter((option, index) => checkedItems[index]);
   };
@@ -40,14 +56,7 @@ const FilterList = ({ options, onSelect }) => {
           isLast={index === options.length - 1}
         />
       ))}
-      <div>
-        <p>Checked Items:</p>
-        <ul>
-          {getCheckedItems().map((checkedItem, index) => (
-            <li key={index}>{checkedItem}</li>
-          ))}
-        </ul>
-      </div>
+      
     </div>
   );
 };

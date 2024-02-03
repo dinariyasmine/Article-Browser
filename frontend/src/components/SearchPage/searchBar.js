@@ -3,18 +3,38 @@ import LoopeFlou from '../../assets/loopFlou.png';
 import ActiveLoope from '../../assets/loop.png';
 import axios  from "axios";
 
+
+
+/**
+ * SearchBar component for rendering a search bar with a search icon and handling search functionality.
+ * @param {Object} props - The properties passed to the component.
+ * @param {function} props.onSearch - The function to be called when searching. Receives the search input and a flag indicating if it's empty.
+ * @returns {JSX.Element} React component
+ */
+
 const SearchBar = ({ onSearch }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
+  /**
+   * Handler for the input click event to search it.
+   */
   const handleInputClick = () => {
     setIsClicked(true);
   };
 
+
+  /**
+   * Handler for the input blur event.
+   */
   const handleInputBlur = () => {
     setIsClicked(false);
   };
 
+  /**
+   * Handler for the input change event.
+   * @param {Object} event - The input change event object.
+   */
   const handleInputChange = (event) => {
     const inputValue = event.target.value;
     setSearchInput(inputValue);
@@ -26,11 +46,14 @@ const SearchBar = ({ onSearch }) => {
 
 
 
+      /**
+     * Handler for the search button click event.
+     */
     const handleSearchClick = async () => {
       try {
           console.log("I was triggered by:", searchInput);
   
-          const response = await axios.post('http://127.0.0.1:8000/app/search/', {
+          const response = await axios.post('http://127.0.0.1:8000/app/search_articles/', {
               query: searchInput,
           });
           console.log("res",response);

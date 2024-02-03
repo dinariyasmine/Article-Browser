@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/articleModify/articleModify.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/articleModify/articleModify.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import './articleModify.css';
+import PopUp from '../../components/ModeratorPage/Popup/popUp';
+
+
+/**
+ * ArticleModify component for modifying article details.
+ *
+ * @component
+ * @returns {JSX.Element} ArticleModify component
+ */
+
+
+const ArticleModify = () => {
+  const storedArticle = localStorage.getItem('selectedArticle');
+  const article0 = storedArticle ? JSON.parse(storedArticle) : {};
+  console.log('Article stored in local :', article0);
+
+  const [Title, setTitle] = useState(article0.title);
+  const [Summary, setSummary] = useState(article0.abstract);
+  const [Author, setAuthor] = useState(article0.authors.split(', '));
+  const [Institution, setInstitution] = useState(article0.institutions.split(', '));
+  const [Keywords, setKeywords] = useState(article0.keywords.split(', '));
+  const [Date, setDate] = useState(article0.date);
+  const [Reference, setReference] = useState(article0.references);
+  
+  const textareaRef = useRef(null);
+  const input0Ref = useRef(null);
+  const input2Refs = useRef(Author.map(() => React.createRef()));
+  const input3Refs = useRef(Institution.map(() => React.createRef()));
+  const input4Refs = useRef(Keywords.map(() => React.createRef()));
+  const input5Ref = useRef(null);
+  const input6Refs = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [Summary]);
+
+  useEffect(() => {
+    if (input0Ref.current) {
+      input0Ref.current.style.height = 'auto';
+      input0Ref.current.style.height = `${input0Ref.current.scrollHeight}px`;
+    }
+  }, [Title]);
+
+  const handleChange0 = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleChange1 = (e) => {
+    setSummary(e.target.value);
+  };
+  const handleChange2 = (index, e) => {
+    const newValues = [...Author];
+    newValues[index] = e.target.value;
+    setAuthor(newValues);
+  };
+  const handleChange3 = (index, e) => {
+    const newValues = [...Institution];
+    newValues[index] = e.target.value;
+    setInstitution(newValues);
+  };
+  const handleChange4 = (index, e) => {
+    const newValues = [...Keywords];
+    newValues[index] = e.target.value;
+    setKeywords(newValues);
+  };
+  const handleChange5 = (e) => {
+    setDate(e.target.value);
+  };
+  const handleChange6 = (e) => {
+    setReference(e.target.value);
+  };
+
+  const [pop,setPop]=useState(false);
+  const [ind,setInd]=useState(0);
+  
+  return (
+    &lt;>
+      
+      
+      &lt;div className="w-full" style={{filter: (pop)?'blur(5px)':'blur(0px)'}}>
+        &lt;div className='ArticleModify'>
+            
+          {/* &lt;div className='titreArticleModify flex justify-center items-start gap-5 flex-col w-full'> */}
+            {/* &lt;div className="pdpArticleTitle flex justify-start items-center" style={{ width: '100%'}}> */}
+              &lt;div className='flex justify-center items-center gap-5' style={{ width: '50%', margin:'50px 0'}}>
+                &lt;textarea className='text-center Titre' ref={input0Ref} value={Title} onChange={handleChange0} style={{ width: '100%', minHeight: '20px', height: 'auto', resize: 'none'}}/>
+                &lt;FontAwesomeIcon icon={faPencil} size='xl'/>
+              &lt;/div>
+            {/* &lt;/div> */}
+
+          &lt;div className='contenuArticleModify containerArticleModify flex items-end flex-col'>
+            &lt;div className='w-full'>
+              &lt;h2 className='summaryTitle'>Article's summary :&lt;/h2>
+              &lt;textarea ref={textareaRef} value={Summary} onChange={handleChange1} style={{ width: '100%', minHeight: '50px', height: 'auto', resize: 'none'}}/>
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>
+          &lt;/div>
+
+          &lt;div className='authorArticleModify containerArticleModify flex justify-between items-center'>
+            &lt;div>
+              &lt;h2 className='summaryTitle'>Authors&lt;/h2>
+              {Author.map((author, index) => (
+                &lt;input
+                  key={index}
+                  className='inputArticleModify'
+                  ref={input2Refs.current[index]}
+                  type="text"
+                  value={Author[index]}
+                  onChange={(e) => handleChange2(index, e)}
+                />
+              ))}
+              {/* &lt;input className='inputArticleModify' ref={input2Ref} type="text" value={Author} onChange={handleChange2}/> */}
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>
+          &lt;/div>
+
+          &lt;div className='institutionsArticleModify containerArticleModify flex justify-between items-center'>
+            &lt;div>
+              &lt;h2 className='summaryTitle'>Institutions&lt;/h2>
+              {Institution.map((institution, index) => (
+                &lt;input
+                  key={index}
+                  className='inputArticleModify'
+                  ref={input3Refs.current[index]}
+                  type="text"
+                  value={Institution[index]}
+                  onChange={(e) => handleChange3(index, e)}
+                />
+              ))}
+              {/* &lt;input className='inputArticleModify' ref={input3Ref} type="text" value={Institution} onChange={handleChange3}/> */}
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>
+          &lt;/div>
+
+          &lt;div className='keywordsArticleModify containerArticleModify flex justify-between items-center'>
+            &lt;div>
+              &lt;h2 className='summaryTitle'>Key-words&lt;/h2>
+              {Keywords.map((keyword, index) => (
+                &lt;input
+                  key={index}
+                  className='inputArticleModify'
+                  ref={input4Refs.current[index]}
+                  type="text"
+                  value={Keywords[index]}
+                  onChange={(e) => handleChange4(index, e)}
+                />
+              ))}
+              {/* &lt;input className='inputArticleModify' ref={input4Ref} type="text" value={Keywords} onChange={handleChange4}/> */}
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>  
+          &lt;/div>
+
+          {/* &lt;div className='dateArticleModify containerArticleModify flex justify-between items-center'>
+            &lt;div>
+              &lt;h2 className='summaryTitle'>Date&lt;/h2>
+              &lt;input className='inputArticleModify' ref={input5Ref} type="date" value={Date} onChange={handleChange5}/>
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>
+          &lt;/div> */}
+
+          &lt;div className='refsArticleModify containerArticleModify flex justify-between items-center'>
+            &lt;div className="w-full">
+              &lt;h2 className='summaryTitle'>References&lt;/h2>
+              {/* {Reference.map((ref, index) => (
+                &lt;input
+                  key={index}
+                  className='inputArticleModify'
+                  ref={input6Refs.current[index]}
+                  type="text"
+                  value={Reference[index]}
+                  onChange={(e) => handleChange6(index, e)}
+                />
+              ))} */}
+              &lt;textarea className='inputArticleModify' ref={input6Refs} type="text" value={Reference} onChange={handleChange6} style={{ width: '95%', minHeight: '80px', height: 'auto', resize: 'none'}}/>
+            &lt;/div>
+            &lt;FontAwesomeIcon icon={faPencil} size='xl'/>  
+          &lt;/div>
+
+          &lt;/div>
+          &lt;div className="buttonsArticleModify flex justify-end items-center">
+          &lt;p onClick={()=>{setPop(true);setInd(0);}} style={{ cursor: 'pointer' }}>Delete article&lt;/p>
+          &lt;button onClick={()=>{setPop(true);setInd(1);}}>Validate&lt;/button>
+          &lt;/div>
+      &lt;/div>
+      {/* PopUp component for additional actions */}
+      &lt;PopUp index={ind} trigger={pop} setTrigger={setPop} titre={Title} resume={Summary} mots_cles={Keywords} institutions={Institution} auteurs={Author} references={Reference} />
+    &lt;/>
+  );
+};
+
+export default ArticleModify;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

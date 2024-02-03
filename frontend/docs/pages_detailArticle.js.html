@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSDoc: Source: pages/detailArticle.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/detailArticle.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import Navbar from "../components/ArticleDetailsPage/detailArticleNavbar";
+import HeaderArticle from "../components/ArticleDetailsPage/headerArticle";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
+/**
+ * DetailArticle component represents the page displaying detailed information about an article.
+ * @returns {JSX.Element} JSX element for the DetailArticle component.
+ */
+const DetailArticle = () => {
+  // Retrieve the stored article from local storage
+  const storedArticle = localStorage.getItem('selectedArticle');
+  console.log("Stored article ",storedArticle);
+
+  // Parse the stored article or use an empty object if not present
+  const article = storedArticle ? JSON.parse(storedArticle) : {};
+  console.log('Article stored in local storage:', article);
+
+  // Initialize variables for the first and second halves of the integral text
+  let firstHalfIntegralText = '';
+  let secondHalfIntegralText = '';
+  
+  // Split the integral text into two halves around the midpoint
+  if (article &amp;&amp; article.integralText) {
+    const midpoint = Math.floor(article.integralText.length / 2);
+    const nearestWhitespace = article.integralText.lastIndexOf(' ', midpoint) + 1;
+    firstHalfIntegralText = article.integralText.slice(0, nearestWhitespace);
+    secondHalfIntegralText = article.integralText.slice(nearestWhitespace);
+  }
+  
+  // Use 'N/A' if references are not available
+  const formattedReferences = article.references || 'N/A';
+
+
+  /**
+   * generatePDF function generates a PDF document containing information about the article.
+   */
+  const generatePDF = () => {
+    const pdf = new jsPDF();
+  
+    // Add title
+      pdf.setFont('times', 'bold');
+      pdf.text('Title : '+article.title, 20, 20);
+      pdf.setFont('times', 'normal');
+  
+    // Add Authors, Institutions, PublishDate, and Keywords
+   
+      pdf.text('Authors :'+ article.authors, 20, 30);
+      pdf.text('Institutions :'+ article.institutions, 20, 40);
+      pdf.text('Publish Date :'+ article.publishDate, 20, 50);
+      pdf.text('Keywords : ' +article.keywords, 20, 60);
+    
+  
+    // Add Abstract
+    pdf.setFont('times', 'bold');
+    pdf.text('Abstract:', 20, 70);
+    pdf.setFont('times', 'normal');
+  
+    const abstractLines = pdf.splitTextToSize(article.abstract, pdf.internal.pageSize.width - 40);
+    pdf.text(abstractLines, 20, 80);
+  
+    // Add Integral Text
+    pdf.setFont('times', 'bold');
+    pdf.text('Integral Text:', 20, 100);
+    pdf.setFont('times', 'normal');
+    pdf.autoTable({ startY: 110, body: [[firstHalfIntegralText, secondHalfIntegralText]] });
+  
+    // Add References
+    pdf.text(`References: ${formattedReferences}`, 20, pdf.autoTable.previous.finalY + 20);
+  
+    // Save the PDF
+    pdf.save('article.pdf');
+  };
+  
+  
+  
+  
+  // JSX structure for the DetailArticle component
+  return (
+    &lt;div className="flex flex-col overflow-x-hidden max-sm:-ml-8">
+       {/* Navbar component with the title */}
+      &lt;Navbar title={article.title}/>
+
+      {/* HeaderArticle component with additional information */}
+      &lt;HeaderArticle Authors={article.authors} Institutions={article.institutions} PublishDate={article.publishDate} KeyWords={article.keywords} />
+      
+      {/* Abstract section */}
+      &lt;div className="mt-10 w-5/6">
+        &lt;p className=" ml-24 font-bold text-lg">Abstract :&lt;/p>
+        &lt;p className="ml-24 mt-2">{article.abstract}&lt;/p>
+      &lt;/div>
+
+       {/* Integral Text section */}
+      &lt;div className="mt-10 w-5/6">
+      &lt;p className="ml-24 font-bold text-lg">Integral Text :&lt;/p>
+      &lt;/div>
+      
+      {/* Grid layout for displaying the two halves of the Integral Text */}
+      &lt;div className="mr-24 ml-24 grid grid-cols-2">
+        &lt;p className="mt-2 mr-3">{firstHalfIntegralText}&lt;/p>
+        &lt;p className="mt-2 ml-3">{secondHalfIntegralText}&lt;/p>
+      &lt;/div>
+
+      {/* User icon */}
+      &lt;div className="flex items-center max-sm:mr-10">
+          &lt;div className=" ml-auto -mr-40 -mt-36  w-56 h-56 rounded-full bg-darkBlue">&lt;/div>
+          &lt;/div>
+
+      {/* References section */}    
+      &lt;p className="ml-24 mt-10">&lt;strong className="text-lg ">References :&lt;/strong> {formattedReferences}&lt;/p>
+      
+      {/* Button to generate and view the PDF */}
+      &lt;button className="ml-auto  mr-24 max-sm:mr-14 bg-pink  rounded-full  my-10  py-2 px-10 hover:bg-pink-700" onClick={generatePDF}>
+         &lt;p className="text-white">View PDF&lt;/p>   
+      &lt;/button>
+    &lt;/div>
+  );
+}
+
+export default DetailArticle;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

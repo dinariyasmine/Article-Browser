@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/AdminPage/popAddModerator/popAddModerator.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/AdminPage/popAddModerator/popAddModerator.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import './popAddModerator.css';
+import axios from 'axios';
+
+/**
+ * Component for adding a new moderator.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.trigger - Boolean indicating whether the pop-up is triggered.
+ * @param {Function} props.setTrigger - Function to set the pop-up trigger.
+ * @param {Object} props.selectedUser - Selected user information.
+ * @param {Function} props.handleAddModerator - Function to handle adding a new moderator.
+ * @returns {JSX.Element} JSX element representing the pop-up for adding a moderator.
+ */
+const PopAdd = (props) => {
+  // State variable to store the user name
+  const [userName, setUserName] = useState(props.selectedUser ? props.selectedUser.username : '');
+
+  // Effect to update userName state when selectedUser changes
+  useEffect(() => {
+    setUserName(props.selectedUser ? props.selectedUser.username : '');
+  }, [props.selectedUser]);
+
+  /**
+   * Handles the change in the user name input field.
+   * @param {Object} event - The input change event.
+   */
+  const handleUserNameChange = (event) => {
+    setUserName(event.target.value);
+  };
+
+  /**
+   * Handles the addition of a new moderator.
+   * @async
+   */
+  const handleAddModerator = async () => {
+    try {
+      // Make a POST request to add a new moderator
+      const response = await axios.post(
+        'http://127.0.0.1:8000/auth/add_moderator/',
+        { username: userName }
+      );
+
+      console.log('Response:', response.data);
+
+      // Check if the 'success' property exists in the response data
+      const successMessage = response.data ? response.data.success : '';
+
+      console.log(successMessage);
+
+      // Pass user information to the function passed from the parent
+      props.handleAddModerator({ userName });
+
+      // Close the PopAdd component
+      props.setTrigger(false);
+      setUserName('');
+    } catch (error) {
+      console.error('Error during adding moderator:', error.response ? error.response.data : error.message);
+      // Handle error, display a message to the user, etc.
+    }
+  };
+
+  /**
+   * Handles the cancellation of adding a new moderator.
+   */
+  const handleCancel = () => {
+    // Reset the userName state to clear the input
+    setUserName('');
+    // Close the PopAdd component
+    props.setTrigger(false);
+  };
+
+  return (
+    props.trigger ? (
+      &lt;>
+        &lt;div className="popAddPage">
+          &lt;div className="popAdd">
+            &lt;p>Fill The Following Fields To Add a New Moderator :&lt;/p>
+            &lt;div className="inputs">
+              &lt;label>
+                User Name :
+                &lt;input type="text" value={userName} placeholder="User Name" onChange={handleUserNameChange} />
+              &lt;/label>
+            &lt;/div>
+            &lt;div className='buts'>
+              &lt;button style={{ background: '#AEAEAE' }} onClick={handleCancel}>Cancel&lt;/button>
+              &lt;button style={{ background: '#3AC6EB' }} onClick={handleAddModerator}>Add Moderator&lt;/button>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/>
+    ) : null
+  );
+};
+
+export default PopAdd;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

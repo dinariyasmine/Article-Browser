@@ -4,6 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import BlackCalendar from "../../assets/blackCalendar.png";
 import ActiveCalendar from "../../assets/activeCalendar.png";
 
+
+/**
+ * CustomInput component for customizing the appearance of the DatePicker input.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.value - The value to be displayed in the input.
+ * @param {function} props.onClick - The function to be called when the input is clicked.
+ * @param {boolean} props.isCalendarOpen - A flag indicating whether the calendar is open.
+ * @returns {JSX.Element} React component
+ */
 const CustomInput = ({ value, onClick, isCalendarOpen }) => {
   return (
     <button

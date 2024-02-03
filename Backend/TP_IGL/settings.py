@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authentication',
     'corsheaders',
     'extraction',
+    
 ]
 
 MIDDLEWARE = [
