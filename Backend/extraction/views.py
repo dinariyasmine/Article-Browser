@@ -5,6 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from extraction.extract import extract_information_from_pdf
 import os  # Import the os module here
+from django.urls import reverse
+from django.test import Client
+from app.views import index_articles
+import json
 
 class AddArticleView(APIView):
     def post(self, request, *args, **kwargs):
@@ -27,12 +31,31 @@ class AddArticleView(APIView):
         pdf_content = file.read()
 
         # Utilisez PyMuPDF pour extraire les informations du PDF
-        extract_information_from_pdf(pdf_content)
-        print('done')
-        # Le reste de votre traitement
+        article1=extract_information_from_pdf(pdf_content)
+        print('done extraction')
 
-        # Renvoyez une réponse JSON avec le résultat de l'extraction
-        # return JsonResponse({'message': 'Extraction réussie!', 'extraction_result': extraction_result})
+        # Indexation Article
+        # Call the indexing function
+        response = index_articles(article1)
+
+        # # Check if indexing was successful
+        # self.assertEqual(response.status_code, 200)
+
+        # # Parse the content using json.loads
+        # content = json.loads(response.content.decode('utf-8'))
+        # self.assertEqual(content['status'], 'success')
+    
+
+
+
+
+        # self.client = Client()
+        # url = reverse('index_articles')
+        # data = {'article_id': article1.id}
+        # response = self.client.post(url, data=data, content_type='application/json')
+        # print(response.content.decode())
+        # print(response.status_code)
+        # self.assertEqual(response.status_code, 200)
 
         # Exemple de réponse
         return Response({'message': 'Article ajouté avec succès!'}, status=status.HTTP_201_CREATED)

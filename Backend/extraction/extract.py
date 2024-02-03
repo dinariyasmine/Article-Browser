@@ -196,7 +196,6 @@ def extract_information_from_pdf(chemin_du_pdf):
     keyword_instances = [Keyword.objects.get_or_create(name=keyword)[0] for keyword in mots_cles]
 
     # Retrieve or create Reference instances for each reference
-    print('Start\n')
     # Create the Article instance
     article_instance = Article.objects.create(
         title=title,
@@ -205,15 +204,10 @@ def extract_information_from_pdf(chemin_du_pdf):
         pdf_url='vide',  
         references='references',    
     )
-    print('fin hadok jma3a\n')
     # Use set() method to assign values to many-to-many fields
     article_instance.authors.set(author_instances)
-    print('fin authors\n')
     article_instance.institutions.set(institution_instances)
-    print('fin institutions\n')
     article_instance.keywords.set(keyword_instances)
-    print('fin keywords\n')
 
-    print('fin')
 
     return article_instance

@@ -63,6 +63,7 @@ const SignUp = () => {
       );
   
       console.log('Response:', response.data);
+      navigate('/SignIn');
       // Handle the response as needed
     } catch (error) {
       console.error('Error during registration:', error.response.data);
@@ -71,7 +72,6 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    
     // Redirect based on the user's role
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {

@@ -43,33 +43,36 @@ const SignIn = () => {
           withCredentials: true,
         }
       );
-
+  
       console.log('Response:', response.data);
-
+  
       // Assuming the response contains user information
       const user = response.data.user;
-
-      // Set global variable indicating user is logged in
+  
+      // Set global variable indicating the user is logged in
       window.isLoggedIn = true;
-      
-
-      // Store user in local storage
+  
+      // Store the user in local storage
       localStorage.setItem('user', JSON.stringify(user));
       console.log('user', JSON.parse(localStorage.getItem('user')));
       console.log('Logged in?', window.isLoggedIn);
-      //navigate to the next page
-      const storedUser = localStorage.getItem('user');
+      
+  
+      // Navigate to the next page based on user role
+      const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser) {
         if (storedUser.role === 0) {
           navigate('/UserSpace');
         } else if (storedUser.role === 1) {
           navigate('/ModeratorSpace');
+        } else if (storedUser.role === 2) {
+          navigate('/AdminSpace');
         } else {
           // Handle other roles or scenarios
           console.error('Unsupported role:', storedUser.role);
         }
       }
-
+  
       // Handle the response as needed, for example, navigate to a new page
       // or update the UI to reflect the user being logged in
     } catch (error) {
@@ -77,6 +80,7 @@ const SignIn = () => {
       // Handle login error, display a message to the user, etc.
     }
   };
+  
 
   useEffect(() => {
     // Redirect based on the user's role

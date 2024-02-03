@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 from elasticsearch_dsl.connections import connections
 from elasticsearch.exceptions import NotFoundError
 from django.utils import timezone
-
+from app.views import index_articles
 
 class IndexingTestCase(TestCase):
     def setUp(self):
@@ -25,7 +25,7 @@ class IndexingTestCase(TestCase):
             keyword1 = Keyword.objects.create(name='Sciences')
 
             article1 = Article.objects.create(
-                title='Sample Article A',
+                title='Sample Article ZZZ',
                 abstract='This is the abstract of sample article A.',
                 full_text='This is the full text of sample article A.',
                 pdf_url='https://example.com/sample-article-A.pdf',
@@ -34,14 +34,18 @@ class IndexingTestCase(TestCase):
             article1.authors.add(author1)
             article1.institutions.add(institution1)
             article1.keywords.add(keyword1)
+            
+            # Call the indexing function
+            response = index_articles(article1)
 
-            # Index article
-            url = reverse('index_articles')
-            data = {'article_id': article1.id}
-            response = self.client.post(url, data=data, content_type='application/json')
-            print(response.content.decode())
-            print(response.status_code)
+            # Check if indexing was successful
             self.assertEqual(response.status_code, 200)
+
+            # Parse the content using json.loads
+            content = json.loads(response.content.decode('utf-8'))
+            self.assertEqual(content['status'], 'success')
+
+            # Add additional assertions if needed
 
         except Exception as e:
             self.fail(f"Integration test failed: {str(e)}")
@@ -49,7 +53,6 @@ class IndexingTestCase(TestCase):
         finally:
             # Clean up or additional logging can be done here if needed
             pass
-
 #--------------------------------------------------------
         
 class SearchingTestCase(TestCase):
@@ -65,17 +68,12 @@ class SearchingTestCase(TestCase):
             full_text='This is the full text of sample article A',
             pdf_url='https://example.com/sample-article-A.pdf',
             references = 'These are the references of sample article A.',
+            validated = True,
         )
         article1.authors.add(author1)
         article1.institutions.add(institution1)
         article1.keywords.add(keyword1)
-        # Index articles
-        url = reverse('index_articles')
-        data = {'article_id': article1.id}
-        response = self.client.post(url, data=data, content_type='application/json')
-        print(response.content.decode())
-        print(response.status_code)
-        self.assertEqual(response.status_code, 200)
+        index_articles(article1)
 
     @transaction.atomic
     def test_integration(self):
@@ -281,3 +279,30 @@ class ModifyArticleTestCase(TestCase):
             self.fail("Article not found in Elasticsearch")
 
 #--------------------------------------------------------
+            
+class NotValidatedTestCase(TestCase):
+    def setUp(self):
+        # Create a test client
+        self.client = Client()
+
+    def test_not_validated_view(self):
+        # Make a GET request to the view
+        url = reverse('not_validated')  # Use the actual URL name you defined in your URLs
+        response = self.client.get(url)
+
+        # Check if the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Parse the JSON response
+        json_response = response.json()
+
+        # Check if the 'status' key is present in the JSON response
+        self.assertIn('status', json_response)
+
+        # Check if the 'status' is 'error' or 'success' based on your implementation
+        self.assertIn(json_response['status'], ['error', 'success'])
+
+        if 'result' in json_response:
+            # If 'result' is present, check its type or other conditions as needed
+            self.assertIsInstance(json_response['result'], list)
+            # Add more assertions based on your specific requirements

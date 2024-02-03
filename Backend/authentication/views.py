@@ -94,3 +94,79 @@ class LoginView(View):
             return JsonResponse({"errors": f"User authentication failed. {str(e)}"}, status=400)
         except Exception as e:
             return JsonResponse({"errors": f"An unexpected error occurred: {str(e)}"}, status=500)
+class AllModeratorsView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        try:
+            moderators = User.objects.filter(role=1)
+            moderators_data = [{
+                "id": moderator.id,
+                "username": moderator.username,
+                "email": moderator.email,
+                "role": moderator.role,
+            } for moderator in moderators]
+
+            return JsonResponse({"moderators": moderators_data}, status=200)
+        except Exception as e:
+            return JsonResponse({"errors": f"An unexpected error occurred: {str(e)}"}, status=500)
+# Import necessary modules...
+
+class AddModeratorView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            post_data = json.loads(request.body)
+            username = post_data.get('username')
+
+            if not username:
+                return JsonResponse({"errors": "Username is required"}, status=400)
+
+            try:
+                # Find the user by username
+                user = User.objects.get(username=username)
+
+                # Change the role from 0 to 1
+                user.role = 1
+                user.save()
+
+                return JsonResponse({"success": f"The user {username} is now a moderator"}, status=200)
+
+            except User.DoesNotExist:
+                return JsonResponse({"errors": "User not found"}, status=404)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"errors": "Invalid JSON data"}, status=400)
+
+class DeleteModeratorView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            post_data = json.loads(request.body)
+            username = post_data.get('username')
+
+            if not username:
+                return JsonResponse({"errors": "Username is required"}, status=400)
+
+            try:
+                # Find the user by username
+                user = User.objects.get(username=username)
+
+                # Change the role from 1 to 0
+                user.role = 0
+                user.save()
+
+                return JsonResponse({"success": f"The user {username} is now a moderator"}, status=200)
+
+            except User.DoesNotExist:
+                return JsonResponse({"errors": "User not found"}, status=404)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"errors": "Invalid JSON data"}, status=400)
