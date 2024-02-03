@@ -5,29 +5,43 @@ import { Link } from "react-router-dom";
 
 
 
+/**
+ * UserPopUp component for rendering a user profile icon with a pop-up containing user information and logout option.
+ * @returns {JSX.Element} React component
+ */
+
 const UserPopUp = () => {
   const storedUser = JSON.parse(localStorage.getItem('user')) || {};
   const UserName = storedUser.username;
   const EmailAdress = storedUser.email;
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   
-    const handleIconClick = () => {
+  /**
+   * Handler for the user icon click event to toggle the visibility of the pop-up.
+   */  
+  const handleIconClick = () => {
       console.log("user",storedUser);
       setIsPopUpVisible(!isPopUpVisible);
     };
-    const handleLogout = () => {
+    /**
+   * Handler for the logout button click event.
+   * Removes the user from local storage and updates the login status.
+   */
+  const handleLogout = () => {
       console.log("user",storedUser);
       localStorage.removeItem("user");
       window.isLogged=false;
     };
   
     return (
-      <div className="relative">
+      // <div className="relative max-sm:w-5 max-sm:h-5 max-sm:ml-1 ">
+      <div className="relative w-full">
         <button onClick={handleIconClick}>
           <img
             src={profilePic}
             alt="User Icon"
-            className="w-11/12 h-11/12 max-sm:w-10 max-sm:h-10"
+            // className="w-11/12 h-11/12 max-sm:w-14 max-sm:h-14 max-sm:-mt-20"
+            className="w-full"
           />
         </button>
   

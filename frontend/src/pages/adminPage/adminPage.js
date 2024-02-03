@@ -7,18 +7,23 @@ import PopAdd from '../../components/AdminPage/popAddModerator/popAddModerator';
 import PopRemove from '../../components/AdminPage/popRemove/popRemove';
 import User from '../../components/SearchPage/userPopUp';
 
+/**
+ * AdminPage component for managing moderators and uploading articles.
+ *
+ * @component
+ * @returns {JSX.Element} AdminPage component
+ */
+
 const AdminPage = () => {
+  // State variables
   const [pop, setPop] = useState(false);
   const [popRemove, setPopRemove] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [items, setItems] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  
 
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  // };
-
+  // Handle file change
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
@@ -26,51 +31,26 @@ const AdminPage = () => {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      console.log(file)
 
-      axios.post('http://127.0.0.1:8000/extraction/ext/', formData)
-        .then(response => {
-          console.log(response.data);
-          // Gérer la réponse du backend, peut-être mettre à jour l'état du composant pour refléter le succès.
-        })
-        .catch(error => {
-          console.error('Erreur lors de l\'envoi du fichier:', error);
-          // Gérer les erreurs, informer l'utilisateur, etc.
-        });
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/extraction/ext/', formData);
+        console.log(response.data);
+        // Handle backend response, update component state if needed
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        // Handle errors, inform the user, etc.
+      }
     } else {
-      // Gérer le cas où aucun fichier n'est sélectionné
-      console.warn('Aucun fichier sélectionné.');
+      console.warn('No file selected.');
     }
   };
 
-  // const handleUpload = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  //   if (selectedFile) {
-  //     const formData = new FormData();
-  //     formData.append('file', selectedFile);
-  //     console.log(selectedFile)
-
-  //     axios.post('http://127.0.0.1:8000/extraction/ext/', formData)
-  //       .then(response => {
-  //         console.log(response.data);
-  //         // Gérer la réponse du backend, peut-être mettre à jour l'état du composant pour refléter le succès.
-  //       })
-  //       .catch(error => {
-  //         console.error('Erreur lors de l\'envoi du fichier:', error);
-  //         // Gérer les erreurs, informer l'utilisateur, etc.
-  //       });
-  //   } else {
-  //     // Gérer le cas où aucun fichier n'est sélectionné
-  //     console.warn('Aucun fichier sélectionné.');
-  //   }
-  // };
-
+  // Fetch moderators on component mount or when 'items' state changes
   useEffect(() => {
     const fetchModerators = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/auth/all_moderators/');
-        const moderators = response.data.moderators; // Assuming the response contains moderators data
+        const moderators = response.data.moderators;
         setItems(moderators);
       } catch (error) {
         console.error('Error fetching moderators:', error.response.data);
@@ -78,32 +58,32 @@ const AdminPage = () => {
     };
   
     fetchModerators();
-  }, [items]); // Now the effect will run when the 'items' state changes
-   // The empty dependency array ensures the effect runs once when the component mounts
+  }, [items]);
 
+  // Handle trash icon click
   const handleTrashClick = (user) => {
     setSelectedUser(user);
     setPopRemove(true);
   };
 
+  // Handle removal of a user
   const handleRemove = (username) => {
     // Remove the user with the given username from the items array
     const updatedItems = items.filter((item) => item.username !== username);
     setItems(updatedItems);
   };
 
-  // Inside the handleAddModerator function in AdminPage component
+  // Handle adding a new moderator
   const handleAddModerator = (newModerator) => {
-  // Add the new moderator to the items array
-  setItems([...items, newModerator]);
-};
+    // Add the new moderator to the items array
+    setItems([...items, newModerator]);
+  };
 
-  
-
+  // Render component
   return (
     <>
-      <div className="admin" style={{ filter: pop || popRemove ? 'blur(5px)' : 'blur(0px)' }}>
-        <User />
+      <div className="admin" style={{ filter: pop || popRemove ? 'blur(5px)' : 'blur(0px)',}}>
+      <div className="utilisateur w-16 max-sm:w-9"><User /></div>
         <h1>Moderators :</h1>
         <div className="buttons">
           <button onClick={() => setPop(true)}>Add moderator   <FontAwesomeIcon icon={faPlus} /></button>
@@ -118,8 +98,6 @@ const AdminPage = () => {
               />
             </label>
           </div>
-          {/* <button>Upload article    <FontAwesomeIcon icon={faUpload} /></button> */}
-          {/* <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange}/> */}
         </div>
         <table>
           <thead>

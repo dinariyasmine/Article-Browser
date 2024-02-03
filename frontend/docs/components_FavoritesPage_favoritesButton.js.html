@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/FavoritesPage/favoritesButton.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/FavoritesPage/favoritesButton.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import favoritesPic from "../../assets/emptyHeart.png";
+import activeFavoritesPic from "../../assets/redHeart.png";
+import axios from 'axios';
+
+/**
+ * FavoritesButton component for adding/removing an article from user favorites.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.title - The title of the article.
+ * @param {string} props.articleId - The ID of the article.
+ * @param {string} props.userId - The ID of the user.
+ * @returns {JSX.Element} React component
+ */
+const FavoritesButton = ({ title, articleId, userId }) => {
+  // State to track whether the article is in favorites or not
+  const [isFavorite, setIsFavorite] = useState(false);
+  
+  // Get user and selected article from local storage
+  const user = JSON.parse(localStorage.getItem('user'));
+  const article = JSON.parse(localStorage.getItem('selectedArticle'));
+
+  // Function to handle adding/removing from favorites
+  const handleOnclickFavorite = async () => {
+    try {
+      if (isFavorite) {
+        // If already in favorites, remove from favorites
+        const response = await axios.post(
+          'http://127.0.0.1:8000/app/delete_from_favorites/',
+          {
+            user_id: user.id,
+            article_id: article.id2,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setIsFavorite(false);
+          console.log(response.data.status);
+        } else {
+          console.error(response.data.status);
+        }
+      } else {
+        // If not in favorites, add to favorites
+        const response = await axios.post(
+          'http://127.0.0.1:8000/app/add_to_favorites/',
+          {
+            user_id: user.id,
+            article_id: article.id2,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setIsFavorite(true);
+          console.log(response.data.status);
+        } else {
+          console.error(response.data.status);
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // Effect to check if the article is in favorites when the component mounts
+  useEffect(() => {
+    const checkIfFavorite = async () => {
+      try {
+        const response = await axios.post(
+          'http://127.0.0.1:8000/app/is_favorite/',
+          {
+            user_id: user.id,
+            article_id: article.id2,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+  
+        if (response.status === 200) {
+          // Set isFavorite based on the response
+          setIsFavorite(response.data.is_favorite);
+        } else {
+          console.error(response.data.status);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    // Call the function to check if the article is a favorite
+    checkIfFavorite();
+  }, [user.id, article.id2]);
+
+  // Render the favorites button with appropriate image based on isFavorite state
+  return (
+    &lt;button onClick={handleOnclickFavorite} className="max-sm:-mt-20 max-sm:mr-4 ">
+      &lt;img
+        src={isFavorite ? activeFavoritesPic : favoritesPic}
+        alt="Favorites"
+        className="w-10 h-10 mr-6 mb-1 max-sm:w-20 max-sm:h-12 "
+      />
+    &lt;/button>
+  );
+};
+
+export default FavoritesButton;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

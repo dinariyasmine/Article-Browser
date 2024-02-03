@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>extraction package &#8212; SciQuest  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=12dfc556" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="extraction-package">
+<h1>extraction package<a class="headerlink" href="#extraction-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-extraction.admin">
+<span id="extraction-admin-module"></span><h2>extraction.admin module<a class="headerlink" href="#module-extraction.admin" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-extraction.apps">
+<span id="extraction-apps-module"></span><h2>extraction.apps module<a class="headerlink" href="#module-extraction.apps" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="extraction.apps.ExtractionConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">extraction.apps.</span></span><span class="sig-name descname"><span class="pre">ExtractionConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/apps.html#ExtractionConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.apps.ExtractionConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="extraction.apps.ExtractionConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#extraction.apps.ExtractionConfig.default_auto_field" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="extraction.apps.ExtractionConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'extraction'</span></em><a class="headerlink" href="#extraction.apps.ExtractionConfig.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-extraction.extract">
+<span id="extraction-extract-module"></span><h2>extraction.extract module<a class="headerlink" href="#module-extraction.extract" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="extraction.extract.extract_information_from_pdf">
+<span class="sig-prename descclassname"><span class="pre">extraction.extract.</span></span><span class="sig-name descname"><span class="pre">extract_information_from_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chemin_du_pdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/extract.html#extract_information_from_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.extract.extract_information_from_pdf" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts information from a PDF document using OpenAI’s GPT-3.5-turbo model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chemin_du_pdf</strong> (<em>str</em>) – The path to the PDF file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the Article model containing extracted information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="app.html#app.models.Article" title="app.models.Article">Article</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="extraction.extract.lire_pdf">
+<span class="sig-prename descclassname"><span class="pre">extraction.extract.</span></span><span class="sig-name descname"><span class="pre">lire_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chemin_du_pdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/extract.html#lire_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.extract.lire_pdf" title="Link to this definition">¶</a></dt>
+<dd><p>Reads the entire text content of a PDF document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chemin_du_pdf</strong> (<em>str</em>) – The path to the PDF file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The concatenated text content of all pages.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="extraction.extract.lire_pdf_first_page">
+<span class="sig-prename descclassname"><span class="pre">extraction.extract.</span></span><span class="sig-name descname"><span class="pre">lire_pdf_first_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chemin_du_pdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/extract.html#lire_pdf_first_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.extract.lire_pdf_first_page" title="Link to this definition">¶</a></dt>
+<dd><p>Reads the text content of the first page of a PDF document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chemin_du_pdf</strong> (<em>str</em>) – The path to the PDF file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The text content of the first page.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-extraction.models">
+<span id="extraction-models-module"></span><h2>extraction.models module<a class="headerlink" href="#module-extraction.models" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-extraction.tests">
+<span id="extraction-tests-module"></span><h2>extraction.tests module<a class="headerlink" href="#module-extraction.tests" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-extraction.urls">
+<span id="extraction-urls-module"></span><h2>extraction.urls module<a class="headerlink" href="#module-extraction.urls" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-extraction.views">
+<span id="extraction-views-module"></span><h2>extraction.views module<a class="headerlink" href="#module-extraction.views" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="extraction.views.AddArticleView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">extraction.views.</span></span><span class="sig-name descname"><span class="pre">AddArticleView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/views.html#AddArticleView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.views.AddArticleView" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="extraction.views.AddArticleView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/extraction/views.html#AddArticleView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#extraction.views.AddArticleView.post" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-extraction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-extraction" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">SciQuest</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Dinari Yasmine.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/docs/extraction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

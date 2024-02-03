@@ -2,6 +2,17 @@
 import React from 'react';
 import './TextFiled.css';
 
+/**
+ * TextFiled component for rendering input fields.
+ *
+ * @component
+ * @param {Object} props - The properties of the TextFiled component.
+ * @param {string} props.text - The label for the input field.
+ * @param {string} props.value - The current value of the input field.
+ * @param {function} props.onChange - The function called when the input value changes.
+ * @param {string} [props.type] - The type of the input field (default is 'text').
+ * @returns {JSX.Element} TextFiled component
+ */
 const TextFiled = (props) => {
   const { text, value, onChange, type } = props;
 
@@ -19,66 +30,5 @@ const TextFiled = (props) => {
     </div>
   );
 };
+
 export default TextFiled;
-
-
-/* 
-old code:
-// PasswordField.js
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import './TextFiled.css';
-
-const PasswordField = (Props) => {
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleChange = (e) => {
-    setPassword(e.target.value);
-    // Check if Props.onChange is a function before invoking it
-    if (typeof Props.onChange === 'function') {
-      Props.onChange(e);
-    }
-  };
-
-  const isPasswordType = Props.text === 'Password' || Props.text === 'Confirm Password';
-
-  return (
-    isPasswordType ? (
-      <div className='DivPassword'>
-        <input
-          type={showPassword ? 'text' : 'password'}
-          id="password"
-          name="password"
-          placeholder={text}
-          value={value}
-          className='TextFiled PasswordBox'
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <FontAwesomeIcon
-          className='Icon'
-          icon={showPassword ? faEye : faEyeSlash}
-          onClick={handleTogglePassword}
-        />
-      </div>
-    ) : (
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder={Props.text}
-        value={Props.value}  
-        className='TextFiled'
-        onChange={Props.onChange}
-      />
-    )
-  );
-};
-
-export default PasswordField;
-*/

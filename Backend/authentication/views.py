@@ -1,3 +1,4 @@
+# Import necessary modules...
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as AuthLogoutView
 from django.http import JsonResponse
@@ -34,8 +35,6 @@ class RegisterView(View):
         if not (username and email and password1 and password2):
             return JsonResponse({"errors": "All fields are required"}, status=400)
 
-        
-
         # Create the user 
         user = User.objects.create_user(username=username, email=email, password=password1)
         # Check if passwords match
@@ -51,7 +50,6 @@ class RegisterView(View):
             return JsonResponse({"success": "User registration and authentication successful"}, status=200)
         else:
             return JsonResponse({"errors": "User authentication failed"}, status=400)
-
 
 
 class LoginView(View):
@@ -94,10 +92,13 @@ class LoginView(View):
             return JsonResponse({"errors": f"User authentication failed. {str(e)}"}, status=400)
         except Exception as e:
             return JsonResponse({"errors": f"An unexpected error occurred: {str(e)}"}, status=500)
+
+
 class AllModeratorsView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         try:
             moderators = User.objects.filter(role=1)
@@ -111,7 +112,7 @@ class AllModeratorsView(View):
             return JsonResponse({"moderators": moderators_data}, status=200)
         except Exception as e:
             return JsonResponse({"errors": f"An unexpected error occurred: {str(e)}"}, status=500)
-# Import necessary modules...
+
 
 class AddModeratorView(View):
     @method_decorator(csrf_exempt)
@@ -142,6 +143,7 @@ class AddModeratorView(View):
         except json.JSONDecodeError:
             return JsonResponse({"errors": "Invalid JSON data"}, status=400)
 
+
 class DeleteModeratorView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
@@ -163,7 +165,7 @@ class DeleteModeratorView(View):
                 user.role = 0
                 user.save()
 
-                return JsonResponse({"success": f"The user {username} is now a moderator"}, status=200)
+                return JsonResponse({"success": f"The user {username} is no longer a moderator"}, status=200)
 
             except User.DoesNotExist:
                 return JsonResponse({"errors": "User not found"}, status=404)

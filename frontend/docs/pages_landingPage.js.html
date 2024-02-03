@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/landingPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/landingPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import Logo from "../components/LandingPage/logo";
+import pic from "../assets/picLandingPage.png";
+import LandingPageButton from "../components/LandingPage/buttonLandingPage";
+import Text from "../components/LandingPage/textLandingPage";
+import Card from "../components/LandingPage/cardLandingPage";
+import IconCard from "../components/LandingPage/iconCard";
+import IconEarth from "../assets/earthVector.png";
+import IconUI from "../assets/uiVector.png";
+import IconUpdate from "../assets/updateVector.png";
+import { Link } from "react-router-dom";
+
+/**
+ * LandingPage component for the main landing page of the application.
+ * @returns {JSX.Element} React component
+ */
+const LandingPage = () => {
+  return (
+    &lt;div className="overflow-x-hidden font-montserrat max-sm:text-sm ">
+      {/* Logo and Header */}
+      &lt;div className="flex mt-5">
+        &lt;div className="ml-5">
+          &lt;Logo />
+        &lt;/div>
+        &lt;div className="ml-auto -mt-12 w-56 h-20 rounded-full bg-darkBlue" style={{ marginRight: "-4rem" }}>&lt;/div>
+      &lt;/div>
+
+      {/* Main Content */}
+      &lt;div className="flex ml-36 mt-28 max-sm:ml-16">
+        &lt;div>
+          {/* Text and Sign-In Button */}
+          &lt;Text />
+          &lt;div className="mt-10 max-sm:mb-10 max-sm:ml-16">
+            &lt;Link to="/SignIn">
+              &lt;LandingPageButton />
+            &lt;/Link>
+          &lt;/div>
+        &lt;/div>
+
+        {/* Landing Page Image */}
+        &lt;img src={pic} alt="Landing Page" className="mr-16 max-sm:hidden" />
+      &lt;/div>
+
+      {/* Decorative Circles */}
+      &lt;div className="ml-40 -mt-2 w-12 h-12 rounded-full bg-darkBlue ">&lt;/div>
+      &lt;div className="-ml-20  w-52 h-52 rounded-full bg-darkBlue ">&lt;/div>
+
+      {/* Why Choose Us Section */}
+      &lt;div className="flex flex-col items-center justify-center">
+        &lt;p className="text-4xl font-bold text-darkBlue mb-24 -mt-24 max-sm:mt-20">Why choose us ?&lt;/p>
+      &lt;/div>
+
+      {/* Features Section */}
+      &lt;div className="flex flex-wrap items-center justify-center max-sm:flex-wrap ">
+        {/* Precision Search */}
+        &lt;div className="flex flex-col items-center justify-center max-sm:flex-col ">
+          &lt;IconCard imgUrl={IconEarth} />
+          &lt;Card title={"Precision Search"} text={"Our advanced algorithms ensure precise and efficient searches, saving you time and effort."} />
+        &lt;/div>
+
+        {/* User-Friendly Design */}
+        &lt;div className="flex flex-col items-center justify-center">
+          &lt;IconCard imgUrl={IconUI} />
+          &lt;Card title={"User-Friendly Design"} text={"We offer an intuitive interface for easy navigation and a user-focused approach to innovation."} />
+        &lt;/div>
+
+        {/* Up-to-Date Knowledge */}
+        &lt;div className="flex flex-col items-center justify-center">
+          &lt;IconCard imgUrl={IconUpdate} />
+          &lt;Card title={"Up-to-Date Knowledge"} text={"We provide current and comprehensive knowledge, ensuring you're always updated."} />
+        &lt;/div>
+      &lt;/div>
+
+      {/* Decorative Element */}
+      &lt;div className="ml-auto -mr-28 w-52 h-52 overflow-hidden rounded-full relative">
+        &lt;div className="absolute top-0 left-0 w-1/2 h-full bg-darkBlue">&lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+export default LandingPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/adminPage/adminPage.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/adminPage/adminPage.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './adminPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faUpload, faTrash } from '@fortawesome/free-solid-svg-icons';
+import PopAdd from '../../components/AdminPage/popAddModerator/popAddModerator';
+import PopRemove from '../../components/AdminPage/popRemove/popRemove';
+import User from '../../components/SearchPage/userPopUp';
+
+/**
+ * AdminPage component for managing moderators and uploading articles.
+ *
+ * @component
+ * @returns {JSX.Element} AdminPage component
+ */
+
+const AdminPage = () => {
+  // State variables
+  const [pop, setPop] = useState(false);
+  const [popRemove, setPopRemove] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [items, setItems] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // Handle file change
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/extraction/ext/', formData);
+        console.log(response.data);
+        // Handle backend response, update component state if needed
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        // Handle errors, inform the user, etc.
+      }
+    } else {
+      console.warn('No file selected.');
+    }
+  };
+
+  // Fetch moderators on component mount or when 'items' state changes
+  useEffect(() => {
+    const fetchModerators = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/auth/all_moderators/');
+        const moderators = response.data.moderators;
+        setItems(moderators);
+      } catch (error) {
+        console.error('Error fetching moderators:', error.response.data);
+      }
+    };
+  
+    fetchModerators();
+  }, [items]);
+
+  // Handle trash icon click
+  const handleTrashClick = (user) => {
+    setSelectedUser(user);
+    setPopRemove(true);
+  };
+
+  // Handle removal of a user
+  const handleRemove = (username) => {
+    // Remove the user with the given username from the items array
+    const updatedItems = items.filter((item) => item.username !== username);
+    setItems(updatedItems);
+  };
+
+  // Handle adding a new moderator
+  const handleAddModerator = (newModerator) => {
+    // Add the new moderator to the items array
+    setItems([...items, newModerator]);
+  };
+
+  // Render component
+  return (
+    &lt;>
+      &lt;div className="admin" style={{ filter: pop || popRemove ? 'blur(5px)' : 'blur(0px)' }}>
+        &lt;User />
+        &lt;h1>Moderators :&lt;/h1>
+        &lt;div className="buttons">
+          &lt;button onClick={() => setPop(true)}>Add moderator   &lt;FontAwesomeIcon icon={faPlus} />&lt;/button>
+          &lt;div className="upload">
+            &lt;label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+              Upload article &lt;FontAwesomeIcon icon={faUpload} />
+              &lt;input
+                type="file"
+                id="fileInput"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+            &lt;/label>
+          &lt;/div>
+        &lt;/div>
+        &lt;table>
+          &lt;thead>
+            &lt;tr>
+              &lt;th>Username&lt;/th>
+              &lt;th>Email Address&lt;/th>
+              &lt;th>&lt;/th>
+            &lt;/tr>
+          &lt;/thead>
+          &lt;tbody>
+            {items.map((item, index) => (
+              &lt;tr key={index}>
+                &lt;td>{item.username}&lt;/td>
+                &lt;td>{item.email}&lt;/td>
+                &lt;td className='p-3'>
+                  &lt;FontAwesomeIcon
+                    onClick={() => handleTrashClick(item)}
+                    icon={faTrash}
+                    style={{ color: '#3AC6EB', fontSize: '1.4em' }}
+                  />
+                &lt;/td>
+              &lt;/tr>
+            ))}
+          &lt;/tbody>
+        &lt;/table>
+      &lt;/div>
+      &lt;PopAdd trigger={pop} setTrigger={setPop} handleAddModerator={handleAddModerator} selectedUser={selectedUser} />
+      &lt;PopRemove
+        handleRemove={handleRemove}
+        trigger={popRemove}
+        setTrigger={setPopRemove}
+        username={selectedUser ? selectedUser.username : ''}
+        email={selectedUser ? selectedUser.email : ''}
+      />
+    &lt;/>
+  );
+};
+
+export default AdminPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

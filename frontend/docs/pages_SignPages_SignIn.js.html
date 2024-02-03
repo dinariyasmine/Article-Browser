@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/SignPages/SignIn.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/SignPages/SignIn.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import TextFiled from '../../components/Signing/TextFiled/TextFiled';
+import LogInButton from '../../components/Signing/LogInButton/LogInButton';
+import Logo from '../../components/Signing/Logo/Logo';
+import Slogan from '../../components/Signing/Slogan/Slogan';
+import AuthentificationTitle from '../../components/Signing/AuthentificationTitle/AuthentificationTitle';
+import Sign from '../../components/Signing/Sign/Sign';
+import AuthImg from '../../assets/AuthImage.svg';
+import './Signing.css';
+
+/**
+ * SignIn component for user login.
+ *
+ * @component
+ * @returns {JSX.Element} SignIn component
+ */
+
+const SignIn = () => {
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  /**
+   * Handle change in the 'User Name' field.
+   *
+   * @param {Object} e - Event object
+   */
+
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
+  };
+
+  /**
+   * Handle change in the 'Password' field.
+   *
+   * @param {Object} e - Event object
+   */
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  /**
+   * Handle form submission.
+   *
+   * @async
+   */
+  
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/auth/login/',
+        {
+          username: userName,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': window.csrfToken,
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log('Response:', response.data);
+
+      // Assuming the response contains user information
+      const user = response.data.user;
+
+      // Set global variable indicating the user is logged in
+      window.isLoggedIn = true;
+
+      // Store the user in local storage
+      localStorage.setItem('user', JSON.stringify(user));
+      console.log('user', JSON.parse(localStorage.getItem('user')));
+      console.log('Logged in?', window.isLoggedIn);
+
+      // Navigate to the next page based on user role
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser) {
+        if (storedUser.role === 0) {
+          navigate('/UserSpace');
+        } else if (storedUser.role === 1) {
+          navigate('/ModeratorSpace');
+        } else if (storedUser.role === 2) {
+          navigate('/AdminSpace');
+        } else {
+          // Handle other roles or scenarios
+          console.error('Unsupported role:', storedUser.role);
+        }
+      }
+
+      // Handle the response as needed, for example, navigate to a new page
+      // or update the UI to reflect the user being logged in
+    } catch (error) {
+      console.error('Error during login:', error.response.data);
+      // Handle login error, display a message to the user, etc.
+    }
+  };
+
+  // Redirect if the user is already logged in
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      if (storedUser.role === 0) {
+        navigate('/UserSpace');
+      } else if (storedUser.role === 1) {
+        navigate('/ModeratorSpace');
+      } else {
+        // Handle other roles or scenarios
+        console.error('Unsupported role:', storedUser.role);
+      }
+    }
+  }, [navigate]);
+
+  return (
+    &lt;div className='h-screen flex justify-between items-center'>
+      &lt;div className='LeftSide'>
+        &lt;div className='logo'>
+          &lt;Logo />
+        &lt;/div>
+        &lt;img src={AuthImg} alt='Authentification' />
+        &lt;div className='slogan'>
+          &lt;Slogan />
+        &lt;/div>
+      &lt;/div>
+      &lt;div className='RightSide'>
+        &lt;AuthentificationTitle title='Log In' />
+        &lt;div className='MRightSide'>
+          &lt;TextFiled text='User Name' value={userName} onChange={handleUserNameChange} />
+          &lt;TextFiled text='Password' type='password' value={password} onChange={handlePasswordChange} />
+        &lt;/div>
+        &lt;div className='BRightSide' >
+          &lt;LogInButton text='Log In' onClick={handleSubmit}/>
+          &lt;div>
+            &lt;Sign account="Don't have an account?" sign='up' />
+            &lt;Link to="/SignUp">&lt;/Link>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+export default SignIn;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

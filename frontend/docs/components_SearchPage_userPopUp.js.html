@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SearchPage/userPopUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SearchPage/userPopUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import profilePic from "../../assets/userIcon.png";
+import Logout from "../../assets/logout.png";
+import { Link } from "react-router-dom";
+
+
+
+/**
+ * UserPopUp component for rendering a user profile icon with a pop-up containing user information and logout option.
+ * @returns {JSX.Element} React component
+ */
+
+const UserPopUp = () => {
+  const storedUser = JSON.parse(localStorage.getItem('user')) || {};
+  const UserName = storedUser.username;
+  const EmailAdress = storedUser.email;
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  
+  /**
+   * Handler for the user icon click event to toggle the visibility of the pop-up.
+   */  
+  const handleIconClick = () => {
+      console.log("user",storedUser);
+      setIsPopUpVisible(!isPopUpVisible);
+    };
+    /**
+   * Handler for the logout button click event.
+   * Removes the user from local storage and updates the login status.
+   */
+  const handleLogout = () => {
+      console.log("user",storedUser);
+      localStorage.removeItem("user");
+      window.isLogged=false;
+    };
+  
+    return (
+      &lt;div className="relative max-sm:w-5 max-sm:h-5 max-sm:ml-1 ">
+        &lt;button onClick={handleIconClick}>
+          &lt;img
+            src={profilePic}
+            alt="User Icon"
+            className="w-11/12 h-11/12 max-sm:w-14 max-sm:h-14 max-sm:-mt-20"
+          />
+        &lt;/button>
+  
+        {isPopUpVisible &amp;&amp; (
+          &lt;div>
+            {/* Backdrop for the blur effect */}
+            &lt;div
+              className="fixed inset-0 bg-black opacity-25 z-50"
+              onClick={handleIconClick}
+            >&lt;/div>
+  
+            {/* User pop-up */}
+            &lt;div className="fixed top-2 right-2 mt-16 mr-8 flex items-center justify-center z-50">
+              &lt;div className="bg-white border border-gray-400 rounded-2xl p-2 w-44 flex flex-col items-center">
+                {/* Add your pop-up content here */}
+                &lt;p className="text-gray-400 pb-2">{UserName}&lt;/p>
+                
+                {/* Container for the line div */}
+                &lt;div className="line-container w-11/12">
+                  &lt;div className="mb-2 border-b bg-black">&lt;/div>
+                &lt;/div>
+                
+                &lt;p className="text-gray-400 pb-2">{EmailAdress}&lt;/p>
+                 {/* Container for the line div */}
+                 &lt;div className="line-container w-11/12">
+                  &lt;div className="mb-2 border-b bg-black">&lt;/div>
+                &lt;/div>
+                &lt;Link to ="/">
+                &lt;button className="flex items-center" onClick={handleLogout}>
+                  &lt;p className="mt-1 mr-2 mb-0 pb-2 font-semibold text-gray-500">Logout&lt;/p>
+                  &lt;img src={Logout} alt="Logout" className="" />
+                &lt;/button>
+                &lt;/Link>
+                
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        )}
+      &lt;/div>
+    );
+  };
+  
+  export default UserPopUp;
+  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

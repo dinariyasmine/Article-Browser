@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SearchPage/filterBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SearchPage/filterBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
+import Triangle from "../../assets/blackTriangle.png";
+import FilterList from "../SearchPage/filterList";
+
+/**
+ * FilterBar component for displaying a filter button with a dropdown list of options.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.title - The title of the filter.
+ * @param {Array} props.listOfOptions - An array of options for the filter.
+ * @param {function} props.onSelect - The function to be called when an option is selected.
+ * @returns {JSX.Element} React component
+ */
+
+const FilterBar = ({ title, listOfOptions, onSelect }) => {
+  const [rotation, setRotation] = useState(0);
+  const [isOpened, setIsOpened] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+   /**
+   * Handles the click event on the filter button.
+   * Toggles the rotation of the triangle icon and opens/closes the dropdown.
+   */
+  const onClick = () => {
+    setRotation(rotation + 180);
+    setIsOpened(!isOpened);
+  };
+
+  useEffect(() => {
+    // Ensure that selectedOptions is not an empty array before invoking onSelect
+    if (selectedOptions.length > 0) {
+      onSelect(selectedOptions);
+    }
+  }, [selectedOptions, onSelect]);
+
+
+
+  /**
+   * Handles the selection of options in the dropdown list.
+   * Updates the selectedOptions state.
+   * @param {Array} selected - The selected options.
+   */
+  const handleOptionSelect = (selected) => {
+    setSelectedOptions(selected);
+  };
+
+  return (
+    &lt;div className="">
+      {/* Filter button */}
+      &lt;button
+        className={` w-64 grid grid-cols-2 items-center text-darkBlue rounded-xl py-2 border transition duration-300 ease-in-out hover:bg-gray-50 mb-3
+          ${isOpened ? 'border-lightBlue bg-gray-50' : 'border-gray-200'}`}
+        onClick={onClick}
+      >
+        &lt;p className="ml-5 col-start-1 col-end-1">{title}&lt;/p>
+        &lt;img
+          src={Triangle}
+          alt="triangle"
+          className={`col-start-3 col-end-3 mr-8 transform ${isOpened ? 'rotate-180' : ''}`}
+          style={{ transform: `rotate(${rotation}deg)` }}
+        />
+      &lt;/button>
+      {/* Display the dropdown list if opened */}
+      {isOpened &amp;&amp; &lt;FilterList options={listOfOptions} onSelect={handleOptionSelect} />}
+    &lt;/div>
+  );
+};
+
+export default FilterBar;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

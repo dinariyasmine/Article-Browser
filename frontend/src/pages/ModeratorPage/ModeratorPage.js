@@ -1,51 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ModeratorPage.css';
 import Article from '../../components/ModeratorPage/Article/Article';
-import imgProfil from '../../assets/userIcon.png'
 import ProfilePic from "../../components/SearchPage/userPopUp";
+import axios from 'axios';
 
+/**
+ * ModeratorPage component for displaying recently uploaded articles.
+ *
+ * @component
+ * @returns {JSX.Element} ModeratorPage component
+ */
 const ModeratorPage = () => {
-  
-  const items = [
-    {
-      id:'03',
-      title: 'Article 4',
-      Institutions :['Hello','Hello2'],
-      keywords: ['React', 'JavaScript'],
-      date: '2023-01-01',
-      authors: ['Author1','Author2'],
-      Abstract:'Incididunt laboris deserunt in sint ad non quis ex consequat nulla adipisicing.',
-      IntegralText:'Commodo ut quis minim laboris in proident occaecat enim tempor mollit eu cillum. Occaecat irure consequat cillum ut dolore. Excepteur ipsum eiusmod veniam pariatur. Ad laboris aliquip ea cupidatat aute. Mollit dolor sunt nostrud occaecat sunt cillum sunt et anim consequat laboris. Minim id sit cupidatat qui exercitation voluptate dolore. Ad ea aliquip laborum non aliqua.',
-      References: ['Reference1','Reference2'],
-    }
-    // { id: 1, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 2, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 3, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 4, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 5, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 6, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 7, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 8, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-    // { id: 9, title: 'Hello world !', keywords: ['Hello world !','hey'], date: 'Hello world !', author: ['You','ouik'] },
-  ];
+  // State variable to store the list of articles
+  const [articles, setArticles] = useState([]);
+
+  // Fetch articles from the Django backend API when the component mounts
+  useEffect(() => {
+    // Define the Django backend API endpoint for retrieving articles
+    const apiUrl = 'http://127.0.0.1:8000/app/not_validated/';
+
+    // Fetch articles using Axios
+    axios.get(apiUrl)
+      .then(response => {
+        // Assuming the response structure has a 'result' key containing the articles
+        setArticles(response.data.result);
+      })
+      .catch(error => console.error('Error fetching articles:', error));
+  }, []);
 
   return (
     <div className='moderatorPage'>
       <div className='Up flex justify-between items-center'>
-        <div style={{width : '5%'}}></div>
-        <h1 className='TITLE'>Rencently uploaded articles</h1>
+        <div style={{ width: '5%' }}></div>
+        <h1 className='TITLE'>Recently Uploaded Articles</h1>
         <div className="image-container">
-        <button>
-           <ProfilePic />
-        </button>
+          <button>
+            {/* Display the profile picture component */}
+            <ProfilePic />
+          </button>
         </div>
       </div>
-      
+
       <div className='listArticles w-full'>
-        {items.map((element,index) => (    
-          <Article  
-            key={element.id}
-            article={element}
+        {articles.map((article, index) => (
+          <Article
+            key={index} // Assuming 'index' is a suitable unique key for the Article component
+            index={index}
+            article={article}
           />
         ))}
       </div>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/ModeratorPage/Popup/popUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/ModeratorPage/Popup/popUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import './popUp.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleXmark, faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+/**
+ * Functional component for a pop-up window.
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.trigger - Boolean indicating whether the pop-up is triggered.
+ * @param {Function} props.setTrigger - Function to set the pop-up trigger.
+ * @param {number} props.index - Index to determine the type of pop-up.
+ * @param {string} props.titre - Title of the article.
+ * @param {string} props.resume - Summary of the article.
+ * @param {string[]} props.auteurs - Array of authors of the article.
+ * @param {string[]} props.institutions - Array of institutions related to the article.
+ * @param {string[]} props.mots_cles - Array of keywords related to the article.
+ * @param {string} props.references - References related to the article.
+ * @returns {JSX.Element} JSX element representing the pop-up window.
+ */
+const PopUp = (props) => {
+  const navigate = useNavigate();
+
+  /**
+   * Handles the deletion of an article.
+   * @async
+   * @returns {Promise&lt;void>} Promise that resolves after handling the deletion.
+   */
+  const handleDeleteArticle = async () => {
+    try {
+      const storedArticle = localStorage.getItem('selectedArticle');
+      const article0 = storedArticle ? JSON.parse(storedArticle) : {};
+
+      // Assuming article0 has the 'id' property representing the article ID
+      const articleId = article0.id;
+      console.log('ID de l\'article qui va être supprimé :', articleId);
+
+      // Make a POST request to delete the article
+      const response = await axios.post('http://127.0.0.1:8000/app/delete_article/', { article_id: articleId });
+
+      // Check the response status and handle accordingly
+      if (response.status === 200) {
+        console.log('Article deleted successfully');
+        navigate('/ModeratorSpace');
+        // Perform any additional actions after successful deletion
+      } else {
+        console.error('Failed to delete article');
+        // Handle failure, show an error message, etc.
+      }
+    } catch (error) {
+      console.error('Error deleting article', error);
+      // Handle errors, show an error message, etc.
+    }
+  };
+
+  /**
+   * Prepares modified data for saving changes to an article.
+   * @returns {Object} Modified data for the article.
+   */
+  const prepareModifiedData = () => {
+    const storedArticle = localStorage.getItem('selectedArticle');
+    const article0 = storedArticle ? JSON.parse(storedArticle) : {};
+
+    console.log('voici l\'article0', article0);
+    const modifiedData = {
+      article_id: article0.id,
+      title: props.titre,
+      abstract: props.resume,
+      full_text: article0.text,
+      pdf_url: article0.pdf_url,
+      references: props.references,
+      validated: true,
+      authors: props.auteurs.join(', '),
+      institutions: props.institutions.join(', '),
+      keywords: props.mots_cles.join(', '),
+      date: article0.date,
+    };
+
+    return modifiedData;
+  };
+
+  /**
+   * Handles saving changes to an article.
+   * @async
+   * @returns {Promise&lt;void>} Promise that resolves after handling the save changes.
+   */
+  const handleSaveChanges = async () => {
+    try {
+      const modifiedData = prepareModifiedData();
+
+      // Make a POST request to update the article
+      const response = await axios.post('http://127.0.0.1:8000/app/modify_article/', modifiedData);
+
+      // Check the response status and handle accordingly
+      if (response.status === 200) {
+        console.log('Article modified successfully');
+        navigate('/ModeratorSpace');
+        // Perform any additional actions after successful modification
+      } else {
+        console.error('Failed to modify article');
+        // Handle failure, show an error message, etc.
+      }
+    } catch (error) {
+      console.error('Error modifying article', error);
+      // Handle errors, show an error message, etc.
+    }
+  };
+
+  // Array of objects defining pop-up types
+  const items = [
+    { icon: faCircleXmark, h1: 'Delete', p: 'If you click on Delete, this article will be permanently deleted. Are you sure you want to proceed?', button: 'Delete', color: '#EE4A4A' },
+    { icon: faFloppyDisk, h1: 'Validate', p: 'If you click on Validate, the article will be displayed for users and you won’t be able to edit it again. Are you sure you want to proceed?', button: 'Validate', color: '#3AC6EB' }
+  ];
+
+  // JSX structure for the pop-up window
+  return ((props.trigger) ?
+    &lt;>
+      &lt;div className="popValidatePage">
+        &lt;div className='popValidate w-1/3 flex justify-center items-center flex-col max-sm:w-4/5'>
+          &lt;FontAwesomeIcon icon={items[props.index].icon} size='5x' color={items[props.index].color} />
+          &lt;h1>{items[props.index].h1}&lt;/h1>
+          &lt;p>{items[props.index].p}&lt;/p>
+          &lt;div className="buttttons flex justify-center items-center w-full">
+            &lt;button style={{ background: '#AEAEAE', }} onClick={() => props.setTrigger(false)} >Cancel&lt;/button>
+            &lt;button style={{ background: items[props.index].color, }}
+              onClick={() => {
+                if (props.index === 0) {
+                  handleDeleteArticle();
+                }
+                else {
+                  handleSaveChanges();
+                }
+                // Close the popup
+                props.setTrigger(false);
+              }}>{items[props.index].button}&lt;/button>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+    : ""
+  );
+};
+
+export default PopUp;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

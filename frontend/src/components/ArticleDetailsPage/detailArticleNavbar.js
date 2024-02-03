@@ -1,16 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfilePic from "../SearchPage/userPopUp";
 import FavoritesButton from "../FavoritesPage/favoritesButton";
 import axios from 'axios';
 
+
+/**
+ * DetailArticleNavbar component represents the navbar for the detail article page.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.title - The title of the article.
+ * @returns {JSX.Element} JSX element for the DetailArticleNavbar component.
+ */
+
 const DetailArticleNavbar = ({ title }) => {
+  // Retrieve user information from local storage
   const user = JSON.parse(localStorage.getItem('user'));
+
+  // Retrieve the selected article from local storage
   const articleEnCours = JSON.parse(localStorage.getItem('selectedArticle'));
+  console.log("id of article stored", articleEnCours.id);
+
+  // State to track whether the article is marked as a favorite
   const [isFavorite, setIsFavorite] = useState(false);
 
+
+  /**
+   * useEffect hook to fetch the favorite status of the article when the component mounts.
+   */
+  useEffect(() => {
+    // Fetch the favorite articles of the user
+    const fetchFavoriteStatus = async () => {
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/app/get_favorite_articles/", {
+          user_id: user.id,
+        });
+
+        console.log('Response:', response.data);
+
+        // Check if the current article is in the user's favorite articles
+        if (response.data.favorite_articles) {
+          const favoriteArticleIds = response.data.favorite_articles.map(article => article.id);
+          console.log('Favorite Article IDs:', favoriteArticleIds);
+          setIsFavorite(favoriteArticleIds.includes(articleEnCours.id));
+        }
+      } catch (error) {
+        console.error("Error fetching favorite articles:", error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [user.id, articleEnCours.id]);
+
+
+  /**
+   * handleAddToFavorites function handles the addition/removal of the article to/from favorites.
+   */
   const handleAddToFavorites = async () => {
     try {
-      console.log('here')
+      console.log('here');
       const response = await axios.post(
         'http://127.0.0.1:8000/app/add_to_favorites/',
         {
@@ -45,11 +91,11 @@ const DetailArticleNavbar = ({ title }) => {
       </div>
       <div className="relative">
         <p className="text-xl text-darkBlue font-bold mb-2 max-sm:text-xl max-sm:mt-32">{title}</p>
-        {/* Underline effect using Tailwind CSS classes */}
+        {/* The favorite add/remove button */}
         <div className="absolute bottom-0 left-0 w-full h-1 bg-pink"></div>
       </div>
-      {/*Right side of the navbar*/}
-      <div className="flex flex-row -mt-10 mr-5 max-sm:-mt-20">
+      {/* Right side of the navbar */}
+      <div className="flex flex-row -mt-10 mr-5">
         <FavoritesButton isFavorite={isFavorite} onClick={handleAddToFavorites} />
         <button>
           <ProfilePic />

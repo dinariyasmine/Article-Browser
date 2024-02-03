@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SearchPage/datePicker.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SearchPage/datePicker.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import BlackCalendar from "../../assets/blackCalendar.png";
+import ActiveCalendar from "../../assets/activeCalendar.png";
+
+
+/**
+ * CustomInput component for customizing the appearance of the DatePicker input.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.value - The value to be displayed in the input.
+ * @param {function} props.onClick - The function to be called when the input is clicked.
+ * @param {boolean} props.isCalendarOpen - A flag indicating whether the calendar is open.
+ * @returns {JSX.Element} React component
+ */
+const CustomInput = ({ value, onClick, isCalendarOpen }) => {
+  return (
+    &lt;button
+      onClick={onClick}
+      className={`w-64 grid grid-cols-2 items-center text-darkBlue rounded-xl py-2 border transition duration-300 ease-in-out hover:bg-gray-50 mb-3 focus:outline-none ${isCalendarOpen ? 'border-lightBlue' : ''}`}
+    >
+      &lt;img
+        src={isCalendarOpen ? ActiveCalendar : BlackCalendar}
+        alt="Calendar"
+        className="ml-2"
+      />
+      &lt;span className="ml-2">{value}&lt;/span>
+    &lt;/button>
+  );
+};
+
+
+
+const Datepicker = ({ onDateSelect }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  return (
+    &lt;div className="flex items-center">
+      &lt;DatePicker
+        selected={selectedDate}
+        onChange={(date) => {
+          setSelectedDate(date);
+          onDateSelect(date); // Pass the selected date to the callback
+          setIsCalendarOpen(false);
+        }}
+        onInputClick={() => setIsCalendarOpen(true)}
+        onBlur={() => !selectedDate &amp;&amp; setIsCalendarOpen(false)}
+        dateFormat="dd/MM/yyyy"
+        customInput={&lt;CustomInput isCalendarOpen={isCalendarOpen} />}
+        popperPlacement="bottom-start"
+        className="w-64"
+      />
+    &lt;/div>
+  );
+};
+
+  
+  export default Datepicker;
+  </code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AdminPage">AdminPage</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#Article">Article</a></li><li><a href="global.html#ArticleModify">ArticleModify</a></li><li><a href="global.html#AuthentificationTitle">AuthentificationTitle</a></li><li><a href="global.html#ButtonLandingPage">ButtonLandingPage</a></li><li><a href="global.html#CardLandingPage">CardLandingPage</a></li><li><a href="global.html#ClosedArticle">ClosedArticle</a></li><li><a href="global.html#ClosedArticleList">ClosedArticleList</a></li><li><a href="global.html#CustomInput">CustomInput</a></li><li><a href="global.html#DateButton">DateButton</a></li><li><a href="global.html#DetailArticle">DetailArticle</a></li><li><a href="global.html#DetailArticleNavbar">DetailArticleNavbar</a></li><li><a href="global.html#Elipse">Elipse</a></li><li><a href="global.html#FavoritesArticle">FavoritesArticle</a></li><li><a href="global.html#FavoritesArticleList">FavoritesArticleList</a></li><li><a href="global.html#FavoritesButton">FavoritesButton</a></li><li><a href="global.html#FavoritesNavbar">FavoritesNavbar</a></li><li><a href="global.html#FavoritesPage">FavoritesPage</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#FilterList">FilterList</a></li><li><a href="global.html#FilterListItem">FilterListItem</a></li><li><a href="global.html#HeaderArticle">HeaderArticle</a></li><li><a href="global.html#IconCard">IconCard</a></li><li><a href="global.html#LandingPage">LandingPage</a></li><li><a href="global.html#LogInButton">LogInButton</a></li><li><a href="global.html#Logo">Logo</a></li><li><a href="global.html#ModeratorPage">ModeratorPage</a></li><li><a href="global.html#PopAdd">PopAdd</a></li><li><a href="global.html#PopRemove">PopRemove</a></li><li><a href="global.html#PopUp">PopUp</a></li><li><a href="global.html#Rectangle">Rectangle</a></li><li><a href="global.html#SearchBar">SearchBar</a></li><li><a href="global.html#SearchPage">SearchPage</a></li><li><a href="global.html#Sign">Sign</a></li><li><a href="global.html#SignIn">SignIn</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#Slogan">Slogan</a></li><li><a href="global.html#TextFiled">TextFiled</a></li><li><a href="global.html#TextLandingPage">TextLandingPage</a></li><li><a href="global.html#UserPopUp">UserPopUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Feb 03 2024 18:13:31 GMT+0100 (heure normale d’Afrique de l’Ouest)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
