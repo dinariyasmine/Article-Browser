@@ -83,7 +83,7 @@ def extract_information_from_pdf(chemin_du_pdf):
 
     # Initialize OpenAI client
     client = OpenAI(
-        api_key="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"
+        api_key="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"
     )
 
     # Define a prompt for the OpenAI chat-based completion
@@ -147,6 +147,16 @@ def extract_information_from_pdf(chemin_du_pdf):
         pdf_full_text.find("Motivation"),
         key=lambda x: x if x != -1 else float('inf')
     )
+
+    index_intro_motivation = min(
+        pdf_full_text.find("Introduction"),
+        pdf_full_text.find("Motivation"),
+        pdf_full_text.find("INTRODUCTION"),
+        pdf_full_text.find("USE CASES"),
+        pdf_full_text.find("CASES"),
+        key=lambda x: x if x != -1 else float('inf')
+    )
+
 
     # Find the index of the keyword "References"
     index_references = min(

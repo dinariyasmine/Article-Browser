@@ -168,7 +168,7 @@ def perform_elasticsearch_search1(query):
             {"match": {"text": query}},
         ]
     )
-    s = s.extra(size=30)
+    s = s.extra(size=50)
     response = s.execute()
 
     # Check if the search was successful
@@ -363,8 +363,8 @@ def perform_elasticsearch_search(query):
         # Create an Elasticsearch search object and set the query
         s = ArticleIndex.search().query(query)
 
-        # Set the size of the result set to 30
-        s = s.extra(size=30)
+        # Set the size of the result set to 50
+        s = s.extra(size=50)
 
         # Execute the Elasticsearch search
         response = s.execute()
@@ -652,7 +652,7 @@ def perform_elasticsearch_search_not_validated():
         search = search.query('match', validated=False)
 
         # Set the size for the number of documents to retrieve
-        search = search.extra(size=30)
+        search = search.extra(size=50)
 
         # Execute the Elasticsearch search
         response = search.execute()

@@ -42,7 +42,7 @@ const LandingPage = () => {
       </div>
 
       {/* Decorative Circles */}
-      <div className="ml-40 -mt-2 w-12 h-12 rounded-full bg-darkBlue "></div>
+      <div className="ml-40 -mt-2 w-12 h-12 rounded-full bg-darkBlue max-sm:hidden "></div>
       <div className="-ml-20  w-52 h-52 rounded-full bg-darkBlue "></div>
 
       {/* Why Choose Us Section */}

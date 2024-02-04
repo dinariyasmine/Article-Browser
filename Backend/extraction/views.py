@@ -19,6 +19,7 @@ class AddArticleView(APIView):
 
         # Utilisez PyMuPDF pour extraire les informations du PDF
         article1=extract_information_from_pdf(pdf_content)
+        article1.pdf_url=file.name
         print('done extraction')
 
         # Indexation Article

@@ -117,7 +117,7 @@ const SignIn = () => {
   }, [navigate]);
 
   return (
-    <div className='h-screen flex justify-between items-center'>
+    <div className='h-screen flex justify-between items-center max-sm:justify-center'>
       <div className='LeftSide'>
         <div className='logo'>
           <Logo />

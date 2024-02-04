@@ -21,6 +21,8 @@ const AdminPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [items, setItems] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   
 
   // Handle file change
@@ -33,12 +35,16 @@ const AdminPage = () => {
       formData.append('file', file);
 
       try {
+        setLoading(true);
         const response = await axios.post('http://127.0.0.1:8000/extraction/ext/', formData);
         console.log(response.data);
         // Handle backend response, update component state if needed
       } catch (error) {
         console.error('Error uploading file:', error);
         // Handle errors, inform the user, etc.
+      }
+      finally {
+        setLoading(false); // Set loading to false regardless of success or failure
       }
     } else {
       console.warn('No file selected.');
@@ -82,7 +88,8 @@ const AdminPage = () => {
   // Render component
   return (
     <>
-      <div className="admin" style={{ filter: pop || popRemove ? 'blur(5px)' : 'blur(0px)',}}>
+      {loading && <div className="loading-spinner text-center">Loading...</div>}
+    <div className="admin" style={{ filter: pop || popRemove || loading ? 'blur(5px)' : 'blur(0px)',}}>
       <div className="utilisateur w-16 max-sm:w-9"><User /></div>
         <h1>Moderators :</h1>
         <div className="buttons">
