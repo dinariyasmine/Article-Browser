@@ -49,3 +49,15 @@ img{width: 71,7%;height: 57%;}
 .slogan{margin-top: 6.8%;}
 .logo{margin-left: 5%;margin-bottom: 14.55%;}
 /* .logo{margin-top: 50px;} */
+
+
+@media (max-width: 768px) {
+    .LeftSide {
+      display: none;
+    }
+    
+    .RightSide{
+        flex-basis: 80.75%;
+        margin: 0;
+    }
+  }

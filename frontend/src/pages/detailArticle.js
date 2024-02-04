@@ -38,46 +38,175 @@ const DetailArticle = () => {
    */
   const generatePDF = () => {
     const pdf = new jsPDF();
+    let j,temp_ligne,temp_cara;
+    let strd=73;
+    let Y=20;
+    const X=10;
   
-    // const lignes_title=article.title.length % 77;
-    // const Y=20
-    // for (let i = 1; i <= lignes_title; i++) {
-    //   for (let j = 0; j < article.title.length; i += 77) {
-    //     const chunk = article.title.substring(i, i + 77);
-    //     pdf.text('Title : '+chunk, 10, Y*i);
-    //     // Faites quelque chose avec la tranche, comme l'écrire dans votre PDF
-    //   }
-    // }
+    const lignes_title=Math.floor(article.title.length / strd);
+    console.log('lignes_title ', lignes_title);
+    pdf.setFont('times', 'bold');
+    pdf.text('Title : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
 
-    // Add title
-      pdf.setFont('times', 'bold');
-      pdf.text('Title : '+article.title, 10, 20);
-      pdf.setFont('times', 'normal');
+    for (let i = 1; i <= lignes_title; i++) {
+      console.log('ligne ', i);
+      const chunk_title = article.title.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_title);
+      pdf.text(chunk_title, X , Y+=10);
+      temp_cara=i*strd;
+    }
+    if(temp_cara<=article.title.length){
+      const chunk_title = article.title.substring(temp_cara, article.title.length-1);
+      console.log('chunk 2 : ',chunk_title);
+      pdf.text(chunk_title, X , Y+=10);
+    }
+
+    const lignes_auteurs=Math.floor(article.authors.length / strd);
+    console.log('lignes_auteurs ', lignes_auteurs);
+    pdf.setFont('times', 'bold');
+    pdf.text('Authors : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
+    temp_cara=0;
+
+    for (let i = 1; i <= lignes_auteurs; i++) {
+      console.log('ligne ', i);
+      const chunk_authors = article.authors.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_authors);
+      pdf.text(chunk_authors, X , Y+=10);
+      temp_cara=i*strd;
+    }
+    if(temp_cara<=article.authors.length){
+      const chunk_authors = article.authors.substring(temp_cara, article.authors.length-1);
+      console.log('chunk 2 : ',chunk_authors);
+      pdf.text(chunk_authors, X , Y+=10);
+    }
+
+    const lignes_institutions=Math.floor(article.institutions.length / strd);
+    console.log('lignes_institutions ', lignes_institutions);
+    pdf.setFont('times', 'bold');
+    pdf.text('Institutions : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
+    temp_cara=0;
+
+    for (let i = 1; i <= lignes_institutions; i++) {
+      console.log('ligne ', i);
+      const chunk_institutions = article.institutions.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_institutions);
+      pdf.text(chunk_institutions, X , Y+=10);
+      temp_cara=i*strd;
+    }
+    if(temp_cara<=article.institutions.length){
+      const chunk_institutions = article.institutions.substring(temp_cara, article.institutions.length-1);
+      console.log('chunk 2 : ',chunk_institutions);
+      pdf.text(chunk_institutions, X , Y+=10);
+    }
+
+    const lignes_mots_cles=Math.floor(article.keywords.length / strd);
+    console.log('lignes_mots_cles ', lignes_mots_cles);
+    pdf.setFont('times', 'bold');
+    pdf.text('Keywords : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
+    temp_cara=0;
+
+    for (let i = 1; i <= lignes_mots_cles; i++) {
+      console.log('ligne ', i);
+      const chunk_Keywords = article.keywords.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_Keywords);
+      pdf.text(chunk_Keywords, X , Y+=10);
+      temp_cara=i*strd;
+    }
+    if(temp_cara<=article.keywords.length){
+      const chunk_Keywords = article.keywords.substring(temp_cara, article.keywords.length-1);
+      console.log('chunk 2 : ',chunk_Keywords);
+      pdf.text(chunk_Keywords, X , Y+=10);
+    }
+
+    pdf.text('Publish Date :'+ article.publishDate, X, Y+=10);
+
+    Y=Y+20;
+
+    const lignes_abstract=Math.floor(article.abstract.length / strd);
+    console.log('lignes_abstract ', lignes_abstract);
+    pdf.setFont('times', 'bold');
+    pdf.text('Abstract : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
+    temp_cara=0;
+
+    for (let i = 1; i <= lignes_abstract; i++) {
+      console.log('ligne ', i);
+      const chunk_abstract = article.abstract.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_abstract);
+      pdf.text(chunk_abstract, X , Y+=10);
+      temp_cara=i*strd;
+      if (Y > 280) {
+        // Si la position Y dépasse la limite, ajoutez un saut de page
+        pdf.addPage();
+        Y = 20; // Réinitialisez la position Y pour la nouvelle page
+      }
   
-    //  Add Authors, Institutions, PublishDate, and Keywords
-   
-      pdf.text('Authors :'+ article.authors, 20, 30);
-      pdf.text('Institutions :'+ article.institutions, 20, 40);
-      pdf.text('Publish Date :'+ article.publishDate, 20, 50);
-      pdf.text('Keywords : ' +article.keywords, 20, 60);
+    }
+    if(temp_cara<=article.abstract.length){
+      const chunk_abstract = article.abstract.substring(temp_cara, article.abstract.length-1);
+      console.log('chunk 2 : ',chunk_abstract);
+      pdf.text(chunk_abstract, X , Y+=10);
+    }
+
+    if (Y > 280) {
+      // Si la position Y dépasse la limite, ajoutez un saut de page
+      pdf.addPage();
+      Y = 20; // Réinitialisez la position Y pour la nouvelle page
+    }
+
+    Y+=20;
+    let ref = article.references.replace(/(\r\n|\n|\r)/gm, " ");
+    const lignes_ref=Math.floor(ref.length / strd);
+    console.log('lignes_ref ', lignes_ref);
+    pdf.setFont('times', 'bold');
+    pdf.text('References : ', X , Y+=10);
+    pdf.setFont('times', 'normal');
+    temp_cara=0;
+
+    for (let i = 1; i <= lignes_ref; i++) {
+      console.log('ligne ', i);
+      const chunk_ref = ref.substring((i-1)*strd, i*strd);
+      console.log('chunk  : ',chunk_ref);
+      pdf.text(chunk_ref, X , Y+=10);
+      temp_cara=i*strd;
+      if (Y > 280) {
+        // Si la position Y dépasse la limite, ajoutez un saut de page
+        pdf.addPage();
+        Y = 20; // Réinitialisez la position Y pour la nouvelle page
+      }
+  
+    }
+    if(temp_cara<=ref.length){
+      const chunk_ref = ref.substring(temp_cara, ref.length-1);
+      console.log('chunk 2 : ',chunk_ref);
+      pdf.text(chunk_ref, X , Y+=10);
+    }
+    if (Y > 280) {
+      // Si la position Y dépasse la limite, ajoutez un saut de page
+      pdf.addPage();
+      Y = 20; // Réinitialisez la position Y pour la nouvelle page
+    }
+
     
-  
-    //  Add Abstract
     pdf.setFont('times', 'bold');
-    pdf.text('Abstract:', 20, 70);
+    pdf.text('Integral Text:', 10, Y+=20);
+    
+    if (Y > 280) {
+      // Si la position Y dépasse la limite, ajoutez un saut de page
+      pdf.addPage();
+      Y = 20; // Réinitialisez la position Y pour la nouvelle page
+    }
     pdf.setFont('times', 'normal');
-  
-    const abstractLines = pdf.splitTextToSize(article.abstract, pdf.internal.pageSize.width - 40);
-    pdf.text(abstractLines, 20, 80);
-  
-    //  Add Integral Text
-    pdf.setFont('times', 'bold');
-    pdf.text('Integral Text:', 20, 100);
-    pdf.setFont('times', 'normal');
-    pdf.autoTable({ startY: 110, body: [[firstHalfIntegralText, secondHalfIntegralText]] });
-  
-    //  Add References
-    pdf.text(`References: ${formattedReferences}`, 20, pdf.autoTable.previous.finalY + 20);
+    pdf.autoTable({ startY: Y+70, body: [[firstHalfIntegralText, secondHalfIntegralText]] });
+    if (Y > 280) {
+      // Si la position Y dépasse la limite, ajoutez un saut de page
+      pdf.addPage();
+      Y = 20; // Réinitialisez la position Y pour la nouvelle page
+    }
   
     // Save the PDF
     pdf.save('article.pdf');
@@ -128,4 +257,4 @@ const DetailArticle = () => {
   );
 }
 
-expo
+export default DetailArticle;

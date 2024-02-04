@@ -114,17 +114,18 @@ const SignUp = () => {
       }
     }
   }, [navigate]);
+  
 
   return (
-    <div className='h-screen flex justify-between items-center'>
+    <div className='h-screen flex justify-between items-center max-sm:justify-center'>
       <div className='LeftSide'>
-        <div className='logo'>
-          <Logo />
-        </div>
-        <img src={AuthImg} alt='Authentification' />
-        <div className='slogan'>
-          <Slogan />
-        </div>
+          <div className='logo'>
+            <Logo />
+          </div>
+          <img src={AuthImg} alt='Authentification' />
+          <div className='slogan'>
+            <Slogan />
+      </div>
       </div>
       <div className='RightSide'>
         <AuthentificationTitle title='Create Account' />
