@@ -21,9 +21,15 @@ The TP IGL project is a web application designed to streamline the search, filte
    - [Article Processing](#article-processing)
    - [Error Correction](#error-correction)
 6. [Technologies Used](#technologies-used)
-7. [Diagrams Links](#diagram-links)
-8. [énoncé Link](#énoncé-link)
-9. [Figma Design Link](#figma-design-link)
+7. [Links](#links)
+   - [Projet Drive](#projet-drive)
+   - [Énoncé](#énoncé)
+   - [Diagrams](#diagrams)
+      - [Components Diagram](#components-diagram)
+      - [Classes Diagram](#classes-diagram)
+      - [DataBase Schema](#database-schema)
+   - [Figma Design](#figma-design)
+
 
 ## Introduction
 
