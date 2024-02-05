@@ -105,12 +105,12 @@ Scientific articles are characterized by:
 
 ### Commands To Run SciQuest On Your Browser
 
-#  To Run SciQuest :
+####  To Run SciQuest :
 `docker-compose up --build`
 
 Access SciQuest through : [http://127.0.0.1/](http://127.0.0.1/)
 
-#  To Shut Down SciQuest :
+####  To Shut Down SciQuest :
 
 `docker-compose down`
 
