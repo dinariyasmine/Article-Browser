@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './adminPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUpload, faTrash , faCheck} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUpload, faTrash , faCheck, faXmark} from '@fortawesome/free-solid-svg-icons';
 import PopAdd from '../../components/AdminPage/popAddModerator/popAddModerator';
 import PopRemove from '../../components/AdminPage/popRemove/popRemove';
 import User from '../../components/SearchPage/userPopUp';
@@ -23,6 +23,7 @@ const AdminPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [checkMark, setCheckMark] = useState(false);
+  const [xMark, setXMark] = useState(false);
 
   
 
@@ -40,17 +41,20 @@ const AdminPage = () => {
         const response = await axios.post('http://127.0.0.1:8000/extraction/ext/', formData);
         console.log(response.data);
         // Handle backend response, update component state if needed
-      } catch (error) {
-        console.error('Error uploading file:', error);
-        // Handle errors, inform the user, etc.
-      }
-      finally {
         setLoading(false); // Set loading to false regardless of success or failure
         setCheckMark(true); // Set check mark to true to display it
 
-        // Automatically hide the check mark after 2 seconds (adjust the duration as needed)
+        // Automatically hide the check mark after 2 seconds
         setTimeout(() => {
           setCheckMark(false);
+        }, 2000);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        // Handle errors, inform the user, etc.
+        setLoading(false); // Set loading to false regardless of success or failure
+        setXMark(true); // Set check mark to true to display it
+        setTimeout(() => {
+          setXMark(false);
         }, 2000);
       }
     } else {
@@ -104,12 +108,10 @@ const AdminPage = () => {
           <button onClick={() => setPop(true)}>Add moderator   <FontAwesomeIcon icon={faPlus} /></button>
           
           <div className="upload">
-            {loading ? (
-              <div className="load"></div>
-            ) : (
-                (checkMark)?
-                <FontAwesomeIcon icon={faCheck} size='xl' />
-                :<label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+            {loading ? (<div className="load"></div>) : (
+              checkMark ? (<FontAwesomeIcon icon={faCheck} size='xl' />) : (
+                xMark ? (<FontAwesomeIcon icon={faXmark} size='xl' />) : 
+                <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
                   Upload article <FontAwesomeIcon icon={faUpload} />
                   <input
                     type="file"
@@ -117,7 +119,8 @@ const AdminPage = () => {
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                   />
-                </label>              
+                </label>
+              )
             )}
           </div>
         

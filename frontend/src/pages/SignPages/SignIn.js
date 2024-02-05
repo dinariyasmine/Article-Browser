@@ -24,6 +24,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [authError, setAuthError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [checkMark, setCheckMark] = useState(false);
+  const [xMark, setXMark] = useState(false);
 
   /**
    * Handle change in the 'User Name' field.
@@ -52,6 +54,7 @@ const SignIn = () => {
   
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(
         'http://127.0.0.1:8000/auth/login/',
         {
@@ -79,29 +82,39 @@ const SignIn = () => {
       localStorage.setItem('user', JSON.stringify(user));
       console.log('user', JSON.parse(localStorage.getItem('user')));
       console.log('Logged in?', window.isLoggedIn);
+      setLoading(false);
+      setCheckMark(true);
 
-      // Navigate to the next page based on user role
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-      if (storedUser) {
-        if (storedUser.role === 0) {
-          navigate('/UserSpace');
-        } else if (storedUser.role === 1) {
-          navigate('/ModeratorSpace');
-        } else if (storedUser.role === 2) {
-          navigate('/AdminSpace');
-        } else {
-          // Handle other roles or scenarios
-          console.error('Unsupported role:', storedUser.role);
+      setTimeout(() => {
+        setCheckMark(false);
+        
+        // Navigate à l'intérieur du setTimeout après le délai
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+          if (storedUser.role === 0) {
+            navigate('/UserSpace');
+          } else if (storedUser.role === 1) {
+            navigate('/ModeratorSpace');
+          } else if (storedUser.role === 2) {
+            navigate('/AdminSpace');
+          } else {
+            // Handle other roles or scenarios
+            console.error('Unsupported role:', storedUser.role);
+          }
         }
-      }
-
+      }, 1000);
       // Handle the response as needed, for example, navigate to a new page
       // or update the UI to reflect the user being logged in
     } catch (error) {
       console.error('Error during login:', error.response.data);
       setAuthError('Incorrect username or password.');
+      setLoading(false);
+      setXMark(true);
+      setTimeout(() => {
+        setXMark(false); // Correction ici
+      }, 1000);
       // Handle login error, display a message to the user, etc.
-    }
+    } 
   };
 
   // Redirect if the user is already logged in
@@ -138,7 +151,7 @@ const SignIn = () => {
         </div>
         {authError && <div className="auth-error" style={{ marginBottom: (authError)?'10px':'40px' }}>{authError}</div>}
         <div className='BRightSide'>
-          <LogInButton text='Log In' onClick={handleSubmit}/>
+          <LogInButton loading={loading} checkMark={checkMark} xMark={xMark} text='Log In' onClick={handleSubmit}/>
           <div>
             <Sign account="Don't have an account?" sign='up' />
             <Link to="/SignUp"></Link>

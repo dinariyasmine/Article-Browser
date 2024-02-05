@@ -55,7 +55,7 @@ const UserPopUp = () => {
   
             {/* User pop-up */}
             <div className="fixed top-2 right-2 mt-16 mr-8 flex items-center justify-center z-50">
-              <div className="bg-white border border-gray-400 rounded-2xl p-2 w-44 flex flex-col items-center">
+              <div className="bg-white border border-gray-400 rounded-2xl p-2 w-44 flex flex-col items-center ">
                 {/* Add your pop-up content here */}
                 <p className="text-gray-400 pb-2">{UserName}</p>
                 

@@ -39,15 +39,15 @@ const ModeratorPage = () => {
       {/* {loading && <div className="spin"><p>Loading...</p></div>} */}
       {loading && <div className='spin'><div className="loading"></div></div>}
       
-      <div className='moderatorPage' style={{ filter: loading ? 'blur(5px)' : 'blur(0px)',}}>
+      <div className='moderatorPage' style={{ filter: loading ? 'blur(5px)' : 'blur(0px)',}} >
         <div className='Up flex justify-between items-center'>
           <div style={{ width: '5%' }}></div>
           <h1 className='TITLE'>Recently Uploaded Articles</h1>
           <div className="image-container">
-            <button>
-              {/* Display the profile picture component */}
+            {/* <button>
               <ProfilePic />
-            </button>
+            </button> */}
+            <ProfilePic />
           </div>
         </div>
 

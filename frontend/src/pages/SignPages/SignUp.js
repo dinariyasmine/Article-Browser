@@ -24,6 +24,8 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [authError, setAuthError] = useState(null);
+  const [checkMark, setCheckMark] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   /**
@@ -75,6 +77,7 @@ const SignUp = () => {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(
         'http://127.0.0.1:8000/auth/register/',
         {
@@ -93,8 +96,17 @@ const SignUp = () => {
       );
 
       console.log('Response:', response.data);
-      navigate('/SignIn');
+      setLoading(false);
+      setCheckMark(true);
+
+      setTimeout(() => {
+        setCheckMark(false);
+        
+        // Navigate to '/SignIn' inside the setTimeout after the delay
+        navigate('/SignIn');
+      }, 2000);
     } catch (error) {
+      setLoading(false);
       console.error('Error during registration:', error.response.data);
       console.log('Validation errors:', error.response.data.errors);
       if(error.response.data.errors==="Passwords do not match")
@@ -104,8 +116,6 @@ const SignUp = () => {
       else{
         setAuthError('All fileds are requires.');
       }
-
-      
     }
   };
 
@@ -148,7 +158,7 @@ const SignUp = () => {
         </div>
         {authError && <div className="auth-error" style={{ marginBottom: (authError)?'10px':'40px' }}>{authError}</div>}
         <div className='BRightSide'>
-          <LogInButton text='Get Started !' onClick={handleSubmit} />
+          <LogInButton loading={loading} checkMark={checkMark} text='Get Started !' onClick={handleSubmit} />
           <Sign account='Already have an account?' sign='in' />
         </div>
       </div>
