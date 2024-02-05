@@ -86,12 +86,12 @@ WSGI_APPLICATION = 'TP_IGL.wsgi.application'
 
 
 DATABASES = {
-    'default': {
+        'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SciQuest',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres.minmzdiqoozfznwyqifd',
+        'PASSWORD': '123456linaaoulmi',
+        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
         'PORT': '5432',
    }
 }
@@ -137,6 +137,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -183,7 +185,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_USE_SESSIONS = True
 CSRF_COOKIE_SAMESITE = None
-SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SAMESITE = None 
+
+
+
+
 
 # # Configurez le stockage des fichiers en utilisant le système de fichiers local (par défaut)
 # DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -193,3 +199,6 @@ SESSION_COOKIE_SAMESITE = None
 
 # # URL pour servir les fichiers uploadés
 # MEDIA_URL = '/media/'
+
+ELASTICSEARCH_HOST = 'elasticsearch'
+ELASTICSEARCH_PORT = 9200

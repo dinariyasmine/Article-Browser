@@ -2,7 +2,13 @@ from elasticsearch_dsl import Document, Text, Keyword, Date, Boolean
 from elasticsearch_dsl.connections import connections
 
 # Specify the complete Elasticsearch URL
-connections.create_connection(hosts=['http://localhost:9200'])
+connections.create_connection(
+    hosts=['http://elasticsearch:9200'],
+    headers={'Content-Type': 'application/json'},
+)
+
+
+
 
 class ArticleIndex(Document):
     title = Text(analyzer='snowball', fields={'raw': Keyword()})
@@ -18,3 +24,5 @@ class ArticleIndex(Document):
 
     class Index:
         name = 'article_index'
+        
+        
