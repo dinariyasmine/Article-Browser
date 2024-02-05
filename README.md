@@ -103,3 +103,7 @@ Scientific articles are characterized by:
 
 - [Figma Design]( https://www.figma.com/file/JwZGUrP2dFYvt9f0nSCkny/TP-IGL?type=design&node-id=0%3A1&mode=design&t=lOfRuItm6wMwmzIA-1 )
 
+### Commands To Run SciQuest On Your Browser
+
+`docker-compose up --build`
+
