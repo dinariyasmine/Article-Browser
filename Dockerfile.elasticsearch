@@ -1,0 +1,4 @@
+# Use an official Elasticsearch image as the base image
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+
+# Custom configurations or settings can be added here
