@@ -14,6 +14,7 @@ import axios from 'axios';
 const PopAdd = (props) => {
   // State variable to store the user name
   const [userName, setUserName] = useState(props.selectedUser ? props.selectedUser.username : '');
+  const [authError, setAuthError] = useState(false);
 
   // Effect to update userName state when selectedUser changes
   useEffect(() => {
@@ -53,8 +54,10 @@ const PopAdd = (props) => {
       // Close the PopAdd component
       props.setTrigger(false);
       setUserName('');
+      setAuthError(false);
     } catch (error) {
       console.error('Error during adding moderator:', error.response ? error.response.data : error.message);
+      setAuthError(true);
       // Handle error, display a message to the user, etc.
     }
   };
@@ -67,6 +70,7 @@ const PopAdd = (props) => {
     setUserName('');
     // Close the PopAdd component
     props.setTrigger(false);
+    setAuthError(false);
   };
 
   return (
@@ -80,6 +84,7 @@ const PopAdd = (props) => {
                 User Name :
                 <input type="text" value={userName} placeholder="User Name" onChange={handleUserNameChange} />
               </label>
+              {authError && <div className="auth-error" style={{ marginBottom: '10px'}}>User not found.</div>}
             </div>
             <div className='buts'>
               <button style={{ background: '#AEAEAE' }} onClick={handleCancel}>Cancel</button>

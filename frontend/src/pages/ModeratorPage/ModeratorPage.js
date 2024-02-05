@@ -36,7 +36,9 @@ const ModeratorPage = () => {
 
   return (
     <>
-      {loading && <div className="loading-spinner text-center">Loading...</div>}
+      {/* {loading && <div className="spin"><p>Loading...</p></div>} */}
+      {loading && <div className='spin'><div className="loading"></div></div>}
+      
       <div className='moderatorPage' style={{ filter: loading ? 'blur(5px)' : 'blur(0px)',}}>
         <div className='Up flex justify-between items-center'>
           <div style={{ width: '5%' }}></div>

@@ -22,6 +22,8 @@ const SignIn = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [authError, setAuthError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   /**
    * Handle change in the 'User Name' field.
@@ -97,6 +99,7 @@ const SignIn = () => {
       // or update the UI to reflect the user being logged in
     } catch (error) {
       console.error('Error during login:', error.response.data);
+      setAuthError('Incorrect username or password.');
       // Handle login error, display a message to the user, etc.
     }
   };
@@ -128,12 +131,13 @@ const SignIn = () => {
         </div>
       </div>
       <div className='RightSide'>
-        <AuthentificationTitle title='Log In' />
-        <div className='MRightSide'>
+        <AuthentificationTitle title='Log In'/>
+        <div className='MRightSide' style={{ marginBottom: (authError)?'10px':'40px' }}>
           <TextFiled text='User Name' value={userName} onChange={handleUserNameChange} />
           <TextFiled text='Password' type='password' value={password} onChange={handlePasswordChange} />
         </div>
-        <div className='BRightSide' >
+        {authError && <div className="auth-error" style={{ marginBottom: (authError)?'10px':'40px' }}>{authError}</div>}
+        <div className='BRightSide'>
           <LogInButton text='Log In' onClick={handleSubmit}/>
           <div>
             <Sign account="Don't have an account?" sign='up' />

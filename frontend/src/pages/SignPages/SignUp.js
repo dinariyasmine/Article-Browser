@@ -23,6 +23,8 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [authError, setAuthError] = useState(null);
+
 
   /**
    * Handle change in the 'UserName' field.
@@ -95,6 +97,15 @@ const SignUp = () => {
     } catch (error) {
       console.error('Error during registration:', error.response.data);
       console.log('Validation errors:', error.response.data.errors);
+      if(error.response.data.errors==="Passwords do not match")
+      {
+        setAuthError('Passwords do not match.');
+      }
+      else{
+        setAuthError('All fileds are requires.');
+      }
+
+      
     }
   };
 
@@ -129,12 +140,13 @@ const SignUp = () => {
       </div>
       <div className='RightSide'>
         <AuthentificationTitle title='Create Account' />
-        <div className='MRightSide'>
+        <div className='MRightSide' style={{ marginBottom: (authError)?'10px':'40px' }}>
           <TextFiled text='UserName' value={fullName} onChange={handleFullNameChange} />
           <TextFiled text='Email address' value={email} onChange={handleEmailChange} />
           <TextFiled text='Password' type='password' value={password} onChange={handlePasswordChange} />
           <TextFiled text='Confirm Password' type='password' value={confirmPassword} onChange={handleConfirmPasswordChange} />
         </div>
+        {authError && <div className="auth-error" style={{ marginBottom: (authError)?'10px':'40px' }}>{authError}</div>}
         <div className='BRightSide'>
           <LogInButton text='Get Started !' onClick={handleSubmit} />
           <Sign account='Already have an account?' sign='in' />

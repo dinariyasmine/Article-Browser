@@ -3,4 +3,11 @@
     font-family: Montserrat;
     font-size: 3rem;
     font-weight: 900;
+    margin-bottom: 40px;
 }
+
+@media (max-width: 768px) {
+    .AUTHTIT{
+        font-size: 2.2rem;
+    }
+  }

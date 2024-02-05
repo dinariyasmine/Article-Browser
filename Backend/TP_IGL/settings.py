@@ -88,14 +88,13 @@ WSGI_APPLICATION = 'TP_IGL.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SciQuest',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres.minmzdiqoozfznwyqifd',
+        'PASSWORD': '123456linaaoulmi',
+        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
         'PORT': '5432',
    }
 }
-
 #TP_IGL/settings.py
 AUTH_USER_MODEL = 'authentication.User'
 

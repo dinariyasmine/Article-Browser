@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './adminPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUpload, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUpload, faTrash , faCheck} from '@fortawesome/free-solid-svg-icons';
 import PopAdd from '../../components/AdminPage/popAddModerator/popAddModerator';
 import PopRemove from '../../components/AdminPage/popRemove/popRemove';
 import User from '../../components/SearchPage/userPopUp';
@@ -22,6 +22,7 @@ const AdminPage = () => {
   const [items, setItems] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [checkMark, setCheckMark] = useState(false);
 
   
 
@@ -45,6 +46,12 @@ const AdminPage = () => {
       }
       finally {
         setLoading(false); // Set loading to false regardless of success or failure
+        setCheckMark(true); // Set check mark to true to display it
+
+        // Automatically hide the check mark after 2 seconds (adjust the duration as needed)
+        setTimeout(() => {
+          setCheckMark(false);
+        }, 2000);
       }
     } else {
       console.warn('No file selected.');
@@ -85,26 +92,35 @@ const AdminPage = () => {
     setItems([...items, newModerator]);
   };
 
+  
+
   // Render component
   return (
     <>
-      {loading && <div className="loading-spinner text-center">Loading...</div>}
-    <div className="admin" style={{ filter: pop || popRemove || loading ? 'blur(5px)' : 'blur(0px)',}}>
+    <div className="admin" style={{ filter: pop || popRemove ? 'blur(5px)' : 'blur(0px)',}}>
       <div className="utilisateur w-16 max-sm:w-9"><User /></div>
         <h1>Moderators :</h1>
         <div className="buttons">
           <button onClick={() => setPop(true)}>Add moderator   <FontAwesomeIcon icon={faPlus} /></button>
+          
           <div className="upload">
-            <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
-              Upload article <FontAwesomeIcon icon={faUpload} />
-              <input
-                type="file"
-                id="fileInput"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-            </label>
+            {loading ? (
+              <div className="load"></div>
+            ) : (
+                (checkMark)?
+                <FontAwesomeIcon icon={faCheck} size='xl' />
+                :<label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+                  Upload article <FontAwesomeIcon icon={faUpload} />
+                  <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
+                </label>              
+            )}
           </div>
+        
         </div>
         <table>
           <thead>

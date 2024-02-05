@@ -28,7 +28,7 @@ section{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 40px;
+    /* gap: 40px; */
     flex-basis: 33.75%;
     margin-right: 9%;
 }
@@ -60,4 +60,13 @@ img{width: 71,7%;height: 57%;}
         flex-basis: 80.75%;
         margin: 0;
     }
+  }
+
+  .auth-error{
+    color: #102B3E;
+    font-family: Montserrat;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: underline;
+    color: #EE4A6A;
   }

@@ -58,7 +58,7 @@ const FavoritesPage = () => {
   const showFavoriteArticleList = favoriteArticles.length > 0;
 
   return (
-    <div className="font-montserrat max-sm:text-sm">
+    <div className="font-montserrat max-sm:text-sm h-full ">
       {/* Favorites Navbar */}
       <Navbar />
 
@@ -66,7 +66,9 @@ const FavoritesPage = () => {
       {showFavoriteArticleList ? (
         <FavoritesArticleList articles={favoriteArticles} />
       ) : (
-        <img src={searchPic} alt="Search Page Pic" className="w-1/3 mt-10 ml-80" />
+        <div className="flex justify-center items-center w-full">
+          <img src={searchPic} alt="Search Page Pic" className="w-1/3 max-sm:w-4/5" />
+        </div>
       )}
     </div>
   );
