@@ -83,7 +83,7 @@ def extract_information_from_pdf(chemin_du_pdf):
 
     # Initialize OpenAI client
     client = OpenAI(
-        api_key="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"
+        api_key="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"
     )
 
     # Define a prompt for the OpenAI chat-based completion
