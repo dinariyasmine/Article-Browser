@@ -370,32 +370,6 @@ npm run format
 - **[PostgreSQL](https://postgresql.org/)** - Reliable database system
 - **[Docker](https://docker.com/)** - Containerization platform
 
-## Version History
-
-```mermaid
-gitgraph
-    commit id: "v1.0.0"
-    commit id: "Core Search"
-    branch feature/favorites
-    commit id: "User Favorites"
-    commit id: "UI Improvements"
-    checkout main
-    merge feature/favorites
-    commit id: "v1.1.0"
-    branch feature/elasticsearch
-    commit id: "ES Integration"
-    commit id: "Performance Boost"
-    checkout main
-    merge feature/elasticsearch
-    commit id: "v1.2.0"
-```
-
-| **Version** | **Release Date** | **Key Features** |
-|:---:|:---:|:---:|
-| **v1.0.0** | 2024-01-15 | Initial release with core search functionality |
-| **v1.1.0** | 2024-02-15 | Added user favorites and improved UI |
-| **v1.2.0** | 2024-03-15 | Enhanced PDF processing and Elasticsearch integration |
-| **v1.3.0** | 2024-04-15 | Advanced filtering and performance optimizations |
 
 ---
 
